@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(copy:*)",
+      "Bash(cat:*)",
+      "Bash(pip install:*)",
+      "Bash(taskkill:*)",
+      "Bash(dir /B:*)",
+      "Bash(nul)",
+      "Bash(del:*)",
+      "Bash(iconv:*)",
+      "Bash(dir:*)",
+      "Bash(start:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

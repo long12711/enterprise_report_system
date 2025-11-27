@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>工商联门户</title>
+  <style>
+    :root{--brand:#4338ca;--bg:#f5f7fa;--card:#fff;--text:#111;--muted:#666}
+    body{font-family:"Microsoft YaHei",Arial,sans-serif;background:var(--bg);margin:0}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#101827;color:#e5e7eb;display:flex;flex-direction:column}
+    .side-header{padding:18px 16px;font-weight:700;border-bottom:1px solid #1f2937}
+    .menu button{width:100%;text-align:left;background:transparent;border:none;color:#cbd5e1;padding:12px 16px;cursor:pointer;border-left:3px solid transparent}
+    .menu button:hover{background:#0b1220}
+    .menu button.active{color:#fff;background:#0b1220;border-left-color:#60a5fa}
+    .content{flex:1;padding:22px}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:18px;margin-bottom:16px}
+    h1,h2{margin:0 0 10px}
+    .btn{display:inline-block;padding:8px 14px;border:none;border-radius:8px;background:var(--brand);color:#fff;cursor:pointer}
+    .btn.gray{background:#6b7280}
+    .table{width:100%;border-collapse:collapse;margin-top:15px}
+    .table th,.table td{padding:10px;border-bottom:1px solid #eee;font-size:14px;text-align:left}
+    .table th{background:#f9fafb;font-weight:600}
+    .muted{color:var(--muted);font-size:13px}
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:15px}
+    .toolbar select{padding:7px 10px;border:1px solid #ddd;border-radius:8px}
+    .tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;color:#fff}
+    .tag.ok{background:#16a34a}
+    .tag.warn{background:#d97706}
+    .tag.no{background:#ef4444}
+    .btn.ok{background:#16a34a}
+    .btn.no{background:#ef4444}
+    .btn.dl{background:#0ea5e9}
+    .remark{width:220px;padding:6px;border:1px solid #ddd;border-radius:8px}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-header">工商联门户</div>
+      <div class="menu">
+        <button class="active" data-tab="qualification">资质审核</button>
+        <button data-tab="special">专项审核</button>
+        <button data-tab="reports">查看企业报告</button>
+        <button data-tab="send-report">发送报告</button>
+        <button data-tab="tutoring">专家辅导记录</button>
+      </div>
+    </aside>
+    <main class="content">
+        <button class="btn gray" style="float:right;" onclick="logout()">退出登录</button>
+        <h1>工商联工作台</h1>
+
+      <!-- 资质审核 -->
+      <section id="tab-qualification" class="tab card">
+        <h2>企业资质审核</h2>
+        <div class="muted">根据企业问卷得分与指标，判断是否符合升级条件。</div>
+        <div class="toolbar">
+          <label>筛选级别：
+            <select id="levelFilter">
+              <option value="auto">按我的审核级别</option>
+              <option value="beginner">初级 (市级)</option>
+              <option value="intermediate">中级 (省级)</option>
+              <option value="advanced">高级 (国家级)</option>
+            </select>
+          </label>
+          <button class="btn" onclick="loadReviews()">刷新</button>
+        </div>
+        <table id="tblReviews" class="table">
+          <thead>
+            <tr>
+              <th>企业名称</th>
+              <th>当前级别</th>
+              <th>提交时间</th>
+              <th>得分率</th>
+              <th>是否可升级</th>
+              <th>建议升级至</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- 专项审核 -->
+      <section id="tab-special" class="tab card" style="display:none">
+        <h2>突出专项申请审核</h2>
+        <div class="muted">按您当前审核级别查看企业提交的专项申请，支持查看附件并进行通过/驳回。</div>
+        <div class="toolbar">
+          <button class="btn" onclick="loadSpecials()">刷新列表</button>
+        </div>
+        <table id="spTbl" class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>企业</th>
+              <th>标题</th>
+              <th>提交时间</th>
+              <th>审核级别</th>
+              <th>附件</th>
+              <th>状态</th>
+              <th>备注</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- 查看企业报告 -->
+      <section id="tab-reports" class="tab card" style="display:none">
+        <h2>所有企业报告</h2>
+        <div class="muted">查看系统内已生成的所有企业评估报告。</div>
+        <table id="tblReports" class="table">
+            <thead><tr><th>报告名称</th><th>企业名称</th><th>类型</th><th>大小</th><th>生成时间</th><th>操作</th></tr></thead>
+            <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- 发送报告 -->
+      <section id="tab-send-report" class="tab card" style="display:none">
+        <h2>手动发送报告</h2>
+        <div class="muted">选择一份报告并将其通过邮件发送给指定收件人。</div>
+        <div class="toolbar">
+          <label for="reportSelector">选择报告：</label>
+          <select id="reportSelector"></select>
+          <label for="recipientEmail">收件人邮箱：</label>
+          <input type="email" id="recipientEmail" placeholder="输入邮箱地址" class="remark">
+          <button class="btn" onclick="sendSelectedReport()">发送邮件</button>
+        </div>
+      </section>
+
+      <!-- 专家辅导记录 -->
+      <section id="tab-tutoring" class="tab card" style="display:none">
+        <h2>专家辅导记录</h2>
+        <div class="muted">查看专家与企业之间的沟通记录。</div>
+        <table id="tblTutoring" class="table">
+            <thead><tr><th>专家</th><th>企业</th><th>消息内容</th><th>时间</th></tr></thead>
+            <tbody></tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Tab 切换逻辑
+    const tabs = document.querySelectorAll('.menu button');
+    tabs.forEach(btn=>btn.onclick=()=>switchTab(btn.dataset.tab, btn));
+    function switchTab(id, btn){
+      document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      document.querySelectorAll('.tab').forEach(sec=>sec.style.display='none');
+      const s = document.getElementById('tab-'+id); if(s) s.style.display='block';
+      // 按需加载数据
+      if(id==='qualification') loadReviews();
+      if(id==='special') loadSpecials();
+      if(id==='reports') loadAllReports();
+      if(id==='send-report') loadReportsForSelector();
+      if(id==='tutoring') loadTutoringRecords();
+    }
+
+    async function logout(){ await fetch('/api/logout',{method:'POST'}); location.href='/'; }
+
+    // 资质审核
+    async function manualUpgrade(username, newLevel){
+      if(!confirm(`手动将 ${username} 提升为 ${newLevel} 级？`)) return;
+      const res = await fetch('/api/portal/chamber/approve-upgrade',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({username,new_level:newLevel})
+      });
+      const data = await res.json();
+      if(data.success){ alert('已手动晋级'); loadReviews(); }
+      else{ alert('操作失败：'+(data.error||'')); }
+    }
+
+    async function approveUpgrade(username, newLevel) {
+      if (!confirm(`确定要将用户 ${username} 的等级提升为 ${newLevel} 吗？`)) return;
+      const res = await fetch('/api/portal/chamber/approve-upgrade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, new_level: newLevel })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('升级成功！');
+        loadReviews();
+      } else {
+        alert('操作失败：' + (data.error || ''));
+      }
+    }
+
+    async function loadReviews(){
+      const level = document.getElementById('levelFilter').value;
+      const url = level==='auto'? '/api/portal/chamber/reviews' : `/api/portal/chamber/reviews?level=${level}`;
+      const res = await fetch(url); const data = await res.json();
+      const tbody = document.querySelector('#tblReviews tbody'); tbody.innerHTML='';
+      if(!data.success){ tbody.innerHTML = `<tr><td colspan="7" style="color:#ef4444;">${data.error||'加载失败'}</td></tr>`; return; }
+      data.items.forEach(it=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `
+          <td>${it.enterprise_name||''}</td>
+          <td>${it.current_level||''}</td>
+          <td>${it.submit_time_text||''}</td>
+          <td>${it.score_percentage?.toFixed(1)||'-'}%</td>
+          <td>${it.eligible?'<span class="tag ok">可升级</span>':'<span class="tag no">不符合</span>'}</td>
+          <td>${it.upgrade_to||'-'}</td>
+          <td>
+            ${it.excel_file ? `<a class="btn dl" href="/download/submission/${encodeURIComponent(it.excel_file)}" target="_blank">查看问卷</a>` : '<span class="muted">无问卷</span>'}
+            ${it.report_file ? `<a class="btn dl" href="/download/${encodeURIComponent(it.report_file)}" target="_blank">查看报告</a>` : '<span class="muted">无报告</span>'}
+            ${(it.eligible && it.upgrade_to) ? `<button class="btn ok" onclick="approveUpgrade('${it.username}','${it.upgrade_to}')">批准升级</button>` : ''}
+            ${it.next_level ? `<button class="btn" onclick="manualUpgrade('${it.username}','${it.next_level}')">手动晋级</button>` : '<span class="muted">已最高级</span>'}
+          </td>`;
+        tbody.appendChild(tr);
+      })
+    }
+
+    // 专项审核
+    async function loadSpecials(){
+      const level = document.getElementById('levelFilter').value;
+      const url = level==='auto'? '/api/special/list' : `/api/special/list?level=${level}`;
+      const res = await fetch(url); const data = await res.json();
+      const tb = document.querySelector('#spTbl tbody'); tb.innerHTML='';
+      if(!data.success){ tb.innerHTML = `<tr><td colspan="9" style="color:#ef4444;">${data.error||'加载失败'}</td></tr>`; return; }
+      data.items.forEach(it=>{
+        const tr=document.createElement('tr');
+        const files = (it.files||[]).map(fn=>`<button class="btn dl" onclick="down('${it.id}','${fn}')">下载</button>`).join(' ');
+        tr.innerHTML = `
+          <td>${it.id}</td>
+          <td>${it.enterprise||''}</td>
+          <td>${it.title||''}</td>
+          <td>${it.time_text||''}</td>
+          <td>${it.level||''}</td>
+          <td>${files||'-'}</td>
+          <td>${badge(it.status)}</td>
+          <td>${it.remark||''}</td>
+          <td>
+            <input class="remark" id="r_${it.id}" placeholder="备注"/>
+            <button class="btn ok" onclick="review('${it.id}','approve')">通过</button>
+            <button class="btn no" onclick="review('${it.id}','reject')">驳回</button>
+          </td>`;
+        tb.appendChild(tr);
+      })
+    }
+    function badge(s){
+      if(s==='approved') return '<span class="tag ok">已通过</span>';
+      if(s==='rejected') return '<span class="tag no">已驳回</span>';
+      return '<span class="tag warn">待审核</span>';
+    }
+    function down(id,fn){ window.open(`/api/special/download/${id}/${encodeURIComponent(fn)}`,'_blank'); }
+    async function review(id,action){
+      const remark = document.getElementById(`r_${id}`).value.trim();
+      const res = await fetch('/api/special/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,action,remark})});
+      const data = await res.json();
+      if(data.success){ loadSpecials(); } else { alert('操作失败：'+(data.error||'')); }
+    }
+
+    // 专家辅导记录
+    async function loadTutoringRecords() {
+      const res = await fetch('/api/portal/chamber/tutoring-records');
+      const data = await res.json();
+      const tbody = document.querySelector('#tblTutoring tbody');
+      tbody.innerHTML = '';
+      if (data.success) {
+        data.records.forEach(rec => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${rec.expert}</td><td>${rec.enterprise}</td><td>${rec.message}</td><td>${rec.time}</td>`;
+          tbody.appendChild(tr);
+        });
+      } else {
+        tbody.innerHTML = `<tr><td colspan=\"4\">加载失败</td></tr>`;
+      }
+    }
+
+    // 发送报告
+    async function loadReportsForSelector() {
+      const res = await fetch('/api/portal/chamber/all-reports');
+      const data = await res.json();
+      const selector = document.getElementById('reportSelector');
+      selector.innerHTML = '';
+      if (data.success) {
+        data.reports.forEach(report => {
+          const option = document.createElement('option');
+          option.value = report.filename;
+          option.textContent = report.filename;
+          selector.appendChild(option);
+        });
+      }
+    }
+
+    async function sendSelectedReport() {
+      const report_filename = document.getElementById('reportSelector').value;
+      const recipient = document.getElementById('recipientEmail').value;
+      if (!recipient) {
+        alert('请输入收件人邮箱');
+        return;
+      }
+      if (!report_filename) {
+        alert('请选择要发送的报告');
+        return;
+      }
+      const res = await fetch('/api/portal/chamber/send-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipient, report_filename })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('邮件发送成功！');
+      } else {
+        alert('发送失败：' + (data.error || ''));
+      }
+    }
+
+    // 查看企业报告
+    async function loadAllReports(){
+        const res = await fetch('/api/portal/chamber/all-reports');
+        const data = await res.json();
+        const tbody = document.querySelector('#tblReports tbody');
+        tbody.innerHTML = '';
+        if (!data.success) {
+            tbody.innerHTML = `<tr><td colspan="6">${data.error || '加载失败'}</td></tr>`;
+            return;
+        }
+        data.reports.forEach(report => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${report.filename}</td>
+                <td>${report.enterprise_name}</td>
+                <td>${report.type}</td>
+                <td>${(report.file_size / 1024).toFixed(1)} KB</td>
+                <td>${new Date(report.created_time * 1000).toLocaleString()}</td>
+                <td><a href="/download/${encodeURIComponent(report.filename)}" class="btn" target="_blank">下载</a></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // 初始加载
+    switchTab('qualification');
+  </script>
+</body>
+</html>

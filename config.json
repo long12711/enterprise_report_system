@@ -1,0 +1,37 @@
+{
+    "email": {
+        "smtp_server": "smtp.qq.com",
+        "smtp_port": 587,
+        "username": "3907135483@qq.com",
+        "password": "sjtinmdyuxoqcdai",
+        "from_name": "企业评价系统",
+        "use_tls": true
+    },
+    "sms": {
+        "provider": "aliyun",
+        "access_key": "your_aliyun_access_key",
+        "access_secret": "your_aliyun_access_secret",
+        "sign_name": "企业评价系统",
+        "template_code": "SMS_12345678"
+  },
+  "indicators": {
+    "nk_excel_path": "D:/xwechat_files/wxid_nfuq3yq5zb4x22_dcf3/msg/file/2025-11/南开大学-现代企业制度指数评价体系初稿2025.10.22（单独指标）(1).xlsx"
+  },
+  "accounts": {
+    "enterprise": [
+      { "username": "ent_low",  "password": "entl123", "display_name": "企业-初级", "default_level": "beginner" },
+      { "username": "ent_mid",  "password": "entm123", "display_name": "企业-中级", "default_level": "intermediate" },
+      { "username": "ent_high", "password": "enth123", "display_name": "企业-高级", "default_level": "advanced" }
+    ],
+    "chamber_of_commerce": [
+      { "username": "ch_city", "password": "chc123", "display_name": "工商联-市级",   "default_level": "beginner" },
+      { "username": "ch_prov", "password": "chp123", "display_name": "工商联-省级",   "default_level": "intermediate" },
+      { "username": "ch_natl", "password": "chn123", "display_name": "工商联-国家级", "default_level": "advanced" }
+    ],
+    "expert": [
+      { "username": "exp_jun", "password": "expj123", "display_name": "专家-初级", "default_level": "junior" },
+      { "username": "exp_mid", "password": "expm123", "display_name": "专家-中级", "default_level": "intermediate" },
+      { "username": "exp_sen", "password": "exps123", "display_name": "专家-高级", "default_level": "senior" }
+    ]
+    }
+}

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>企业门户</title>
+  <style>
+    :root{--brand:#4338ca;--bg:#f5f7fa;--card:#fff;--text:#111;--muted:#666}
+    body{font-family:"Microsoft YaHei",Arial,sans-serif;background:var(--bg);margin:0}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#101827;color:#e5e7eb;display:flex;flex-direction:column}
+    .side-header{padding:18px 16px;font-weight:700;border-bottom:1px solid #1f2937}
+    .menu button{width:100%;text-align:left;background:transparent;border:none;color:#cbd5e1;padding:12px 16px;cursor:pointer;border-left:3px solid transparent}
+    .menu button:hover{background:#0b1220}
+    .menu button.active{color:#fff;background:#0b1220;border-left-color:#60a5fa}
+    .content{flex:1;padding:22px}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:18px;margin-bottom:16px}
+    h1{margin:0 0 8px;color:var(--brand)}
+    h2{margin:0 0 10px}
+    .btn{display:inline-block;padding:8px 14px;border:none;border-radius:8px;background:var(--brand);color:#fff;cursor:pointer}
+    .btn.gray{background:#6b7280}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
+    .muted{color:var(--muted);font-size:13px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    input,textarea,select{padding:8px 10px;border:1px solid #d1d5db;border-radius:8px}
+    textarea{min-height:90px;width:100%}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;color:#fff}
+    .tag.pending{background:#d97706}
+    .tag.approved{background:#16a34a}
+    .tag.rejected{background:#ef4444}
+    @media (max-width: 900px){.layout{flex-direction:column}.sidebar{width:100%;flex-direction:row;overflow-x:auto}.menu{display:flex}.menu button{white-space:nowrap}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-header">企业门户</div>
+      <div class="menu">
+        <button class="active" data-tab="home">概览</button>
+        <button data-tab="history">历史问卷</button>
+        <button data-tab="growth">成长轨迹</button>
+        <button data-tab="preference">企业偏向</button>
+        <button data-tab="special">专项申请</button>
+        <button data-tab="experts">匹配专家</button>
+      </div>
+    </aside>
+    <main class="content">
+      <!-- 概览 -->
+      <section id="tab-home" class="tab card">
+        <h1>欢迎使用现代企业制度指数评价系统</h1>
+        <div class="muted" id="welcomeInfo">加载中...</div>
+        <div style="margin-top:12px;">
+          <button class="btn" id="startBtn">开始填写问卷</button>
+          <button class="btn gray" onclick="logout()">退出登录</button>
+        </div>
+      </section>
+
+      <!-- 历史问卷 -->
+      <section id="tab-history" class="tab card" style="display:none">
+        <h2>历史问卷记录</h2>
+        <table class="table" id="tblHistory">
+          <thead><tr><th>提交时间</th><th>分数</th><th>查看试卷</th><th>调查报告</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- 成长轨迹 -->
+      <section id="tab-growth" class="tab card" style="display:none">
+        <h2>成长轨迹</h2>
+        <div class="muted">最近N次评估得分趋势（按时间倒序）</div>
+        <table class="table" id="tblGrowth"><thead><tr><th>#</th><th>时间</th><th>级别</th><th>得分率</th></tr></thead><tbody></tbody></table>
+      </section>
+
+      <!-- 企业偏向 -->
+      <section id="tab-preference" class="tab card" style="display:none">
+        <h2>企业偏向（维度表现）</h2>
+        <div class="muted">统计最后一次问卷中各一级指标的得分率（仅供参考）</div>
+        <table class="table" id="tblPref"><thead><tr><th>一级指标</th><th>得分率</th></tr></thead><tbody></tbody></table>
+      </section>
+
+      <!-- 专项申请（已移入左侧菜单） -->
+      <section id="tab-special" class="tab card" style="display:none">
+        <h2>📌 专项申请</h2>
+        <div class="muted">提交与当前企业级别对应的专项材料，交由相应级别的工商联用户进行审核。</div>
+        <div class="row" style="margin-top:12px;">
+          <div style="flex:1 1 320px;min-width:320px;">
+            <label>申请标题</label>
+            <input id="spTitle" type="text" placeholder="如：数字化转型标杆申请" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div style="flex:1 1 100%;">
+            <label>申请说明</label>
+            <textarea id="spDesc" placeholder="简要说明申请事由、亮点与佐证要点"></textarea>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div style="flex:1 1 100%;">
+            <label>上传附件（可多选，支持docx、pdf、xlsx、zip、jpg、png等）</label>
+            <input id="spFiles" class="files" type="file" multiple />
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <button class="btn" onclick="submitSpecial()" id="spBtn">提交专项申请</button>
+          <span id="spStatus" style="margin-left:10px;color:#555;"></span>
+        </div>
+
+        <h3 style="margin-top:18px;">我的专项申请</h3>
+        <table class="table" id="spTable">
+          <thead>
+            <tr>
+              <th>申请ID</th>
+              <th>标题</th>
+              <th>提交时间</th>
+              <th>审核级别</th>
+              <th>状态</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- 匹配专家 -->
+      <section id="tab-experts" class="tab card" style="display:none">
+        <h2>匹配专家</h2>
+        <div class="muted">系统按您的当前等级匹配相应等级专家，可在此处发起沟通。</div>
+        <div class="grid-2">
+          <div>
+            <table class="table" id="tblExperts"><thead><tr><th>专家账号</th><th>称谓</th><th>等级</th><th>操作</th></tr></thead><tbody></tbody></table>
+          </div>
+          <div>
+            <h3>与专家沟通</h3>
+            <div class="row"><select id="expertSelect"></select></div>
+            <div class="row"><textarea id="expertMsg" placeholder="输入要发送的消息..."></textarea></div>
+            <div class="row"><button class="btn" onclick="sendMsg()">发送</button></div>
+            <div id="chatLog" class="muted" style="margin-top:10px;white-space:pre-wrap"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.menu button');
+    tabs.forEach(btn=>btn.onclick=()=>switchTab(btn.dataset.tab, btn));
+    function switchTab(id, btn){
+      document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      document.querySelectorAll('.tab').forEach(sec=>sec.style.display='none');
+      const s = document.getElementById('tab-'+id); if(s) s.style.display='block';
+      if(id==='history') loadHistory();
+      if(id==='growth') loadGrowth();
+      if(id==='preference') loadPreference();
+      if(id==='experts') loadExperts();
+      if(id==='special') loadMySpecials();
+    }
+
+    async function logout(){ await fetch('/api/logout',{method:'POST'}); location.href='/'; }
+
+    // 初始化欢迎与问卷按钮
+    (async function(){
+      try{
+        const res = await fetch('/api/session');
+        const s = await res.json();
+        const level = s.user_level || 'advanced';
+        document.getElementById('startBtn').onclick = ()=>{ location.href = `/questionnaire?user_type=enterprise&user_level=${level}`; };
+        document.getElementById('welcomeInfo').textContent = `当前账号：${s.display_name||s.username||''} | 等级：${level}`;
+      }catch(e){
+        document.getElementById('startBtn').onclick = ()=>{ location.href='/questionnaire'; };
+      }
+      // 默认进来显示概览，不做其他加载，切换tab时再按需加载
+    })();
+
+    // 历史问卷
+    async function loadHistory(){
+      const res = await fetch('/api/enterprise/history'); const data = await res.json();
+      const tb = document.querySelector('#tblHistory tbody'); tb.innerHTML='';
+      if(!data.success){ tb.innerHTML = `<tr><td colspan="4">${data.error||'加载失败'}</td></tr>`; return; }
+      if(data.items.length === 0) {
+        tb.innerHTML = `<tr><td colspan="4">暂无历史记录</td></tr>`; return;
+      }
+      data.items.forEach(it=>{
+        const scoreText = it.score ? `${it.score.total.toFixed(1)} / ${it.score.max.toFixed(1)}` : 'N/A';
+        const questionnaireLink = `<a href="/download/submission/${encodeURIComponent(it.excel_file)}" class="btn" style="padding: 4px 8px; font-size: 12px;" target="_blank">查看详情</a>`;
+        const reportLink = it.report_file ? `<a href="/download/${encodeURIComponent(it.report_file)}" class="btn gray" style="padding: 4px 8px; font-size: 12px;" target="_blank">下载报告</a>` : '<span>暂无</span>';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${it.time_text}</td>
+          <td>${scoreText}</td>
+          <td>${questionnaireLink}</td>
+          <td>${reportLink}</td>
+        `;
+        tb.appendChild(tr);
+      })
+    }
+
+    // 成长轨迹（表格简版）
+    async function loadGrowth(){
+      const res = await fetch('/api/enterprise/scores'); const data = await res.json();
+      const tb = document.querySelector('#tblGrowth tbody'); tb.innerHTML='';
+      if(!data.success){ tb.innerHTML = `<tr><td colspan=4>${data.error||'加载失败'}</td></tr>`; return; }
+      data.items.forEach((it,idx)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${idx+1}</td><td>${it.time_text}</td><td>${it.user_level}</td><td>${it.percentage.toFixed(1)}%</td>`;
+        tb.appendChild(tr);
+      })
+    }
+
+    // 企业偏向（各一级指标得分率）
+    async function loadPreference(){
+      const res = await fetch('/api/enterprise/preference'); const data = await res.json();
+      const tb = document.querySelector('#tblPref tbody'); tb.innerHTML='';
+      if(!data.success){ tb.innerHTML = `<tr><td colspan=2>${data.error||'加载失败'}</td></tr>`; return; }
+      data.items.forEach(it=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${it.level1}</td><td>${it.percentage.toFixed(1)}%</td>`;
+        tb.appendChild(tr);
+      })
+    }
+
+    // 专项申请：提交与列表
+    async function submitSpecial(){
+      const title = document.getElementById('spTitle').value.trim();
+      const desc = document.getElementById('spDesc').value.trim();
+      const files = document.getElementById('spFiles').files;
+      const status = document.getElementById('spStatus');
+      const btn = document.getElementById('spBtn');
+      if(!title){ status.textContent='请填写标题'; return; }
+      const fd = new FormData(); fd.append('title', title); fd.append('desc', desc);
+      for(let i=0;i<files.length;i++){ fd.append('files', files[i]); }
+      btn.disabled=true; status.textContent='提交中...';
+      try{
+        const res = await fetch('/api/special/apply', { method:'POST', body: fd });
+        const data = await res.json();
+        if(res.ok && data.success){
+          status.textContent='提交成功';
+          document.getElementById('spTitle').value='';
+          document.getElementById('spDesc').value='';
+          document.getElementById('spFiles').value='';
+          await loadMySpecials();
+        }else{
+          status.textContent='提交失败：'+(data.error||'');
+        }
+      }catch(e){ status.textContent='提交失败：'+e.message; }
+      finally{ btn.disabled=false; }
+    }
+
+    async function loadMySpecials(){
+      try{
+        const res = await fetch('/api/special/my'); const data = await res.json();
+        const tb = document.querySelector('#spTable tbody'); tb.innerHTML='';
+        if(!data.success){ tb.innerHTML = `<tr><td colspan=6>${data.error||'加载失败'}</td></tr>`; return; }
+        data.items.forEach(it=>{
+          const tr=document.createElement('tr');
+          const statusTag = it.status==='approved' ? '<span class="tag approved">已通过</span>' : (it.status==='rejected' ? '<span class="tag rejected">已驳回</span>' : '<span class="tag pending">待审核</span>');
+          tr.innerHTML = `<td>${it.id}</td><td>${it.title||''}</td><td>${it.time_text||''}</td><td>${it.level||''}</td><td>${statusTag}</td><td>${it.remark||''}</td>`;
+          tb.appendChild(tr);
+        })
+      }catch(e){ console.error(e); }
+    }
+
+    // 匹配专家
+    async function loadExperts(){
+      const res = await fetch('/api/enterprise/match-experts'); const data = await res.json();
+      const tb = document.querySelector('#tblExperts tbody'); tb.innerHTML='';
+      const sel = document.getElementById('expertSelect'); sel.innerHTML='';
+      if(!data.success){ tb.innerHTML = `<tr><td colspan=4>${data.error||'加载失败'}</td></tr>`; return; }
+      data.items.forEach(it=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${it.username}</td><td>${it.display_name||''}</td><td>${it.level}</td><td><button class='btn' onclick="chooseExpert('${it.username}')">选择</button></td>`;
+        tb.appendChild(tr);
+        const o=document.createElement('option'); o.value=it.username; o.textContent=`${it.display_name||it.username} (${it.level})`; sel.appendChild(o);
+      })
+      if(data.items[0]) chooseExpert(data.items[0].username);
+    }
+    function chooseExpert(u){ document.getElementById('expertSelect').value=u; loadChat(); }
+    async function sendMsg(){
+      const expert = document.getElementById('expertSelect').value;
+      const msg = document.getElementById('expertMsg').value.trim(); if(!msg) return;
+      await fetch('/api/enterprise/contact-expert',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expert_username:expert,message:msg})});
+      document.getElementById('expertMsg').value='';
+      loadChat();
+    }
+    async function loadChat(){
+      const expert = document.getElementById('expertSelect').value;
+      const res = await fetch(`/api/enterprise/contact-expert?expert_username=${encodeURIComponent(expert)}`);
+      const data = await res.json();
+      const log = document.getElementById('chatLog');
+      if(!data.success){ log.textContent = data.error || '暂无会话'; return; }
+      log.textContent = (data.items||[]).map(i=>`[${i.time_text}] ${i.from}: ${i.message}`).join('\n');
+    }
+  </script>
+</body>
+</html>

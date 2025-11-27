@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线问卷填写 - 现代企业制度评价系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2E5090 0%, #4472C4 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f9fafb;
+            border-radius: 10px;
+            border-left: 4px solid #2E5090;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #2E5090;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: red;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2E5090;
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #2E5090;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .question-text {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .question-meta {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .radio-group, .select-group {
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: block;
+            margin: 8px 0;
+            padding: 10px 15px;
+            background: #f9fafb;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option:hover {
+            background: #f3f4f6;
+        }
+
+        .radio-option input {
+            margin-right: 10px;
+        }
+
+        .progress-indicator {
+            position: sticky;
+            top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2E5090 0%, #4472C4 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .button {
+            padding: 15px 40px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, #2E5090 0%, #4472C4 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 80, 144, 0.3);
+        }
+
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 80, 144, 0.4);
+        }
+
+        .button-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .button-secondary:hover {
+            background: #4b5563;
+        }
+
+        .button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .dimension-header {
+            background: linear-gradient(135deg, #2E5090 0%, #4472C4 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #2E5090;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+    <style>#userRoleSection{display:none !important;}</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 现代企业制度指数评价问卷</h1>
+            <p>请认真填写以下问卷，所有带 * 的项目为必填项</p>
+        </div>
+
+        <div class="content">
+            <!-- 进度指示器 -->
+            <div class="progress-indicator">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">0%</div>
+                </div>
+                <div class="progress-text" id="progressText">已完成：0 / 0 题</div>
+            </div>
+
+            <form id="questionnaireForm">
+                <input type="hidden" name="用户类型" id="userTypeHidden">
+                <input type="hidden" name="用户分级" id="userLevelHidden">
+                <!-- 用户类型和分级选择 -->
+                <div class="section" id="userRoleSection">
+                    <h2 class="section-title">👤 用户类型和分级</h2>
+
+                    <div class="form-group">
+                        <label class="form-label">用户类型</label>
+                        <select class="form-control" name="用户类型" id="userType" onchange="onUserTypeChange()">
+                            <option value="">请选择用户类型</option>
+                            <option value="chamber_of_commerce">工商联用户</option>
+                            <option value="enterprise">企业用户</option>
+                            <option value="expert">专家用户</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">用户分级</label>
+                        <select class="form-control" name="用户分级" id="userLevel" onchange="onUserLevelChange()">
+                            <option value="">请先选择用户类型</option>
+                        </select>
+                    </div>
+
+                    <div class="info-box" id="userTypeInfo" style="display: none;">
+                        <strong>问卷说明：</strong> <span id="userTypeDescription"></span>
+                    </div>
+                </div>
+
+                <!-- 企业基本信息 -->
+                <div class="section">
+                    <h2 class="section-title">📊 企业基本信息</h2>
+
+                    <div class="form-group">
+                        <label class="form-label required">企业名称</label>
+                        <input type="text" class="form-control" name="企业名称">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">统一社会信用代码</label>
+                        <input type="text" class="form-control" name="统一社会信用代码">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">企业类型</label>
+                        <select class="form-control" name="企业类型" id="enterpriseType">
+                            <option value="">请选择</option>
+                            <option value="有限责任公司">有限责任公司</option>
+                            <option value="股份有限公司">股份有限公司</option>
+                            <option value="个人独资企业">个人独资企业</option>
+                            <option value="合伙企业">合伙企业</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">所属行业</label>
+                        <input type="text" class="form-control" name="所属行业">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">注册资本（万元）</label>
+                        <input type="number" class="form-control" name="注册资本（万元）">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">成立时间</label>
+                        <input type="date" class="form-control" name="成立时间">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">员工人数</label>
+                        <input type="number" class="form-control" name="员工人数">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">年营业收入（万元）</label>
+                        <input type="number" class="form-control" name="年营业收入（万元）">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">联系人姓名</label>
+                        <input type="text" class="form-control" name="联系人姓名">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">联系人邮箱</label>
+                        <input type="email" class="form-control" name="联系人邮箱">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">联系人电话</label>
+                        <input type="tel" class="form-control" name="联系人电话">
+                    </div>
+                </div>
+
+                <!-- 问卷题目容器 -->
+                <div id="questionsContainer"></div>
+
+                <!-- 提交按钮 -->
+                <div class="button-group">
+                    <button type="button" class="button button-secondary" onclick="saveDraft()">💾 保存草稿</button>
+                    <button type="submit" class="button button-primary" id="submitButton">✅ 提交问卷</button>
+                </div>
+            </form>
+
+            <!-- 状态消息 -->
+            <div id="statusMessage" class="hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        let questionsData = [];
+        let totalQuestions = 0;
+        let currentUserType = '';
+        let currentUserLevel = '';
+
+        // 用户类型配置
+        const userTypeConfig = {
+            'chamber_of_commerce': {
+                'name': '工商联用户',
+                'levels': {
+                    'national': '国家级',
+                    'provincial': '省级',
+                    'municipal': '市级'
+                }
+            },
+            'enterprise': {
+                'name': '企业用户',
+                'levels': {
+                    'advanced': '高级',
+                    'intermediate': '中级',
+                    'beginner': '初级'
+                }
+            },
+            'expert': {
+                'name': '专家用户',
+                'levels': {
+                    'senior': '高级专家',
+                    'intermediate': '中级专家',
+                    'junior': '初级专家'
+                }
+            }
+        };
+
+        // 页面加载时初始化
+        window.addEventListener('DOMContentLoaded', async () => {
+            // 优先按URL/会话自动识别身份与等级并加载题目
+            await initRoleFromSessionOrUrl();
+            // 兜底：仍保留手动选择（只有在识别失败时才会显示）
+            initializeUserTypeSelector();
+        });
+
+        // 从URL读取参数
+        function getQueryParam(key){
+            const u = new URL(window.location.href);
+            return u.searchParams.get(key);
+        }
+
+        // 自动识别身份与等级并直接加载题目
+        async function initRoleFromSessionOrUrl(){
+            try{
+                let uType = getQueryParam('user_type');
+                let uLevel = getQueryParam('user_level');
+
+                if(!uType || !uLevel){
+                    // 读取会话
+                    const res = await fetch('/api/session');
+                    const s = await res.json();
+                    if(s && s.logged_in && s.role && s.user_level){
+                        uType = uType || s.role;
+                        uLevel = uLevel || s.user_level;
+                    }
+                }
+
+                if(uType && uLevel){
+                    // 写入隐藏域，设置当前身份
+                    const ht = document.getElementById('userTypeHidden');
+                    const hl = document.getElementById('userLevelHidden');
+                    if(ht) ht.value = uType;
+                    if(hl) hl.value = uLevel;
+                    currentUserType = uType;
+                    currentUserLevel = uLevel;
+
+                    // 加载题目
+                    await loadQuestionsForUserType(uType, uLevel);
+                }
+            }catch(e){
+                console.warn('initRoleFromSessionOrUrl failed:', e);
+            }
+        }
+
+        // 初始化用户类型选择器
+        function initializeUserTypeSelector() {
+            const userTypeSelect = document.getElementById('userType');
+            userTypeSelect.addEventListener('change', onUserTypeChange);
+        }
+
+        // 用户类型改变事件
+        function onUserTypeChange() {
+            const userType = document.getElementById('userType').value;
+            const userLevelSelect = document.getElementById('userLevel');
+            
+            if (!userType) {
+                userLevelSelect.innerHTML = '<option value="">请先选择用户类型</option>';
+                userLevelSelect.disabled = true;
+                document.getElementById('userTypeInfo').style.display = 'none';
+                return;
+            }
+
+            currentUserType = userType;
+            
+            // 更新分级选项
+            const levels = userTypeConfig[userType].levels;
+            userLevelSelect.innerHTML = '<option value="">请选择分级</option>';
+            
+            Object.keys(levels).forEach(levelKey => {
+                const option = document.createElement('option');
+                option.value = levelKey;
+                option.textContent = levels[levelKey];
+                userLevelSelect.appendChild(option);
+            });
+            
+            userLevelSelect.disabled = false;
+            document.getElementById('questionsContainer').innerHTML = '';
+        }
+
+        // 用户分级改变事件
+        async function onUserLevelChange() {
+            const userType = document.getElementById('userType').value;
+            const userLevel = document.getElementById('userLevel').value;
+            
+            if (!userType || !userLevel) {
+                return;
+            }
+
+            currentUserType = userType;
+            currentUserLevel = userLevel;
+
+            // 加载对应的问卷题目
+            await loadQuestionsForUserType(userType, userLevel);
+            
+            // 显示问卷说明
+            showUserTypeInfo(userType, userLevel);
+        }
+
+        // 加载特定用户类型和分级的问卷题目
+        async function loadQuestionsForUserType(userType, userLevel) {
+            try {
+                const response = await fetch(`/api/get_questions?user_type=${userType}&user_level=${userLevel}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    questionsData = data.questions;
+                    totalQuestions = questionsData.length;
+                    renderQuestions(questionsData);
+                    updateProgress();
+                } else {
+                    showStatus('加载问卷失败：' + data.error, 'error');
+                }
+            } catch (error) {
+                showStatus('加载问卷失败：' + error.message, 'error');
+            }
+        }
+
+        // 显示用户类型信息
+        function showUserTypeInfo(userType, userLevel) {
+            const infoBox = document.getElementById('userTypeInfo');
+            const descriptionSpan = document.getElementById('userTypeDescription');
+            
+            const descriptions = {
+                'chamber_of_commerce': {
+                    'national': '国家级工商联评估问卷 - 全面评估，包含所有指标类型（合规项、有效项、调节项）',
+                    'provincial': '省级工商联评估问卷 - 重点评估，包含合规项和有效项',
+                    'municipal': '市级工商联评估问卷 - 基础评估，重点关注合规项和核心治理指标'
+                },
+                'enterprise': {
+                    'advanced': '企业高级自评问卷 - 全面自评，包含所有指标类型（合规项、有效项、调节项）',
+                    'intermediate': '企业中级自评问卷 - 标准自评，包含合规项和有效项',
+                    'beginner': '企业初级自评问卷 - 基础自评，重点关注合规项和核心治理指标'
+                },
+                'expert': {
+                    'senior': '高级专家评估问卷 - 深度评估，包含所有指标类型（合规项、有效项、调节项）',
+                    'intermediate': '中级专家评估问卷 - 标准评估，包含合规项和有效项',
+                    'junior': '初级专家评估问卷 - 基础评估，重点关注合规项和核心治理指标'
+                }
+            };
+            
+            descriptionSpan.textContent = descriptions[userType][userLevel] || '';
+            infoBox.style.display = 'block';
+        }
+
+        // 渲染问卷题目
+        function renderQuestions(questions) {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            // 按一级指标分组
+            const groupedQuestions = {};
+            questions.forEach(q => {
+                if (!groupedQuestions[q.level1]) {
+                    groupedQuestions[q.level1] = [];
+                }
+                groupedQuestions[q.level1].push(q);
+            });
+
+            // 渲染每个维度
+            Object.keys(groupedQuestions).forEach((dimension, dimIndex) => {
+                const section = document.createElement('div');
+                section.className = 'section';
+
+                const dimensionHeader = document.createElement('div');
+                dimensionHeader.className = 'dimension-header';
+                dimensionHeader.textContent = `${dimIndex + 1}. ${dimension}`;
+                section.appendChild(dimensionHeader);
+
+                groupedQuestions[dimension].forEach((question, qIndex) => {
+                    const questionDiv = createQuestionElement(question, qIndex);
+                    section.appendChild(questionDiv);
+                });
+
+                container.appendChild(section);
+            });
+        }
+
+        // 创建问题元素
+        function createQuestionElement(question, index) {
+            const div = document.createElement('div');
+            div.className = 'question-group';
+
+            const questionNumber = document.createElement('span');
+            questionNumber.className = 'question-number';
+            questionNumber.textContent = `第 ${question.sequence} 题`;
+
+            const questionText = document.createElement('div');
+            questionText.className = 'question-text';
+            questionText.innerHTML = questionNumber.outerHTML + question.question;
+
+            const questionMeta = document.createElement('div');
+            questionMeta.className = 'question-meta';
+            questionMeta.textContent = `二级指标：${question.level2 || '无'} | 分值：${question.base_score} 分 | 类型：${question.question_type}`;
+
+            div.appendChild(questionText);
+            div.appendChild(questionMeta);
+
+            // 优先：如存在打分标准，渲染勾选清单并自动计分
+            if (question.criteria && String(question.criteria).trim().length > 0) {
+                div.appendChild(createCriteriaChecklist(question));
+            } else {
+            // 根据问题类型创建不同的输入控件
+            const questionType = question.question_type || '';
+            if (questionType.includes('合规') || questionType === '合规项' || questionType === '合规类') {
+                div.appendChild(createRadioGroup(question, ['是', '否', '不适用']));
+            } else if (questionType.includes('有效') || questionType === '有效项' || questionType === '有效性类') {
+                div.appendChild(createRadioGroup(question, ['很有效', '比较有效', '一般', '不太有效', '完全无效', '不适用']));
+            } else if (questionType.includes('否决') || questionType.includes('调节') || questionType === '调节项' || questionType === '一票否决类') {
+                div.appendChild(createRadioGroup(question, ['是', '否', '不适用']));
+            } else {
+                // 默认使用是/否选项
+                div.appendChild(createRadioGroup(question, ['是', '否', '不适用']));
+                }
+            }
+
+            return div;
+        }
+
+        // 创建单选按钮组
+        function createRadioGroup(question, options) {
+            const radioGroup = document.createElement('div');
+            radioGroup.className = 'radio-group';
+
+            options.forEach(option => {
+                const label = document.createElement('label');
+                label.className = 'radio-option';
+
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `question_${question.sequence}`;
+                radio.value = option;
+                radio.onchange = () => {
+                    // 取消同题目的其他隐藏分数（如果有）
+                    const hiddenScore = document.querySelector(`input[name="question_${question.sequence}_score"]`);
+                    if (hiddenScore) hiddenScore.value = '';
+                    updateProgress();
+                };
+
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(option));
+                radioGroup.appendChild(label);
+            });
+
+            return radioGroup;
+        }
+
+        // 解析打分标准文本为条目
+        function parseCriteriaItems(text) {
+            if (!text) return [];
+            let cleaned = text.replace(/^[^\n]*得\d+分[^\n]*\n?/g, ''); // 去除“以下…得1分”等提示行
+            // 优先按换行拆分
+            let items = cleaned.split(/\n+/).map(s => s.trim()).filter(Boolean);
+            if (items.length <= 1) {
+                // 尝试按序号 1. 2. 3. 拆分
+                items = cleaned.split(/(?:(?:^|\n)\s*)\d+\.\s*/).map(s => s.trim()).filter(Boolean);
+            }
+            if (items.length <= 1) {
+                // 按中文分号/句号兜底
+                items = cleaned.split(/[；;。]/).map(s => s.trim()).filter(Boolean);
+            }
+            return items;
+        }
+
+        // 从打分标准中推断计分模式
+        function detectScoringMode(text) {
+            if (!text) return 'proportional';
+            if (/全部完成得\s*1\s*分.*少完成不得分/.test(text)) return 'all_or_nothing';
+            if (/全部完成.*得分|全部满足.*得分/.test(text)) return 'all_or_nothing';
+            if (/根据.*完成情况.*赋分|按.*完成情况.*赋分/.test(text)) return 'proportional';
+            return 'proportional';
+        }
+
+        // 创建打分标准清单（勾选项自动计分）
+        function createCriteriaChecklist(question) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'radio-group';
+            wrapper.style.border = '1px dashed #e5e7eb';
+            wrapper.style.borderRadius = '6px';
+            wrapper.style.padding = '12px';
+            wrapper.style.background = '#fbfdff';
+
+            const info = document.createElement('div');
+            info.style.fontSize = '12px';
+            info.style.color = '#555';
+            const mode = detectScoringMode(question.criteria || '');
+            const items = parseCriteriaItems(question.criteria || '');
+            const base = Number(question.base_score || 1);
+            info.textContent = `打分标准：共 ${items.length} 项；计分方式：${mode === 'all_or_nothing' ? '全部满足得满分，否则0分' : '按完成项占比折算'}；满分：${base}分`;
+            wrapper.appendChild(info);
+
+            const list = document.createElement('div');
+            list.style.marginTop = '10px';
+
+            items.forEach((it, i) => {
+                const label = document.createElement('label');
+                label.className = 'radio-option';
+                label.style.display = 'flex';
+                label.style.alignItems = 'flex-start';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.name = `question_${question.sequence}_item`;
+                cb.value = String(i + 1);
+                cb.style.marginTop = '3px';
+                label.appendChild(cb);
+                const span = document.createElement('span');
+                span.textContent = it;
+                label.appendChild(span);
+                list.appendChild(label);
+            });
+            wrapper.appendChild(list);
+
+            // 分数与隐藏域
+            const scoreBar = document.createElement('div');
+            scoreBar.style.marginTop = '8px';
+            scoreBar.style.fontSize = '12px';
+            scoreBar.style.color = '#2E5090';
+            scoreBar.textContent = `当前得分：0 / ${base}`;
+            wrapper.appendChild(scoreBar);
+
+            const hiddenAnswer = document.createElement('input');
+            hiddenAnswer.type = 'hidden';
+            hiddenAnswer.name = `question_${question.sequence}`;
+            wrapper.appendChild(hiddenAnswer);
+
+            const hiddenScore = document.createElement('input');
+            hiddenScore.type = 'hidden';
+            hiddenScore.name = `question_${question.sequence}_score`;
+            wrapper.appendChild(hiddenScore);
+
+            function recompute() {
+                const checked = wrapper.querySelectorAll(`input[name='question_${question.sequence}_item']:checked`);
+                const n = checked.length;
+                let score = 0;
+                if (mode === 'all_or_nothing') {
+                    score = (n === items.length) ? base : 0;
+                } else {
+                    score = items.length > 0 ? (base * n / items.length) : 0;
+                    // 保留一位小数
+                    score = Math.round(score * 10) / 10;
+                }
+                scoreBar.textContent = `当前得分：${score} / ${base}`;
+                hiddenScore.value = String(score);
+                // 保存为JSON字符串（被后端当作普通字符串保存，不破坏兼容）
+                const sel = Array.from(checked).map(el => el.value);
+                hiddenAnswer.value = JSON.stringify({ mode, base, total: items.length, selected: sel, score });
+                // 标记此题已作答
+                wrapper.dataset.answered = sel.length > 0 ? '1' : '';
+                updateProgress();
+            }
+
+            wrapper.addEventListener('change', recompute);
+
+            return wrapper;
+        }
+
+        // 更新进度
+        function updateProgress() {
+            // 单选已答
+            const radioAnswered = document.querySelectorAll('input[type="radio"]:checked').length;
+            // 标准清单题已答（任意勾选即算作答）
+            const checklistAnswered = document.querySelectorAll('.radio-group[data-answered="1"]').length;
+            const answeredQuestions = radioAnswered + checklistAnswered;
+            const percentage = totalQuestions > 0 ? Math.round((answeredQuestions / totalQuestions) * 100) : 0;
+
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = percentage + '%';
+            document.getElementById('progressText').textContent = `已完成：${answeredQuestions} / ${totalQuestions} 题`;
+        }
+
+        // 表单提交
+        document.getElementById('questionnaireForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="loading"></span> 提交中...';
+
+            try {
+                // 收集表单数据
+                const formData = new FormData(e.target);
+                const data = {
+                    enterprise_info: {},
+                    answers: {}
+                };
+
+                // 收集用户类型和分级
+                data.user_type = currentUserType;
+                data.user_level = currentUserLevel;
+
+                // 收集企业信息
+                const enterpriseFields = [
+                    '企业名称', '统一社会信用代码', '企业类型', '所属行业',
+                    '注册资本（万元）', '成立时间', '员工人数', '年营业收入（万元）',
+                    '联系人姓名', '联系人邮箱', '联系人电话'
+                ];
+
+                enterpriseFields.forEach(field => {
+                    data.enterprise_info[field] = formData.get(field);
+                });
+
+                // 收集问卷答案与分数
+                data.scores = {};
+                questionsData.forEach(question => {
+                    const seq = String(question.sequence);
+                    const answer = formData.get(`question_${seq}`);
+                    const score = formData.get(`question_${seq}_score`);
+                    if (answer !== null && answer !== undefined && answer !== '') {
+                        data.answers[seq] = answer;
+                    }
+                    if (score !== null && score !== undefined && score !== '') {
+                        data.scores[seq] = Number(score);
+                    }
+                });
+
+                // 发送题目快照，便于后端生成与本次级别一致的Excel
+                data.questions_snapshot = questionsData;
+
+                // 打印要提交的数据，用于调试
+                console.log('Submitting data:', JSON.stringify(data, null, 2));
+
+                // 打印要提交的数据，用于调试
+                console.log('Submitting data:', JSON.stringify(data, null, 2));
+
+                // 提交数据
+                const response = await fetch('/api/submit_questionnaire', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showStatus('✅ 问卷提交成功！报告将通过邮件发送给您。', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/success';
+                    }, 2000);
+                } else {
+                    showStatus('❌ 提交失败：' + result.error, 'error');
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '✅ 提交问卷';
+                }
+            } catch (error) {
+                showStatus('❌ 提交失败：' + error.message, 'error');
+                submitButton.disabled = false;
+                submitButton.innerHTML = '✅ 提交问卷';
+            }
+        });
+
+        // 保存草稿
+        function saveDraft() {
+            const formData = new FormData(document.getElementById('questionnaireForm'));
+            const draftData = {};
+            for (const [key, value] of formData.entries()) {
+                draftData[key] = value;
+            }
+            localStorage.setItem('questionnaire_draft', JSON.stringify(draftData));
+            showStatus('💾 草稿已保存到本地', 'success');
+            setTimeout(() => {
+                document.getElementById('statusMessage').classList.add('hidden');
+            }, 2000);
+        }
+
+        // 显示状态消息
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.textContent = message;
+            statusDiv.classList.remove('hidden');
+        }
+
+        // 加载草稿
+        window.addEventListener('DOMContentLoaded', () => {
+            const draft = localStorage.getItem('questionnaire_draft');
+            if (draft) {
+                const draftData = JSON.parse(draft);
+                Object.keys(draftData).forEach(key => {
+                    const element = document.querySelector(`[name="${key}"]`);
+                    if (element) {
+                        if (element.type === 'radio') {
+                            const radio = document.querySelector(`[name="${key}"][value="${draftData[key]}"]`);
+                            if (radio) radio.checked = true;
+                        } else {
+                            element.value = draftData[key];
+                        }
+                    }
+                });
+                updateProgress();
+            }
+        });
+    </script>
+</body>
+</html>

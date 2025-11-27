@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业现代制度评价系统 - 登录</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(135deg,#2E5090 0%,#4472C4 100%);min-height:100vh;padding:24px}
+        .container{max-width:1080px;margin:0 auto}
+        .card{background:#fff;border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.15);overflow:hidden}
+        .header{background:linear-gradient(135deg,#2E5090 0%,#4472C4 100%);color:#fff;padding:28px;text-align:center;position:relative}
+        .header h1{font-size:28px;margin-bottom:6px}
+        .header p{opacity:.9}
+        .admin-link{position:absolute;right:20px;top:20px;color:#fff;border:1px solid rgba(255,255,255,.6);padding:6px 12px;border-radius:999px;text-decoration:none}
+        .content{padding:26px;background:#fff}
+        .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+        .role{border:1px solid #e5e7eb;border-radius:12px;padding:18px;cursor:pointer;transition:.2s;background:#f9fafb}
+        .role:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.06)}
+        .role.active{outline:2px solid #2E5090;background:#eef4ff}
+        .role h3{color:#111;font-size:18px;margin-bottom:6px}
+        .role p{color:#555;font-size:13px}
+        .form{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+        .form label{font-size:13px;color:#333}
+        .form select,.form input{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px;font-size:14px}
+        .actions{margin-top:16px;display:flex;gap:12px}
+        .btn{background:#2E5090;color:#fff;border:none;border-radius:10px;padding:12px 22px;cursor:pointer}
+        .btn.sec{background:#6b7280}
+        .hint{margin-top:10px;color:#555;font-size:13px}
+        .status{margin-top:12px;padding:10px;border-radius:10px;display:none}
+        .ok{background:#e8fff0;color:#166534;border:1px solid #bbf7d0}
+        .err{background:#fff1f2;color:#991b1b;border:1px solid #fecdd3}
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="card">
+        <div class="header">
+            <a class="admin-link" href="/admin/login">管理员登录</a>
+            <h1>现代企业制度指数评价系统</h1>
+            <p>请选择您的身份登录系统（系统将自动识别等级）</p>
+        </div>
+        <div class="content">
+            <div class="grid" id="roleGrid">
+                <div class="role active" data-role="enterprise">
+                    <h3>企业用户</h3>
+                    <p>填写问卷并自动生成报告</p>
+                </div>
+                <div class="role" data-role="chamber_of_commerce">
+                    <h3>工商联用户</h3>
+                    <p>审核企业资质，判定是否可升级</p>
+                </div>
+                <div class="role" data-role="expert">
+                    <h3>专家用户</h3>
+                    <p>根据问卷结果匹配等级并指导</p>
+                </div>
+            </div>
+
+            <div class="form" style="margin-top:20px;">
+                <div>
+                    <label>登录账户</label>
+                    <input id="username" placeholder="账户名" />
+                </div>
+                <div>
+                    <label>登录密码</label>
+                    <input id="password" type="password" placeholder="密码" />
+                </div>
+
+                <div>
+                    <label>记住我</label>
+                    <select id="remember"><option value="0">否</option><option value="1">是</option></select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" id="loginBtn">登录</button>
+                <button class="btn sec" onclick="resetForm()">重置</button>
+            </div>
+            <div id="status" class="status"></div>
+            <div class="hint">默认账户：企业(ent/ent123)，工商联(chamber/chamber123)，专家(expert/expert123)。可在config.json中配置。</div>
+        </div>
+    </div>
+</div>
+    <script>
+    let currentRole = 'enterprise';
+    const roleGrid = document.getElementById('roleGrid');
+    roleGrid.querySelectorAll('.role').forEach(el=>{
+        el.onclick=()=>{
+            roleGrid.querySelectorAll('.role').forEach(x=>x.classList.remove('active'))
+            el.classList.add('active');
+            currentRole = el.getAttribute('data-role');
+            const label = document.getElementById('levelLabel');
+            const level = document.getElementById('level');
+            if(currentRole==='chamber_of_commerce'){
+                label.textContent='审核级别';
+                level.innerHTML=`<option value="beginner">市级</option><option value="intermediate">省级</option><option value="advanced">国家级</option>`
+            }else{
+                label.textContent=(currentRole==='expert'?'专家级别':'企业分级');
+                level.innerHTML=`<option value="beginner">初级</option><option value="intermediate">中级</option><option value="advanced" selected>高级</option>`
+            }
+        }
+    })
+
+    async function doLogin(){
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const remember = document.getElementById('remember').value==='1';
+        const status = document.getElementById('status');
+        status.style.display='none';
+        try{
+            const res = await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role:currentRole,username,password,remember})});
+            const data = await res.json();
+            if(res.ok && data.success){
+                status.className='status ok';status.style.display='block';status.textContent='登录成功，正在跳转...';
+                setTimeout(()=>{ window.location.href = data.redirect || '/'; },500);
+            }else{
+                status.className='status err';status.style.display='block';status.textContent='登录失败：'+(data.error||'');
+                }
+        }catch(e){
+            status.className='status err';status.style.display='block';status.textContent='网络错误：'+e.message;
+        }
+    }
+    document.getElementById('loginBtn').onclick=doLogin;
+    function resetForm(){
+        document.getElementById('username').value='';
+        document.getElementById('password').value='';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统使用指南 - 企业现代制度评价系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        h2 {
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f9fafb;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .screenshot {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            padding: 8px 0;
+        }
+
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 企业现代制度评价系统</h1>
+            <p>完整使用指南 v1.0</p>
+        </div>
+
+        <div class="content">
+            <!-- 快速链接 -->
+            <div class="section">
+                <h2>🚀 快速开始</h2>
+                <div class="quick-links">
+                    <a href="http://localhost:5000" class="btn" target="_blank">客户端首页</a>
+                    <a href="http://localhost:5000/questionnaire" class="btn" target="_blank">在线问卷</a>
+                    <a href="http://localhost:5000/admin/login" class="btn" target="_blank">管理员登录</a>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>💡 提示：</strong> 首次使用请先启动系统。双击 <code>启动系统.bat</code> 文件即可启动。
+                </div>
+            </div>
+
+            <!-- 目录 -->
+            <div class="toc">
+                <h3>📑 目录</h3>
+                <ul>
+                    <li><a href="#overview">1. 系统概述</a></li>
+                    <li><a href="#client">2. 客户端使用指南</a></li>
+                    <li><a href="#admin">3. 管理员使用指南</a></li>
+                    <li><a href="#api">4. API接口文档</a></li>
+                    <li><a href="#faq">5. 常见问题</a></li>
+                </ul>
+            </div>
+
+            <!-- 系统概述 -->
+            <div id="overview" class="section">
+                <h2>1. 系统概述</h2>
+                <p>企业现代制度评价系统是一个完整的Web应用，用于评估企业的现代制度建设水平。系统包含客户端和管理端两个模块。</p>
+
+                <h3>主要功能</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span class="feature-icon">📝</span> 在线问卷</h4>
+                        <p>企业可在线填写231题评价问卷，系统自动保存进度。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span class="feature-icon">📤</span> Excel上传</h4>
+                        <p>支持批量上传企业数据Excel文件，快速处理多家企业。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span class="feature-icon">📄</span> 报告生成</h4>
+                        <p>自动生成Word和PDF格式的专业评价报告。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span class="feature-icon">✉️</span> 邮件通知</h4>
+                        <p>报告生成后自动发送邮件到企业联系人邮箱。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span class="feature-icon">🎛️</span> 管理后台</h4>
+                        <p>完整的管理员后台，统计、管理、批量操作一应俱全。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><span class="feature-icon">📊</span> 数据可视化</h4>
+                        <p>雷达图展示各维度得分，直观展现企业制度水平。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 客户端使用指南 -->
+            <div id="client" class="section">
+                <h2>2. 客户端使用指南</h2>
+
+                <h3>2.1 在线填写问卷</h3>
+                <ol>
+                    <li>访问客户端首页：<code>http://localhost:5000</code></li>
+                    <li>点击"在线填写问卷"功能卡片</li>
+                    <li>填写企业基本信息（标记*的为必填项）</li>
+                    <li>按照问卷提示逐题回答</li>
+                    <li>可随时点击"保存草稿"保存进度</li>
+                    <li>填写完成后点击"提交问卷"</li>
+                    <li>系统自动生成报告并发送到您的邮箱</li>
+                </ol>
+
+                <div class="alert alert-info">
+                    <strong>💡 提示：</strong> 问卷会自动保存到浏览器本地，关闭页面后再次打开会自动恢复填写进度。
+                </div>
+
+                <h3>2.2 批量上传Excel</h3>
+                <ol>
+                    <li>准备Excel文件，确保包含以下列：
+                        <ul>
+                            <li>企业名称（必填）</li>
+                            <li>联系人（必填）</li>
+                            <li>联系人邮箱（必填）</li>
+                            <li>联系人手机（必填）</li>
+                        </ul>
+                    </li>
+                    <li>在首页下滑到"批量上传Excel文件"区域</li>
+                    <li>点击上传区域或拖拽Excel文件</li>
+                    <li>预览上传数据</li>
+                    <li>选择是否发送邮件/短信通知</li>
+                    <li>点击"开始处理"</li>
+                    <li>等待处理完成</li>
+                </ol>
+
+                <h3>2.3 企业信息填写说明</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>字段</th>
+                            <th>说明</th>
+                            <th>示例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>企业名称</td>
+                            <td>企业完整注册名称</td>
+                            <td>XX科技有限公司</td>
+                        </tr>
+                        <tr>
+                            <td>统一社会信用代码</td>
+                            <td>18位企业信用代码</td>
+                            <td>91110000XXXXXXXXXX</td>
+                        </tr>
+                        <tr>
+                            <td>企业类型</td>
+                            <td>选择企业组织形式</td>
+                            <td>有限责任公司</td>
+                        </tr>
+                        <tr>
+                            <td>所属行业</td>
+                            <td>企业主营业务行业</td>
+                            <td>信息技术</td>
+                        </tr>
+                        <tr>
+                            <td>注册资本</td>
+                            <td>单位：万元</td>
+                            <td>1000</td>
+                        </tr>
+                        <tr>
+                            <td>联系人邮箱</td>
+                            <td>用于接收报告的邮箱</td>
+                            <td>contact@example.com</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 管理员使用指南 -->
+            <div id="admin" class="section">
+                <h2>3. 管理员使用指南</h2>
+
+                <div class="alert alert-warning">
+                    <strong>🔐 默认账户信息：</strong><br>
+                    用户名：<code>admin</code><br>
+                    密码：<code>admin123</code><br>
+                    <strong>首次使用后请立即修改密码！</strong>
+                </div>
+
+                <h3>3.1 登录管理后台</h3>
+                <ol>
+                    <li>访问管理员登录页面：<code>http://localhost:5000/admin/login</code></li>
+                    <li>输入用户名和密码</li>
+                    <li>点击"登录"按钮</li>
+                    <li>登录成功后自动跳转到管理员仪表板</li>
+                </ol>
+
+                <h3>3.2 系统概览</h3>
+                <p>登录后默认显示系统概览页面，包含以下内容：</p>
+                <ul>
+                    <li><strong>统计卡片：</strong>总提交数、已生成报告、今日提交、邮件发送数</li>
+                    <li><strong>最近提交：</strong>显示最新的5条企业提交记录</li>
+                </ul>
+
+                <h3>3.3 问卷提交管理</h3>
+                <ol>
+                    <li>点击左侧菜单"📝 问卷提交管理"</li>
+                    <li>查看所有企业提交的问卷列表</li>
+                    <li>使用搜索框筛选特定企业</li>
+                    <li>对每个提交可进行以下操作：
+                        <ul>
+                            <li><strong>查看：</strong>查看企业信息和答题详情</li>
+                            <li><strong>生成报告：</strong>为该企业生成评价报告</li>
+                            <li><strong>发送邮件：</strong>将报告发送到企业邮箱</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>3.4 批量生成报告</h3>
+                <ol>
+                    <li>点击左侧菜单"⚡ 批量生成报告"</li>
+                    <li>勾选需要生成报告的企业（可点击"全选"）</li>
+                    <li>配置报告选项：
+                        <ul>
+                            <li>☑️ 生成Word报告</li>
+                            <li>☑️ 生成PDF报告</li>
+                            <li>☑️ 自动发送邮件</li>
+                        </ul>
+                    </li>
+                    <li>点击"🚀 开始批量生成"</li>
+                    <li>实时查看处理进度</li>
+                </ol>
+
+                <div class="alert alert-info">
+                    <strong>💡 性能提示：</strong> 批量生成报告会在后台异步处理，不会阻塞界面操作。
+                </div>
+
+                <h3>3.5 报告管理</h3>
+                <ol>
+                    <li>点击左侧菜单"📄 报告管理"</li>
+                    <li>查看所有已生成的报告列表</li>
+                    <li>可以：
+                        <ul>
+                            <li><strong>下载：</strong>下载Word或PDF报告文件</li>
+                            <li><strong>删除：</strong>删除不需要的报告文件</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>3.6 邮件设置</h3>
+                <ol>
+                    <li>点击左侧菜单"✉️ 邮件设置"</li>
+                    <li>填写SMTP服务器信息：
+                        <ul>
+                            <li>SMTP服务器地址（如：smtp.qq.com）</li>
+                            <li>端口号（如：587）</li>
+                            <li>发件人邮箱</li>
+                            <li>邮箱密码/授权码</li>
+                        </ul>
+                    </li>
+                    <li>点击"💾 保存设置"</li>
+                    <li>点击"📧 发送测试邮件"验证配置</li>
+                </ol>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ 注意：</strong> 使用QQ邮箱、163邮箱等，需要使用"授权码"而非登录密码。
+                </div>
+
+                <h3>3.7 系统设置</h3>
+                <ol>
+                    <li>点击左侧菜单"⚙️ 系统设置"</li>
+                    <li>修改管理员密码：
+                        <ul>
+                            <li>输入当前密码</li>
+                            <li>输入新密码</li>
+                            <li>确认新密码</li>
+                            <li>点击"🔒 修改密码"</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- API文档 -->
+            <div id="api" class="section">
+                <h2>4. API接口文档</h2>
+
+                <h3>4.1 客户端API</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>接口</th>
+                            <th>方法</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/api/get_questions</td>
+                            <td>GET</td>
+                            <td>获取问卷题目列表</td>
+                        </tr>
+                        <tr>
+                            <td>/api/submit_questionnaire</td>
+                            <td>POST</td>
+                            <td>提交问卷数据</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>4.2 管理员API</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>接口</th>
+                            <th>方法</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/api/admin/login</td>
+                            <td>POST</td>
+                            <td>管理员登录</td>
+                        </tr>
+                        <tr>
+                            <td>/api/admin/dashboard-stats</td>
+                            <td>GET</td>
+                            <td>获取仪表板统计数据</td>
+                        </tr>
+                        <tr>
+                            <td>/api/admin/submissions</td>
+                            <td>GET</td>
+                            <td>获取所有提交记录</td>
+                        </tr>
+                        <tr>
+                            <td>/api/admin/generate-report</td>
+                            <td>POST</td>
+                            <td>生成单个报告</td>
+                        </tr>
+                        <tr>
+                            <td>/api/admin/batch-generate</td>
+                            <td>POST</td>
+                            <td>批量生成报告</td>
+                        </tr>
+                        <tr>
+                            <td>/api/admin/reports</td>
+                            <td>GET</td>
+                            <td>获取所有报告列表</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 常见问题 -->
+            <div id="faq" class="section">
+                <h2>5. 常见问题</h2>
+
+                <h3>Q1: 如何启动系统？</h3>
+                <p><strong>A:</strong> 双击项目根目录下的 <code>启动系统.bat</code> 文件即可启动。系统会自动检查Python环境和依赖包。</p>
+
+                <h3>Q2: 忘记管理员密码怎么办？</h3>
+                <p><strong>A:</strong> 有两种方式：</p>
+                <ol>
+                    <li>直接修改 <code>app.py</code> 文件中的 <code>ADMIN_USERS</code> 字典</li>
+                    <li>删除浏览器session cookie，使用默认密码登录</li>
+                </ol>
+
+                <h3>Q3: 邮件发送失败怎么办？</h3>
+                <p><strong>A:</strong> 请检查以下几点：</p>
+                <ul>
+                    <li>SMTP服务器地址和端口是否正确</li>
+                    <li>邮箱密码是否使用"授权码"（QQ邮箱、163邮箱等需要）</li>
+                    <li>防火墙是否阻止了SMTP端口</li>
+                    <li>尝试在"邮件设置"中发送测试邮件验证</li>
+                </ul>
+
+                <h3>Q4: 如何自定义问卷题目？</h3>
+                <p><strong>A:</strong> 修改项目根目录下的 <code>指标体系.xlsx</code> 文件，修改后重启系统即可。</p>
+
+                <h3>Q5: 生成的报告保存在哪里？</h3>
+                <p><strong>A:</strong> 报告文件保存在以下位置：</p>
+                <ul>
+                    <li>Word/PDF报告：<code>reports/</code> 文件夹</li>
+                    <li>问卷Excel文件：<code>submissions/</code> 文件夹</li>
+                </ul>
+
+                <h3>Q6: 如何添加新的管理员账户？</h3>
+                <p><strong>A:</strong> 修改 <code>app.py</code> 中的 <code>ADMIN_USERS</code> 字典：</p>
+                <div class="code-block">
+ADMIN_USERS = {
+    'admin': hashlib.sha256('admin123'.encode()).hexdigest(),
+    'newuser': hashlib.sha256('newpassword'.encode()).hexdigest()
+}
+                </div>
+
+                <h3>Q7: 系统支持多少个企业同时使用？</h3>
+                <p><strong>A:</strong> 理论上没有限制，但建议：</p>
+                <ul>
+                    <li>单次批量处理不超过100家企业</li>
+                    <li>生产环境建议使用专业的Web服务器（如Nginx + Gunicorn）</li>
+                    <li>大量数据建议使用数据库而非文件存储</li>
+                </ul>
+
+                <h3>Q8: 如何备份数据？</h3>
+                <p><strong>A:</strong> 备份以下文件夹即可：</p>
+                <ul>
+                    <li><code>submissions/</code> - 问卷提交数据</li>
+                    <li><code>reports/</code> - 生成的报告文件</li>
+                    <li><code>uploads/</code> - 上传的Excel文件</li>
+                </ul>
+            </div>
+
+            <!-- 技术支持 -->
+            <div class="section">
+                <h2>📞 技术支持</h2>
+                <p>如果您在使用过程中遇到任何问题，欢迎通过以下方式获取帮助：</p>
+                <ul>
+                    <li>查看项目文档：<code>README_FRONTEND.md</code></li>
+                    <li>查看终端输出的错误信息</li>
+                    <li>检查浏览器控制台的JavaScript错误</li>
+                </ul>
+
+                <div class="alert alert-success">
+                    <strong>✨ 使用愉快！</strong> 如有建议或功能需求，欢迎反馈。
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

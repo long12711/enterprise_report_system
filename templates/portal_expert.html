@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>专家门户 - 指导匹配</title>
+  <style>
+    body{font-family:"Microsoft YaHei",Arial,sans-serif;background:#f5f7fa;margin:0;padding:20px}
+    .container{max-width:1200px;margin:0 auto}
+    .card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.08);padding:20px;margin-bottom:20px}
+    h1{margin:0 0 10px;color:#0f766e}
+    .meta{color:#666;font-size:13px}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
+    th{background:#ecfeff;color:#0f766e;text-align:left}
+    .toolbar{display:flex;gap:10px;align-items:center}
+    .toolbar button{padding:8px 16px;border:none;border-radius:8px;background:#0f766e;color:#fff;cursor:pointer}
+    .logout{float:right}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>专家门户 · 指导匹配</h1>
+      <div class="meta">根据企业问卷与得分匹配专家指导优先级</div>
+      <button class="logout" onclick="logout()">退出登录</button>
+      <div class="toolbar" style="margin-top:10px;">
+        <button onclick="loadMatches()">刷新</button>
+      </div>
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>企业名称</th>
+            <th>当前级别</th>
+            <th>得分率</th>
+            <th>建议匹配</th>
+            <th>优先级</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    async function logout(){
+      await fetch('/api/logout',{method:'POST'});
+      location.href='/'
+    }
+    async function loadMatches(){
+      const res = await fetch('/api/portal/expert/matches');
+      const data = await res.json();
+      const tbody = document.querySelector('#tbl tbody');
+      tbody.innerHTML='';
+      if(!data.success){
+        tbody.innerHTML = `<tr><td colspan="5" style="color:#ef4444;">${data.error||'加载失败'}</td></tr>`;
+        return;
+      }
+      data.items.forEach(it=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `
+          <td>${it.enterprise_name||''}</td>
+          <td>${it.current_level||''}</td>
+          <td>${it.score_percentage?.toFixed(1)||'-'}%</td>
+          <td>${it.match_level||'-'}</td>
+          <td>${it.priority||'-'}</td>
+        `;
+        tbody.appendChild(tr);
+      })
+    }
+    loadMatches();
+  </script>
+</body>
+</html>
+
