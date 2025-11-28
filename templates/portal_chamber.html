@@ -162,17 +162,6 @@
     async function logout(){ await fetch('/api/logout',{method:'POST'}); location.href='/'; }
 
     // 资质审核
-    async function manualUpgrade(username, newLevel){
-      if(!confirm(`手动将 ${username} 提升为 ${newLevel} 级？`)) return;
-      const res = await fetch('/api/portal/chamber/approve-upgrade',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({username,new_level:newLevel})
-      });
-      const data = await res.json();
-      if(data.success){ alert('已手动晋级'); loadReviews(); }
-      else{ alert('操作失败：'+(data.error||'')); }
-    }
-
     async function approveUpgrade(username, newLevel) {
       if (!confirm(`确定要将用户 ${username} 的等级提升为 ${newLevel} 吗？`)) return;
       const res = await fetch('/api/portal/chamber/approve-upgrade', {

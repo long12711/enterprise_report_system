@@ -19,7 +19,7 @@ from pathlib import Path
 import threading
 import hashlib
 from functools import wraps
-from report_generator import ReportGenerator
+# from report_generator import ReportGenerator  # 已废弃，使用 enterprise_report_generator
 from notification_service import NotificationService
 from questionnaire_submission_manager import QuestionnaireSubmissionManager
 from enterprise_report_generator import EnterpriseReportGenerator
@@ -33,9 +33,15 @@ from user_types_config_final import (
 from nankai_indicator_loader import load_questions_by_level, map_user_to_level
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['REPORT_FOLDER'] = 'reports'
+# 注册专家门户蓝图
+from expert_portal import ui_bp as expert_ui_bp, api_bp as expert_api_bp
+app.register_blueprint(expert_ui_bp, url_prefix='/portal/expert')
+app.register_blueprint(expert_api_bp, url_prefix='/api/portal/expert')
+app.config['UPLOAD_FOLDER'] = 'storage/uploads'
+app.config['REPORT_FOLDER'] = 'storage/reports'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+app.config['SUBMISSIONS_FOLDER'] = 'storage/submissions'
+app.config['SPECIAL_FOLDER'] = 'storage/special_submissions'
 app.config['SECRET_KEY'] = 'your-secret-key-here-change-this-in-production'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
 
@@ -52,12 +58,12 @@ except Exception:
 # 确保文件夹存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['REPORT_FOLDER'], exist_ok=True)
-os.makedirs('submissions', exist_ok=True)
+os.makedirs(app.config['SUBMISSIONS_FOLDER'], exist_ok=True)
 
 # 初始化服务
-report_generator = ReportGenerator()
+# report_generator = ReportGenerator()  # 已废弃，使用 enterprise_report_generator
 notification_service = NotificationService()
-submission_manager = QuestionnaireSubmissionManager()
+submission_manager = QuestionnaireSubmissionManager(storage_folder=app.config['SUBMISSIONS_FOLDER'])
 enterprise_report_generator = EnterpriseReportGenerator()
 pdf_report_generator = PDFReportGenerator()
 
@@ -230,15 +236,11 @@ def portal_enterprise():
 def portal_chamber():
     return render_template('portal_chamber.html')
 
-@app.route('/portal/expert')
-@role_required('expert')
-def portal_expert():
-    return render_template('portal_expert.html')
 
 # ======= 工商联审核/专家匹配 API =======
 
 def _list_submission_jsons(limit=200):
-    base = 'submissions'
+    base = app.config['SUBMISSIONS_FOLDER']
     items = []
     if not os.path.exists(base):
         return items
@@ -428,33 +430,6 @@ def api_chamber_reviews():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
-@app.route('/api/portal/expert/matches')
-@role_required('expert')
-def api_expert_matches():
-    try:
-        items = []
-        for jp in _list_submission_jsons():
-            data, xlsx = _load_submission(jp)
-            if not data or not os.path.exists(xlsx):
-                continue
-            sc = _compute_score_from_excel(xlsx)
-            pct = sc.get('percentage',0.0)
-            if pct>=80:
-                match_level='advanced'; priority='中'
-            elif pct>=60:
-                match_level='intermediate'; priority='中'
-            else:
-                match_level='beginner'; priority='高'
-            items.append({
-                'enterprise_name': data.get('enterprise_info',{}).get('企业名称',''),
-                'current_level': data.get('user_level','advanced'),
-                'score_percentage': pct,
-                'match_level': match_level,
-                'priority': priority
-            })
-        return jsonify({'success': True, 'items': items})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @app.route('/')
@@ -573,7 +548,7 @@ def process_excel_async(task_id, filepath, send_email, send_sms):
                     enterprise_data = row.to_dict()
 
                     # 生成报告
-                    report_path = report_generator.generate_report(
+                    report_path = enterprise_report_generator.generate_report(
                         enterprise_data,
                         output_folder=app.config['REPORT_FOLDER']
                     )
@@ -917,9 +892,7 @@ def submit_questionnaire():
         # 将会话中的用户身份信息补充到提交数据中，确保后续流程能正确使用
         data['user_type'] = user_type
         data['user_level'] = user_level
-        data['username'] = session.get('username') # 关联用户名
-        data['username'] = session.get('username') # 关联用户名
-        data['username'] = session.get('username') # 关联用户名
+        data['username'] = session.get('username')  # 关联用户名
 
         # 保存提交数据
         result = submission_manager.save_submission(data)
@@ -973,7 +946,6 @@ def generate_and_send_report_async(questionnaire_path, enterprise_info, user_typ
                 # 如果专业版不可用，使用原版
                 word_report_path = enterprise_report_generator.generate_report(questionnaire_path)
                 print(f"[OK] Word报告已生成: {word_report_path}")
-            print(f"[OK] Word报告已生成: {word_report_path}")
 
             # 生成PDF报告
             pdf_report_path = pdf_report_generator.generate_report(questionnaire_path)
@@ -1742,12 +1714,15 @@ def api_enterprise_reports():
         if not username:
             return jsonify({'success': False, 'error': '无法获取用户信息，请重新登录'}), 401
 
+        # 获取企业名称
+        display_name = session.get('display_name', username)
+
         reports_folder = app.config['REPORT_FOLDER']
         reports = []
 
         if os.path.exists(reports_folder):
             for filename in os.listdir(reports_folder):
-                if filename.startswith(enterprise_name) and filename.endswith(('.docx', '.pdf')):
+                if display_name in filename and filename.endswith(('.docx', '.pdf')):
                     filepath = os.path.join(reports_folder, filename)
                     stat = os.stat(filepath)
                     reports.append({
