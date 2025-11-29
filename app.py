@@ -22,21 +22,24 @@ from functools import wraps
 # from report_generator import ReportGenerator  # 已废弃，使用 enterprise_report_generator
 from notification_service import NotificationService
 from questionnaire_submission_manager import QuestionnaireSubmissionManager
-from enterprise_report_generator import EnterpriseReportGenerator
-from pdf_report_generator import PDFReportGenerator
+from report_engine import EnterpriseReportGenerator, PDFReportGenerator, ProfessionalReportGenerator, ComprehensiveAnalysisGenerator
 # from score_calculator import ScoreCalculator  # 避免依赖空指标文件导致初始化失败
 from user_types_config_final import (
     get_all_user_types, 
     get_user_levels, 
     get_questionnaire_config
 )
-from nankai_indicator_loader import load_questions_by_level, map_user_to_level
+# from nankai_indicator_loader import load_questions_by_level, map_user_to_level  # 已迁移到 survey_engine
+from survey_engine.services.loader import SurveyLoader
 
 app = Flask(__name__)
 # 注册专家门户蓝图
 from expert_portal import ui_bp as expert_ui_bp, api_bp as expert_api_bp
 app.register_blueprint(expert_ui_bp, url_prefix='/portal/expert')
 app.register_blueprint(expert_api_bp, url_prefix='/api/portal/expert')
+# 注册问卷引擎蓝图（提供 /api/get_questions、/api/health 等）
+from survey_engine import api_bp as survey_api_bp
+app.register_blueprint(survey_api_bp, url_prefix='/api/survey')
 app.config['UPLOAD_FOLDER'] = 'storage/uploads'
 app.config['REPORT_FOLDER'] = 'storage/reports'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
@@ -45,15 +48,8 @@ app.config['SPECIAL_FOLDER'] = 'storage/special_submissions'
 app.config['SECRET_KEY'] = 'your-secret-key-here-change-this-in-production'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
 
-# 南开大学指标体系Excel绝对路径，优先读取config.json，可回退到默认值
-try:
-    with open('config.json', 'r', encoding='utf-8') as _cf:
-        _conf = json.load(_cf)
-        NK_FILE_PATH = _conf.get('indicators', {}).get('nk_excel_path')
-        if not NK_FILE_PATH:
-            NK_FILE_PATH = r"D:\xwechat_files\wxid_nfuq3yq5zb4x22_dcf3\msg\file\2025-11\南开大学-现代企业制度指数评价体系初稿2025.10.22（单独指标）(1).xlsx"
-except Exception:
-    NK_FILE_PATH = r"D:\xwechat_files\wxid_nfuq3yq5zb4x22_dcf3\msg\file\2025-11\南开大学-现代企业制度指数评价体系初稿2025.10.22（单独指标）(1).xlsx"
+# 指标文件管理：统一由 SurveyLoader 管理
+_survey_loader = SurveyLoader()
 
 # 确保文件夹存在
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -67,19 +63,11 @@ submission_manager = QuestionnaireSubmissionManager(storage_folder=app.config['S
 enterprise_report_generator = EnterpriseReportGenerator()
 pdf_report_generator = PDFReportGenerator()
 
-# 新增：专业报告生成器
-try:
-    from professional_report_generator import ProfessionalReportGenerator
-    professional_report_generator = ProfessionalReportGenerator()
-except ImportError:
-    professional_report_generator = None
+# 新增：专业报告生成器（集中由 report_engine 提供）
+professional_report_generator = ProfessionalReportGenerator() if 'ProfessionalReportGenerator' in globals() and ProfessionalReportGenerator else None
 
-# 新增：综合分析报告生成器
-try:
-    from comprehensive_analysis_generator import ComprehensiveAnalysisGenerator
-    comprehensive_analysis_generator = ComprehensiveAnalysisGenerator()
-except ImportError:
-    comprehensive_analysis_generator = None
+# 新增：综合分析报告生成器（集中由 report_engine 提供）
+comprehensive_analysis_generator = ComprehensiveAnalysisGenerator() if 'ComprehensiveAnalysisGenerator' in globals() and ComprehensiveAnalysisGenerator else None
 
 # 存储处理状态
 processing_status = {}
@@ -732,41 +720,18 @@ def success_page():
 @app.route('/api/get_questions')
 def get_questions():
     """
-    获取问卷题目
-    支持按用户类型和分级返回不同的题目（直接读取南开大学Excel中的“初级/中级/高级”工作表）
+    获取问卷题目（兼容旧路径）。内部委托给 SurveyLoader，保持与 /api/survey/get_questions 一致。
     """
     try:
         # 获取查询参数
         user_type = request.args.get('user_type')
         user_level = request.args.get('user_level')
+        excel_level = request.args.get('excel_level')  # 可选：beginner|intermediate|advanced
 
-        # 测试直指sheet参数（可选）：excel_level=beginner|intermediate|advanced
-        level_key = request.args.get('excel_level')
+        level_key = _survey_loader.resolve_level_key(user_type, user_level, excel_level)
 
-        # 将用户类型/分级映射为 beginner/intermediate/advanced（当未显式指定excel_level时）
-        if not level_key:
-            if user_type and user_level:
-                level_key = map_user_to_level(user_type, user_level)
-            else:
-                # 默认取高级
-                level_key = 'advanced'
-
-        # 校验文件是否存在
-        if not NK_FILE_PATH or not os.path.exists(NK_FILE_PATH):
-            # 尝试回退文件
-            fallback = '指标体系_备份.xlsx'
-            if os.path.exists(fallback):
-                questions = load_questions_by_level(fallback, level_key)
-                source_file = os.path.abspath(fallback)
-            else:
-                return jsonify({
-                    'success': False,
-                    'error': '指标文件不存在，请在config.json配置indicators.nk_excel_path或放置指标体系_备份.xlsx',
-                    'excel_level': level_key
-                }), 500
-        else:
-            source_file = NK_FILE_PATH
-            questions = load_questions_by_level(NK_FILE_PATH, level_key)
+        questions = _survey_loader.get_questions(level_key)
+        source_file = _survey_loader.nk_excel_path
 
         return jsonify({
             'success': True,
@@ -787,19 +752,20 @@ def get_questions():
 
 @app.route('/api/health')
 def health():
-    """运行状态与指标文件健康检查"""
+    """运行状态与指标文件健康检查（兼容旧路径，委托给 SurveyLoader）"""
     try:
-        exists = bool(NK_FILE_PATH) and os.path.exists(NK_FILE_PATH)
+        path = _survey_loader.nk_excel_path
+        exists = bool(path) and os.path.exists(path)
         result = {
             'success': True,
-            'nk_excel_path': NK_FILE_PATH,
+            'nk_excel_path': path,
             'file_exists': exists,
         }
         if exists:
             try:
                 overview = {}
                 for lv in ['beginner','intermediate','advanced']:
-                    qs = load_questions_by_level(NK_FILE_PATH, lv)
+                    qs = _survey_loader.get_questions(lv)
                     overview[lv] = len(qs)
                 result['overview'] = overview
             except Exception as e:
@@ -811,13 +777,14 @@ def health():
 
 @app.route('/api/indicators/overview')
 def indicators_overview():
-    """返回各分级题目数量与示例题目（前3条）"""
+    """返回各分级题目数量与示例题目（前3条）（兼容旧路径，委托 SurveyLoader）"""
     try:
-        if not NK_FILE_PATH or not os.path.exists(NK_FILE_PATH):
+        path = _survey_loader.nk_excel_path
+        if not path or not os.path.exists(path):
             return jsonify({'success': False, 'error': '指标文件不存在'}), 500
         data = {}
         for lv in ['beginner','intermediate','advanced']:
-            qs = load_questions_by_level(NK_FILE_PATH, lv)
+            qs = _survey_loader.get_questions(lv)
             data[lv] = {
                 'count': len(qs),
                 'samples': qs[:3]

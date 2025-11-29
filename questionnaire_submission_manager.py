@@ -6,7 +6,7 @@ import os
 import json
 from datetime import datetime
 import pandas as pd
-from questionnaire_generator import QuestionnaireGenerator
+# from questionnaire_generator import QuestionnaireGenerator  # 已移除未使用依赖
 from score_calculator import ScoreCalculator
 
 
