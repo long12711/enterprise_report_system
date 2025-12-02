@@ -39,6 +39,7 @@
       <div class="side-header">企业门户</div>
       <div class="menu">
         <button class="active" data-tab="home">概览</button>
+        <button data-tab="questionnaire">问卷填报</button>
         <button data-tab="history">历史问卷</button>
         <button data-tab="growth">成长轨迹</button>
         <button data-tab="preference">企业偏向</button>
@@ -54,6 +55,103 @@
         <div style="margin-top:12px;">
           <button class="btn" id="startBtn">开始填写问卷</button>
           <button class="btn gray" onclick="logout()">退出登录</button>
+        </div>
+      </section>
+
+      <!-- 问卷填报 -->
+      <section id="tab-questionnaire" class="tab card" style="display:none">
+        <h2>📝 问卷填报管理</h2>
+        <div class="muted">按照初级→中级→高级的顺序填写问卷，每级需达到60分才能解锁下一级</div>
+        
+        <!-- 填报进度 -->
+        <div style="margin-top:20px;padding:15px;background:#f9fafb;border-radius:8px;">
+          <h3 style="margin:0 0 12px;">填报进度</h3>
+          <div style="display:flex;gap:20px;align-items:center;">
+            <div style="flex:1;text-align:center;">
+              <div style="font-size:14px;color:#666;margin-bottom:8px;">初级问卷</div>
+              <div id="status-beginner" style="font-size:24px;">⏳</div>
+              <div id="score-beginner" style="font-size:12px;color:#666;margin-top:4px;">未填写</div>
+            </div>
+            <div style="font-size:20px;color:#ccc;">→</div>
+            <div style="flex:1;text-align:center;">
+              <div style="font-size:14px;color:#666;margin-bottom:8px;">中级问卷</div>
+              <div id="status-intermediate" style="font-size:24px;">🔒</div>
+              <div id="score-intermediate" style="font-size:12px;color:#666;margin-top:4px;">未解锁</div>
+            </div>
+            <div style="font-size:20px;color:#ccc;">→</div>
+            <div style="flex:1;text-align:center;">
+              <div style="font-size:14px;color:#666;margin-bottom:8px;">高级问卷</div>
+              <div id="status-advanced" style="font-size:24px;">🔒</div>
+              <div id="score-advanced" style="font-size:12px;color:#666;margin-top:4px;">未解锁</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 问卷列表 -->
+        <div style="margin-top:20px;">
+          <h3>可填写问卷</h3>
+          <div id="questionnaire-list">
+            <!-- 初级问卷 -->
+            <div class="card" style="margin-top:12px;border-left:4px solid #3b82f6;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <h4 style="margin:0 0 8px;">初级问卷</h4>
+                  <div class="muted">适用于初创企业和小微企业</div>
+                  <div id="beginner-status" style="margin-top:8px;"></div>
+                </div>
+                <div>
+                  <button id="btn-beginner" class="btn" onclick="startQuestionnaire('初级')">开始填写</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 中级问卷 -->
+            <div class="card" style="margin-top:12px;border-left:4px solid #10b981;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <h4 style="margin:0 0 8px;">中级问卷</h4>
+                  <div class="muted">适用于成长型企业</div>
+                  <div id="intermediate-status" style="margin-top:8px;"></div>
+                </div>
+                <div>
+                  <button id="btn-intermediate" class="btn gray" onclick="startQuestionnaire('中级')" disabled>未解锁</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 高级问卷 -->
+            <div class="card" style="margin-top:12px;border-left:4px solid #f59e0b;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <h4 style="margin:0 0 8px;">高级问卷</h4>
+                  <div class="muted">适用于成熟型企业和大型企业</div>
+                  <div id="advanced-status" style="margin-top:8px;"></div>
+                </div>
+                <div>
+                  <button id="btn-advanced" class="btn gray" onclick="startQuestionnaire('高级')" disabled>未解锁</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 最近提交记录 -->
+        <div style="margin-top:20px;">
+          <h3>最近提交</h3>
+          <table class="table" id="recent-submissions">
+            <thead>
+              <tr>
+                <th>级别</th>
+                <th>提交时间</th>
+                <th>得分</th>
+                <th>评价等级</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5" style="text-align:center;color:#999;">暂无提交记录</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -151,6 +249,7 @@
       if(btn) btn.classList.add('active');
       document.querySelectorAll('.tab').forEach(sec=>sec.style.display='none');
       const s = document.getElementById('tab-'+id); if(s) s.style.display='block';
+      if(id==='questionnaire') loadQuestionnairePage();
       if(id==='history') loadHistory();
       if(id==='growth') loadGrowth();
       if(id==='preference') loadPreference();
@@ -292,6 +391,151 @@
       const log = document.getElementById('chatLog');
       if(!data.success){ log.textContent = data.error || '暂无会话'; return; }
       log.textContent = (data.items||[]).map(i=>`[${i.time_text}] ${i.from}: ${i.message}`).join('\n');
+    }
+
+    // ========== 问卷填报管理 ==========
+    
+    // 加载问卷填报页面
+    async function loadQuestionnairePage(){
+      try {
+        // 加载填报状态
+        await loadQuestionnaireStatus();
+        // 加载最近提交记录
+        await loadRecentSubmissions();
+      } catch(e) {
+        console.error('加载问卷页面失败:', e);
+      }
+    }
+
+    // 加载问卷填报状态
+    async function loadQuestionnaireStatus(){
+      try {
+        const res = await fetch('/api/nankai/questionnaire-status');
+        const data = await res.json();
+        
+        if(!data.success) {
+          console.error('加载状态失败:', data.error);
+          return;
+        }
+
+        const status = data.status || {};
+        
+        // 更新初级状态
+        updateLevelStatus('beginner', '初级', status.beginner || {});
+        
+        // 更新中级状态
+        updateLevelStatus('intermediate', '中级', status.intermediate || {});
+        
+        // 更新高级状态
+        updateLevelStatus('advanced', '高级', status.advanced || {});
+        
+      } catch(e) {
+        console.error('加载问卷状态失败:', e);
+      }
+    }
+
+    // 更新单个级别的状态
+    function updateLevelStatus(level, levelName, statusData){
+      const statusIcon = document.getElementById(`status-${level}`);
+      const scoreText = document.getElementById(`score-${level}`);
+      const statusDiv = document.getElementById(`${level}-status`);
+      const button = document.getElementById(`btn-${level}`);
+      
+      if(statusData.completed) {
+        // 已完成
+        const score = statusData.score || 0;
+        const isQualified = score >= 60;
+        
+        statusIcon.textContent = isQualified ? '✅' : '❌';
+        scoreText.textContent = `${score.toFixed(1)}分 ${isQualified ? '(合格)' : '(不合格)'}`;
+        scoreText.style.color = isQualified ? '#16a34a' : '#ef4444';
+        
+        if(statusDiv) {
+          statusDiv.innerHTML = `
+            <span style="color:${isQualified ? '#16a34a' : '#ef4444'};">
+              最近得分：${score.toFixed(1)}分 / 100分
+            </span>
+            ${statusData.report_url ? `<a href="${statusData.report_url}" class="btn" style="margin-left:10px;padding:4px 10px;font-size:12px;" target="_blank">下载报告</a>` : ''}
+          `;
+        }
+        
+        button.textContent = '重新填写';
+        button.className = 'btn';
+        button.disabled = false;
+        
+      } else if(statusData.unlocked) {
+        // 已解锁但未完成
+        statusIcon.textContent = '⏳';
+        scoreText.textContent = '未填写';
+        scoreText.style.color = '#666';
+        
+        if(statusDiv) {
+          statusDiv.innerHTML = '<span style="color:#f59e0b;">请尽快完成填写</span>';
+        }
+        
+        button.textContent = '开始填写';
+        button.className = 'btn';
+        button.disabled = false;
+        
+      } else {
+        // 未解锁
+        statusIcon.textContent = '🔒';
+        scoreText.textContent = '未解锁';
+        scoreText.style.color = '#999';
+        
+        if(statusDiv) {
+          const prevLevel = level === 'intermediate' ? '初级' : '中级';
+          statusDiv.innerHTML = `<span style="color:#999;">需要先完成${prevLevel}问卷且得分≥60分</span>`;
+        }
+        
+        button.textContent = '未解锁';
+        button.className = 'btn gray';
+        button.disabled = true;
+      }
+    }
+
+    // 开始填写问卷
+    function startQuestionnaire(level){
+      // 跳转到南开问卷填写页面
+      window.location.href = `/nankai-questionnaire-fill?level=${encodeURIComponent(level)}`;
+    }
+
+    // 加载最近提交记录
+    async function loadRecentSubmissions(){
+      try {
+        const res = await fetch('/api/nankai/recent-submissions?limit=5');
+        const data = await res.json();
+        
+        const tbody = document.querySelector('#recent-submissions tbody');
+        tbody.innerHTML = '';
+        
+        if(!data.success || !data.submissions || data.submissions.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;">暂无提交记录</td></tr>';
+          return;
+        }
+        
+        data.submissions.forEach(sub => {
+          const score = sub.score || 0;
+          const isQualified = score >= 60;
+          const gradeText = score >= 90 ? '优秀' : (score >= 80 ? '良好' : (score >= 60 ? '合格' : '待改进'));
+          const gradeColor = score >= 90 ? '#16a34a' : (score >= 80 ? '#3b82f6' : (score >= 60 ? '#f59e0b' : '#ef4444'));
+          
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${sub.level || '-'}</td>
+            <td>${sub.submit_time || '-'}</td>
+            <td style="color:${isQualified ? '#16a34a' : '#ef4444'};font-weight:bold;">${score.toFixed(1)}分</td>
+            <td><span style="color:${gradeColor};font-weight:bold;">${gradeText}</span></td>
+            <td>
+              ${sub.report_url ? `<a href="${sub.report_url}" class="btn" style="padding:4px 10px;font-size:12px;" target="_blank">下载报告</a>` : '<span style="color:#999;">生成中...</span>'}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+        
+      } catch(e) {
+        console.error('加载最近提交失败:', e);
+      }
     }
   </script>
 </body>
