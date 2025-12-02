@@ -16,6 +16,7 @@ matplotlib.use('Agg')  # 使用非交互式后端，适合多线程
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+from industry_analyzer import IndustryAnalyzer
 from score_calculator import ScoreCalculator
 
 # 设置中文字体
@@ -33,9 +34,10 @@ except:
 class PDFReportGenerator:
     """PDF报告生成器"""
 
-    def __init__(self):
+    def __init__(self, indicator_file='nankai_indicators.xlsx'):
         """初始化报告生成器"""
-        self.calculator = ScoreCalculator()
+        self.calculator = ScoreCalculator(indicator_file=indicator_file)
+        self.industry_analyzer = IndustryAnalyzer()
         self.styles = getSampleStyleSheet()
         self._setup_custom_styles()
 
@@ -156,7 +158,11 @@ class PDFReportGenerator:
         story.extend(self._create_score_overview(score_summary, enterprise_name))
         story.append(PageBreak())
 
-        # 6. 维度分析
+        # 6. 行业对比分析（新增）
+        story.extend(self._create_industry_comparison(score_summary, enterprise_info))
+        story.append(PageBreak())
+
+        # 7. 维度分析
         story.extend(self._create_dimension_analysis(score_summary))
         story.append(PageBreak())
 
@@ -273,12 +279,13 @@ class PDFReportGenerator:
             ['执行摘要', '3'],
             ['企业基本情况', '4'],
             ['评价概览与图表分析', '5'],
-            ['维度分析', '6'],
-            ['详细评价结果', '7'],
-            ['风险评估与预警', '8'],
-            ['改进路径规划', '9'],
-            ['合规性检查清单', '10'],
-            ['报告说明与附录', '11'],
+            ['行业对比分析', '6'],
+            ['维度分析', '7'],
+            ['详细评价结果', '8'],
+            ['风险评估与预警', '9'],
+            ['改进路径规划', '10'],
+            ['合规性检查清单', '11'],
+            ['报告说明与附录', '12'],
         ]
 
         toc_table = Table(toc_data, colWidths=[12*cm, 3*cm])
@@ -672,6 +679,140 @@ class PDFReportGenerator:
         ]))
 
         elements.append(compliance_table)
+        
+        return elements
+
+    def _create_industry_comparison(self, score_summary, enterprise_info):
+        """创建行业对比分析章节"""
+        elements = []
+        
+        elements.append(Paragraph("行业对比分析", self.chapter_style))
+        elements.append(Spacer(1, 0.5*cm))
+        
+        # 获取企业信息
+        industry = enterprise_info.get('所属行业', '其他')
+        enterprise_score = score_summary['score_percentage']
+        
+        # 获取行业对比数据
+        comparison_data = self.industry_analyzer.get_comparison_data(
+            enterprise_score, industry
+        )
+        
+        # 行业概况说明
+        intro_text = f"""
+根据现代企业制度指数评价体系，对{enterprise_info.get('企业名称', '企业')}在{industry}行业中的
+表现进行全面对比分析。通过与行业平均水平、优秀企业、标杆企业的多维度对比，
+客观评价企业在行业中的竞争地位，为企业制定发展战略提供数据支撑。
+        """
+        elements.append(Paragraph(intro_text, self.body_style))
+        elements.append(Spacer(1, 0.5*cm))
+        
+        # 1. 总体对比表格
+        elements.append(Paragraph("（一）总体水平对比", self.heading2_style))
+        
+        overall_data = [
+            ['对比项目', '企业得分率', '行业平均', '行业优秀', '同规模平均', '全国标杆', '国际先进', '相对位置'],
+            [
+                '总体完成率',
+                f"{enterprise_score:.1f}%",
+                f"{comparison_data['industry_average']:.1f}%",
+                f"{comparison_data['industry_excellent']:.1f}%",
+                f"{comparison_data['same_size_average']:.1f}%",
+                f"{comparison_data['national_benchmark']:.1f}%",
+                f"{comparison_data['international_advanced']:.1f}%",
+                comparison_data['position']
+            ]
+        ]
+        
+        overall_table = Table(overall_data, colWidths=[2.2*cm, 1.8*cm, 1.8*cm, 1.8*cm, 2*cm, 1.8*cm, 1.8*cm, 1.8*cm])
+        overall_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#3B82F6')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('FONTNAME', (0, 0), (-1, 0), 'SimHei'),
+            ('FONTSIZE', (0, 0), (-1, 0), 8),
+            ('FONTNAME', (0, 1), (-1, -1), 'SimSun'),
+            ('FONTSIZE', (0, 1), (-1, -1), 7),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.Color(0.95, 0.95, 0.95)]),
+        ]))
+        
+        elements.append(overall_table)
+        elements.append(Spacer(1, 0.5*cm))
+        
+        # 2. 行业地位分析
+        elements.append(Paragraph("（二）行业地位分析", self.heading2_style))
+        
+        position_text = f"""
+在{industry}共计{comparison_data['total_enterprises']}家企业中，
+{enterprise_info.get('企业名称', '企业')}现代企业制度建设水平排名约为{comparison_data['ranking']['description']}，
+具体排名约第{comparison_data['ranking']['rank']}位，处于{comparison_data['position']}。
+企业得分率{enterprise_score:.1f}%，超过行业平均水平{enterprise_score - comparison_data['industry_average']:.1f}个百分点。
+        """
+        elements.append(Paragraph(position_text, self.body_style))
+        elements.append(Spacer(1, 0.3*cm))
+        
+        # 3. 维度对比分析
+        elements.append(Paragraph("（三）各维度对比分析", self.heading2_style))
+        
+        # 获取维度对比数据
+        dimension_comparisons = self.industry_analyzer.get_dimension_comparison(
+            score_summary['score_by_level1'], industry
+        )
+        
+        # 分类展示
+        excellent_dims = [d for d in dimension_comparisons if d['performance'] == '优秀水平']
+        advanced_dims = [d for d in dimension_comparisons if d['performance'] == '先进领域']
+        improve_dims = [d for d in dimension_comparisons if d['performance'] == '改进空间']
+        
+        if excellent_dims:
+            elements.append(Paragraph("<b>优势领域（超过行业优秀水平）：</b>", self.body_style))
+            for dim in excellent_dims:
+                text = f"• {dim['dimension']}：企业得分率{dim['enterprise_score']:.1f}%，" \
+                       f"超出行业平均{dim['gap_to_average']:.1f}个百分点，" \
+                       f"超出行业优秀{dim['gap_to_excellent']:.1f}个百分点"
+                elements.append(Paragraph(text, self.bullet_style))
+            elements.append(Spacer(1, 0.3*cm))
+        
+        if advanced_dims:
+            elements.append(Paragraph("<b>先进领域（超过行业平均但低于优秀水平）：</b>", self.body_style))
+            for dim in advanced_dims:
+                text = f"• {dim['dimension']}：得分率{dim['enterprise_score']:.1f}%，" \
+                       f"超出行业平均{dim['gap_to_average']:.1f}个百分点，" \
+                       f"但距离行业优秀还有{abs(dim['gap_to_excellent']):.1f}个百分点差距"
+                elements.append(Paragraph(text, self.bullet_style))
+            elements.append(Spacer(1, 0.3*cm))
+        
+        if improve_dims:
+            elements.append(Paragraph("<b>改进空间（需要重点关注）：</b>", self.body_style))
+            for dim in improve_dims:
+                text = f"• {dim['dimension']}：得分率{dim['enterprise_score']:.1f}%，" \
+                       f"低于行业平均{abs(dim['gap_to_average']):.1f}个百分点，需要重点改进"
+                elements.append(Paragraph(text, self.bullet_style))
+            elements.append(Spacer(1, 0.3*cm))
+        
+        # 4. 标杆企业对比
+        elements.append(Paragraph("（四）标杆企业对比", self.heading2_style))
+        
+        benchmark_text = f"""
+在{industry}领域，{', '.join(comparison_data['benchmark_companies'][:3])}等企业被公认为行业标杆。
+这些企业在现代企业制度建设方面起步较早，制度体系相对完善，治理水平较高。
+{enterprise_info.get('企业名称', '企业')}与标杆企业相比，还有{comparison_data['national_benchmark'] - enterprise_score:.1f}个百分点的提升空间，
+建议重点学习标杆企业在制度完善度、治理效率、风险管控等方面的先进经验。
+        """
+        elements.append(Paragraph(benchmark_text, self.body_style))
+        
+        # 5. 数据来源说明
+        elements.append(Spacer(1, 0.5*cm))
+        data_source = "基于实际提交数据统计" if comparison_data['data_source'] == 'actual' else "基于行业基准数据"
+        note = Paragraph(
+            f"注：本章节数据{data_source}，行业平均值和优秀水平根据大量企业评价数据计算得出，具有较高参考价值。",
+            ParagraphStyle('Note', parent=self.body_style, fontSize=8, textColor=colors.grey)
+        )
+        elements.append(note)
+        
+        return elements
 
         return elements
 

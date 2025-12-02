@@ -10,7 +10,7 @@ def _ensure_expert_role_api():
         return redirect('/')
 
 
-@api_bp.get('/matches')
+@api_bp.route('/matches', methods=['GET'])
 def api_matches():
     try:
         items = get_expert_matches()

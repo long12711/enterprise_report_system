@@ -23,7 +23,9 @@ COLUMN_CANDIDATES = {
     '指标类型': ['指标类型', '题目类型', '类型'],
     '分值': ['分值', '满分', '权重', '得分上限'],
     '适用对象': ['适用对象', '适用企业'],
-    '打分标准': ['打分标准', '评分标准', '评分细则', '评价标准', '判断标准']
+    '打分标准': ['打分标准', '评分标准', '评分细则', '评价标准', '判断标准'],
+    '评分准则': ['评分准则', '评分规则', '评分说明', '评分方法'],
+    '佐证材料': ['佐证材料', '证明材料', '支撑材料']
 }
 
 
@@ -80,6 +82,8 @@ def load_questions_by_level(file_path: str, level_key: str) -> List[Dict]:
     score_col = cols.get('分值')
     target_col = cols.get('适用对象')
     criteria_col = cols.get('打分标准')
+    scoring_rule_col = cols.get('评分准则')
+    evidence_col = cols.get('佐证材料')
 
     questions: List[Dict] = []
     if l3_col is None:
@@ -101,6 +105,8 @@ def load_questions_by_level(file_path: str, level_key: str) -> List[Dict]:
             base_score = None
         applicable = _coerce(row.get(target_col, ''), '所有企业') if target_col else '所有企业'
         criteria = _coerce(row.get(criteria_col, ''), '').strip() if criteria_col else ''
+        scoring_rule = _coerce(row.get(scoring_rule_col, ''), '').strip() if scoring_rule_col else ''
+        evidence = _coerce(row.get(evidence_col, ''), '').strip() if evidence_col else ''
 
         q = {
             'sequence': int(sequence) if (sequence is not None and not pd.isna(sequence)) else (len(questions) + 1),
@@ -111,6 +117,9 @@ def load_questions_by_level(file_path: str, level_key: str) -> List[Dict]:
             'base_score': base_score if base_score is not None else 1.0,
             'applicable_enterprises': applicable,
             'criteria': criteria,
+            'scoring_rule': scoring_rule,  # 新增：评分准则
+            'evidence_required': evidence,  # 新增：佐证材料
+            'score_value': str(base_score) if base_score is not None else '1',  # 新增：分值字符串
             'source_level': sheet_name
         }
         questions.append(q)
