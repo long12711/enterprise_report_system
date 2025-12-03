@@ -3,31 +3,238 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>专家门户 - 指导匹配</title>
+  <title>专家门户</title>
   <style>
-    body{font-family:"Microsoft YaHei",Arial,sans-serif;background:#f5f7fa;margin:0;padding:20px}
-    .container{max-width:1200px;margin:0 auto}
-    .card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.08);padding:20px;margin-bottom:20px}
-    h1{margin:0 0 10px;color:#0f766e}
-    .meta{color:#666;font-size:13px}
-    table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
-    th{background:#ecfeff;color:#0f766e;text-align:left}
-    .toolbar{display:flex;gap:10px;align-items:center}
-    .toolbar button{padding:8px 16px;border:none;border-radius:8px;background:#0f766e;color:#fff;cursor:pointer}
-    .logout{float:right}
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:"Microsoft YaHei",system-ui,-apple-system,BlinkMacSystemFont,Arial,sans-serif;background:#f4f5fb;color:#111827;font-size:13px;line-height:1.5;}
+    .layout{display:flex;min-height:100vh;}
+    .sidebar{width:230px;background:linear-gradient(180deg,#0f766e,#0369a1);color:#e5f5ff;padding:18px 14px 18px 14px;display:flex;flex-direction:column;}
+    .side-header{font-size:20px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+    .side-header::before{content:"";width:8px;height:24px;border-radius:999px;background:#a7f3d0;}
+    .menu{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+    .menu button{border:none;background:transparent;color:#e5f5ff;padding:8px 10px;border-radius:8px;text-align:left;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;align-items:center;}
+    .menu button span.badge{font-size:11px;background:rgba(15,118,110,0.2);padding:2px 6px;border-radius:999px;}
+    .menu button.active{background:rgba(15,118,110,0.18);box-shadow:0 0 0 1px rgba(148,163,184,0.25);}
+    .menu button:hover{background:rgba(15,118,110,0.27);}
+    .side-footer{margin-top:auto;font-size:11px;opacity:0.8;}
+
+    .content{flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:10px;}
+    .topbar{display:flex;justify-content:space-between;align-items:center;}
+    .top-left h1{margin:0;font-size:21px;color:#111827;letter-spacing:0.5px;}
+    .top-left .sub{margin-top:4px;font-size:12px;color:#6b7280;}
+    .top-right{display:flex;align-items:center;gap:10px;font-size:13px;color:#374151;}
+    .pill{padding:4px 10px;border-radius:999px;background:#ecfeff;color:#0f766e;border:1px solid #a5f3fc;font-size:11px;}
+    .btn{border:none;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;background:#0f766e;color:#fff;display:inline-flex;align-items:center;gap:4px;}
+    .btn.gray{background:#e5e7eb;color:#111827;}
+    .btn.sm{padding:4px 10px;font-size:12px;}
+    .btn:disabled{opacity:0.6;cursor:default;}
+
+    .card{background:#fff;border-radius:12px;box-shadow:0 8px 22px rgba(15,23,42,0.06);padding:14px 16px;margin-bottom:6px;}
+    .card h2{margin:0 0 6px;font-size:17px;color:#111827;}
+    .card h3{margin:0 0 4px;font-size:15px;}
+    .muted{font-size:12px;color:#6b7280;}
+
+    .kpi-cards{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+    .kpi{flex:1 1 120px;min-width:150px;background:linear-gradient(135deg,#eff6ff,#ecfdf5);border-radius:10px;padding:8px 10px;border:1px solid #e5e7eb;}
+    .kpi-label{font-size:11px;color:#6b7280;margin-bottom:4px;}
+    .kpi-value{font-size:20px;font-weight:700;color:#0f172a;}
+    .kpi-sub{font-size:11px;color:#16a34a;margin-top:2px;}
+
+    .chart-area{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;}
+    .chart-card{flex:1 1 260px;min-height:220px;border-radius:14px;border:1px solid #e5e7eb;background:radial-gradient(circle at top left,#e0f2fe,#f9fafb);padding:12px 14px;position:relative;overflow:hidden;}
+    .chart-card::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:999px;border:18px solid rgba(59,130,246,0.04);}
+
+    .viz-row{display:flex;gap:16px;margin-top:10px;align-items:stretch;flex-wrap:wrap;}
+    .viz-col{flex:1 1 120px;min-width:150px;}
+    .ring-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    .ring{
+      width:110px;height:110px;border-radius:999px;
+      background:conic-gradient(#22c55e 0deg 260deg,#e5e7eb 260deg 360deg);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 10px 25px rgba(15,23,42,0.18);
+    }
+    .ring-inner{
+      width:76px;height:76px;border-radius:999px;
+      background:#f9fafb;border:2px solid rgba(209,213,219,0.9);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      font-size:18px;font-weight:700;color:#16a34a;
+    }
+    .ring-inner span{font-size:11px;color:#6b7280;margin-top:2px;font-weight:400;}
+    .viz-caption{margin-top:8px;font-size:12px;color:#4b5563;text-align:center;}
+
+    .tag-cloud{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;}
+    .tag-chip{padding:4px 8px;border-radius:999px;font-size:11px;border:1px solid rgba(148,163,184,0.8);background:rgba(239,246,255,0.9);color:#1f2937;}
+    .tag-chip.em{border-color:#f97316;background:rgba(254,243,199,0.9);color:#92400e;}
+
+    .my-badges{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;}
+    .badge{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid #e5e7eb;background:#f9fafb;color:#374151;}
+
+    .tabs{margin-top:8px;}
+    .tab{display:none;}
+    .tab.active{display:block;}
+
+    .row{display:flex;align-items:center;gap:8px;}
+    .row + .row{margin-top:6px;}
+
+    .grid-2{display:grid;grid-template-columns:1.2fr 1.3fr;gap:12px;margin-top:10px;}
+    @media (max-width:960px){.layout{flex-direction:column;}.sidebar{width:100%;flex-direction:row;overflow-x:auto;}.side-footer{display:none;}.grid-2{grid-template-columns:1fr;}}
+
+    table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px;}
+    th,td{padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:left;}
+    th{background:#f9fafb;font-weight:600;font-size:12px;color:#4b5563;}
+    tr:hover td{background:#f3f4ff;}
+
+    input,textarea,select{width:100%;border-radius:8px;border:1px solid #d1d5db;padding:6px 8px;font-size:13px;font-family:inherit;}
+    textarea{min-height:80px;resize:vertical;}
+    label{font-size:12px;color:#4b5563;margin-bottom:2px;display:block;}
+
+    .tag{display:inline-flex;align-items:center;padding:2px 6px;border-radius:999px;font-size:11px;border:1px solid #e5e7eb;color:#374151;background:#f9fafb;margin-right:4px;margin-bottom:2px;}
+
+    .action-links{display:flex;gap:6px;align-items:center;}
+    .action-link{border-radius:999px;border:1px solid #d1d5db;background:#fff;color:#374151;font-size:11px;padding:2px 10px;cursor:pointer;display:inline-flex;align-items:center;}
+    .action-link.delete{border-color:#fecaca;background:#fef2f2;color:#b91c1c;}
+    .action-link:hover{background:#f3f4ff;}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <h1>专家门户 · 指导匹配</h1>
-      <div class="meta">根据企业问卷与得分匹配专家指导优先级</div>
-      <button class="logout" onclick="logout()">退出登录</button>
-      <div class="toolbar" style="margin-top:10px;">
-        <button onclick="loadMatches()">刷新</button>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-header">专家门户</div>
+      <div class="menu">
+        <button class="active" data-tab="home">首页</button>
+        <button data-tab="matches">匹配概览</button>
+        <button data-tab="enterprise">企业详情</button>
+        <button data-tab="ledger">辅导台账</button>
+        <button data-tab="feedback">专项反馈</button>
+        <button data-tab="profile">我的信息</button>
+        <button data-tab="rating">评级管理</button>
       </div>
-      <table id="tbl">
+      <div class="side-footer">
+        已登录：<span id="sideUser">专家</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <div class="top-left">
+          <h1>专家工作台</h1>
+          <div class="sub">查看企业问卷结果、管理辅导台账与专项反馈，支持按评级与地域进行智能匹配。</div>
+        </div>
+        <div class="top-right">
+          <span id="topUser" class="pill">专家</span>
+          <button class="btn gray sm" onclick="logout()">退出登录</button>
+        </div>
+      </div>
+
+      <section class="tabs">
+        <!-- 首页 -->
+        <section id="tab-home" class="tab card active">
+          <h2>首页概览</h2>
+          <div class="muted" id="welcomeInfo">加载中...</div>
+          <div class="muted" id="scopeTipHome" style="margin-top:4px;"></div>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn sm" onclick="switchTab('ledger')">记录辅导台账</button>
+            <button class="btn sm" onclick="switchTab('enterprise')">查看企业详情</button>
+            <button class="btn sm" onclick="seedDemo()">一键填充演示数据</button>
+          </div>
+
+          <div class="kpi-cards">
+            <div class="kpi">
+              <div class="kpi-label">已服务企业数</div>
+              <div class="kpi-value" id="kpiEntTotal">-</div>
+              <div class="kpi-sub" id="kpiEntSub">按地域范围过滤后</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">平均得分率</div>
+              <div class="kpi-value" id="kpiAvgScore">-</div>
+              <div class="kpi-sub">问卷得分平均值</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">近30天辅导记录</div>
+              <div class="kpi-value" id="kpiLedger30">-</div>
+              <div class="kpi-sub">包含线上+线下辅导</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">专项反馈提交</div>
+              <div class="kpi-value" id="kpiFeedback">-</div>
+              <div class="kpi-sub" id="kpiFeedbackSub">—</div>
+            </div>
+          </div>
+
+          <div class="chart-area">
+            <div class="chart-card">
+              <h3>工作强度概览</h3>
+              <div class="muted" style="font-size:11px;">用环形图直观展示“服务企业”“辅导场次”“反馈建议”占比</div>
+              <div class="viz-row">
+                <div class="viz-col">
+                  <div class="ring-wrap">
+                    <div class="ring" style="background:conic-gradient(#22c55e 0deg 260deg,#e5e7eb 260deg 360deg);">
+                      <div class="ring-inner">
+                        26
+                        <span>服务企业</span>
+                      </div>
+                    </div>
+                    <div class="viz-caption">近一年累计服务企业</div>
+                  </div>
+                </div>
+                <div class="viz-col">
+                  <div class="ring-wrap">
+                    <div class="ring" style="background:conic-gradient(#0ea5e9 0deg 220deg,#e5e7eb 220deg 360deg);">
+                      <div class="ring-inner" style="color:#0284c7;">
+                        18
+                        <span>辅导场次</span>
+                      </div>
+                    </div>
+                    <div class="viz-caption">线下+线上辅导总次数</div>
+                  </div>
+                </div>
+                <div class="viz-col">
+                  <div class="ring-wrap">
+                    <div class="ring" style="background:conic-gradient(#f97316 0deg 180deg,#e5e7eb 180deg 360deg);">
+                      <div class="ring-inner" style="color:#ea580c;">
+                        9
+                        <span>专项反馈</span>
+                      </div>
+                    </div>
+                    <div class="viz-caption">向工商联提交的建议</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3>企业画像示意</h3>
+              <div class="muted" style="font-size:11px;">用标签云展示目前主要服务对象的特征</div>
+              <div class="tag-cloud">
+                <span class="tag-chip em">制造业企业</span>
+                <span class="tag-chip">科技创新</span>
+                <span class="tag-chip">专精特新</span>
+                <span class="tag-chip">民营企业</span>
+                <span class="tag-chip">公司治理</span>
+                <span class="tag-chip em">风险合规</span>
+                <span class="tag-chip">数字化转型</span>
+                <span class="tag-chip">融资需求</span>
+                <span class="tag-chip">股权激励</span>
+                <span class="tag-chip">人力资源管理</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="my-badges">
+            <span class="badge" id="badgeLevel">评级：-</span>
+            <span class="badge" id="badgeScope">服务范围：全国</span>
+            <span class="badge" id="badgeCats">擅长领域：-</span>
+          </div>
+        </section>
+
+        <!-- 匹配概览 -->
+        <section id="tab-matches" class="tab card">
+          <h2>匹配概览</h2>
+          <div class="muted">根据企业问卷与得分匹配专家指导优先级（已按您的评级与地域进行过滤）</div>
+          <div class="muted" id="scopeTipMatches" style="margin-top:4px;"></div>
+          <div class="row" style="margin-top:8px;">
+            <button class="btn sm" onclick="loadMatches()">刷新</button>
+      </div>
+          <table class="table" id="tblMatches">
         <thead>
           <tr>
             <th>企业名称</th>
@@ -39,37 +246,693 @@
         </thead>
         <tbody></tbody>
       </table>
+        </section>
+
+        <!-- 企业详情 -->
+        <section id="tab-enterprise" class="tab card">
+          <h2>企业详情</h2>
+          <div class="muted" id="scopeTipEnterprise" style="margin:4px 0 8px;"></div>
+          <div class="grid-2">
+            <div>
+              <div class="row">
+                <input id="kw" placeholder="搜索企业名称..." />
+                <button class="btn sm" onclick="loadEnterpriseList()">刷新</button>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>企业名称</th>
+                    <th>等级</th>
+                    <th>得分率</th>
+                    <th>提交时间</th>
+                  </tr>
+                </thead>
+                <tbody id="entList"></tbody>
+              </table>
+            </div>
+            <div>
+              <div style="border-radius:12px;border:1px solid #e5e7eb;background:#f9fafb;padding:10px 12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                  <div>
+                    <div class="muted" style="font-size:11px;margin-bottom:2px;">当前选中企业</div>
+                    <h3 id="entTitle" style="margin:0;font-size:16px;color:#111827;">企业概览</h3>
+                  </div>
+                  <div style="text-align:right;">
+                    <div class="badge" id="entScoreBadge">得分：-</div>
+                  </div>
+                </div>
+                <div class="muted" id="entBasic" style="margin-top:6px;">请在左侧列表中点击一家企业，右侧将展示其基础信息与问卷概况。</div>
+                <div id="entTags" style="margin-top:6px;font-size:12px;"></div>
+              </div>
+
+              <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+                <div style="flex:1;min-width:140px;border-radius:10px;border:1px solid #e5e7eb;background:#fff;padding:8px 10px;">
+                  <div class="muted" style="font-size:11px;">综合得分</div>
+                  <div id="entScore" style="font-size:14px;color:#111827;margin-top:4px;">-</div>
+                </div>
+                <div style="flex:1;min-width:140px;border-radius:10px;border:1px solid #e5e7eb;background:#fff;padding:8px 10px;">
+                  <div class="muted" style="font-size:11px;">地区信息</div>
+                  <div id="entRegion" style="font-size:14px;color:#111827;margin-top:4px;">-</div>
+                </div>
+              </div>
+
+              <div style="margin-top:10px;border-radius:10px;border:1px dashed #d1d5db;background:#fff;padding:8px 10px;">
+                <div class="muted" style="font-size:11px;">问卷文件</div>
+                <div id="entExcel" style="font-size:13px;color:#374151;margin-top:4px;">-</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 辅导台账 -->
+        <section id="tab-ledger" class="tab card">
+          <h2>辅导台账</h2>
+          <div class="muted">记录您对企业的每一次辅导过程及关键结论，可上传佐证材料。</div>
+          <div class="grid-2" style="margin-top:10px;">
+            <div>
+              <div class="row">
+                <button class="btn sm" onclick="newLedger()">新增记录</button>
+                <button class="btn sm gray" onclick="loadLedger()">刷新</button>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>日期</th>
+                    <th>企业</th>
+                    <th>方式</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="ledgerList"></tbody>
+              </table>
+            </div>
+            <div>
+              <h3>编辑记录</h3>
+              <div class="row">
+                <div style="flex:1;">
+                  <label>企业名称</label>
+                  <input id="fLedgerEnt" />
+                </div>
+                <div style="flex:1;">
+                  <label>辅导日期</label>
+                  <input id="fLedgerDate" type="datetime-local" />
+                </div>
+              </div>
+              <div class="row">
+                <div style="flex:1;">
+                  <label>辅导方式</label>
+                  <input id="fLedgerMethod" placeholder="线上/线下/混合" />
+                </div>
+              </div>
+              <div style="margin-top:6px;">
+                <label>辅导内容与结论</label>
+                <textarea id="fLedgerSummary"></textarea>
+              </div>
+              <div style="margin-top:6px;">
+                <label>后续计划</label>
+                <textarea id="fLedgerNext"></textarea>
+              </div>
+              <div class="row" style="margin-top:8px;">
+                <button class="btn sm" onclick="saveLedger()">保存</button>
+                <button class="btn sm gray" onclick="resetLedgerForm()">清空</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 专项反馈 -->
+        <section id="tab-feedback" class="tab card">
+          <h2>专项反馈</h2>
+          <div class="muted">向工商联反馈您在辅导工作中发现的问题、建议和创新思路。</div>
+          <div class="grid-2" style="margin-top:10px;">
+            <div>
+              <div class="row">
+                <button class="btn sm gray" onclick="loadFeedbacks()">刷新</button>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>标题</th>
+                    <th>范围</th>
+                    <th>状态</th>
+                    <th>提交时间</th>
+                  </tr>
+                </thead>
+                <tbody id="fbList"></tbody>
+              </table>
+            </div>
+            <div>
+              <h3>新建反馈</h3>
+              <label>标题</label>
+              <input id="fFbTitle" placeholder="例如：关于完善问卷指标体系的建议" />
+              <label style="margin-top:6px;">反馈范围</label>
+              <input id="fFbScope" placeholder="如：市级试点、省级推广、全国推广" />
+              <label style="margin-top:6px;">详细内容</label>
+              <textarea id="fFbContent"></textarea>
+              <div class="row" style="margin-top:8px;">
+                <button class="btn sm" onclick="submitFeedback()">提交反馈</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 我的信息 -->
+        <section id="tab-profile" class="tab card">
+          <h2>我的信息</h2>
+          <div class="muted">查看并完善个人基础信息，便于工商联与企业联系您。</div>
+          <div class="grid-2" style="margin-top:10px;">
+            <div>
+              <label>姓名 / 显示名称</label>
+              <input id="pfName" />
+              <label style="margin-top:6px;">电子邮箱</label>
+              <input id="pfEmail" />
+              <label style="margin-top:6px;">联系电话</label>
+              <input id="pfPhone" />
+              <label style="margin-top:6px;">所在单位</label>
+              <input id="pfOrg" />
+              <label style="margin-top:6px;">职务 / 职称</label>
+              <input id="pfTitle" />
+            </div>
+            <div>
+              <label>擅长领域</label>
+              <input id="pfExpertise" placeholder="如：公司治理、合规管理、数字化转型" />
+              <label style="margin-top:6px;">个人简介</label>
+              <textarea id="pfBio"></textarea>
+              <div class="row" style="margin-top:8px;">
+                <button class="btn sm" onclick="saveProfile()">保存信息</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 评级管理 -->
+        <section id="tab-rating" class="tab card">
+          <h2>评级管理</h2>
+          <div class="muted">设置您的专家评级与服务地域范围，系统会据此过滤可服务企业。</div>
+          <div class="grid-2" style="margin-top:10px;">
+            <div>
+              <label>评级等级</label>
+              <select id="rtLevel">
+                <option value="local">地市级（默认）</option>
+                <option value="provincial">省级</option>
+                <option value="national">国家级</option>
+              </select>
+              <label style="margin-top:6px;">服务省份（可多值，用逗号分隔，如：河北,天津）</label>
+              <input id="rtProvince" />
+              <label style="margin-top:6px;">服务城市（可多值，如：石家庄,保定）</label>
+              <input id="rtCity" />
+              <label style="margin-top:6px;">服务区县（可多值，可选）</label>
+              <input id="rtDistrict" />
+            </div>
+            <div>
+              <label>专家类别 / 特色方向（逗号分隔）</label>
+              <input id="rtCategories" placeholder="如：制造业治理, 国企改革, 民营企业传承" />
+              <div class="row" style="margin-top:8px;">
+                <button class="btn sm" onclick="saveRating()">保存设置</button>
+              </div>
+              <div style="margin-top:10px;" class="muted">
+                说明：<br />
+                - 国家级专家默认可查看全国企业；<br />
+                - 省级专家默认按省份过滤企业；<br />
+                - 地市级专家可进一步按市区设定精细服务范围。<br />
+              </div>
     </div>
   </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
   <script>
-    async function logout(){
-      await fetch('/api/logout',{method:'POST'});
-      location.href='/'
+    // ========== 通用 ==========
+    const tabs = ['home','matches','enterprise','ledger','feedback','profile','rating'];
+    let currentLedgerId = null;
+
+    function switchTab(name){
+      tabs.forEach(t=>{
+        document.getElementById('tab-'+t).classList.remove('active');
+        document.querySelector('.menu button[data-tab="'+t+'"]').classList.remove('active');
+      });
+      document.getElementById('tab-'+name).classList.add('active');
+      document.querySelector('.menu button[data-tab="'+name+'"]').classList.add('active');
+
+      if(name==='home') loadHomeStats();
+      if(name==='matches') loadMatches();
+      if(name==='enterprise') loadEnterpriseList();
+      if(name==='ledger') loadLedger();
+      if(name==='feedback') loadFeedbacks();
+      if(name==='profile' || name==='rating') loadProfile();
     }
+
+    document.querySelectorAll('.menu button').forEach(btn=>{
+      btn.addEventListener('click', ()=>switchTab(btn.dataset.tab));
+    });
+
+    async function logout(){
+      try{
+      await fetch('/api/logout',{method:'POST'});
+      }catch(e){}
+      location.href='/';
+    }
+
+    // ========== 首页统计 ==========
+    function renderHomeCharts(opts){
+      const prof = opts.profile||{};
+      const levelDist = opts.levelDist;
+      const histData = opts.histData;
+
+      document.getElementById('welcomeInfo').innerText = `您好，${prof.display_name||'专家'}。`;
+      document.getElementById('sideUser').innerText = prof.display_name||'专家';
+      document.getElementById('topUser').innerText = `${prof.display_name||'专家'} · ${prof.level||''}`;
+
+      document.getElementById('kpiEntTotal').innerText = (opts.enterpriseTotal!=null?opts.enterpriseTotal:levelDist.beginner+levelDist.intermediate+levelDist.advanced);
+      document.getElementById('kpiAvgScore').innerText = (opts.avgScore||0).toFixed(1)+'%';
+      document.getElementById('kpiLedger30').innerText = (opts.ledger30||0);
+      document.getElementById('kpiFeedback').innerText = (opts.fbSubmitted||0);
+      document.getElementById('kpiFeedbackSub').innerText = `已反馈 ${opts.fbSubmitted||0} 条，其中标记已处理 ${opts.fbReviewed||0} 条`;
+
+      const level = (prof.rating_level||'local').toLowerCase();
+      const levelLabel = level==='national'?'国家级':(level==='provincial'?'省级':'地市级');
+      document.getElementById('badgeLevel').innerText = `评级：${levelLabel}`;
+      const prov = prof.province||''; const city = prof.city||'';
+      document.getElementById('badgeScope').innerText = `服务范围：${prov||'全国'} ${city}`.trim();
+      const cats = prof.categories||[];
+      document.getElementById('badgeCats').innerText = `擅长领域：${(Array.isArray(cats)?cats.join('、'):cats||'-')}`;
+
+      const scopeTip = `当前按【${levelLabel}】专家、地域：省份=[${prov||'未限定'}]，城市=[${prof.city||'未限定'}] 过滤企业。`;
+      document.getElementById('scopeTipHome').innerText = scopeTip;
+
+      // 分数直方图（带最小高度，避免柱子看不见）
+      const bars = document.getElementById('scoreBars'); bars.innerHTML='';
+      (histData||[]).forEach(b=>{
+        const h = b.count>0 ? Math.min(100, 18 + b.count*14) : 4;
+        const wrap=document.createElement('div'); wrap.style.flex='1';
+        wrap.innerHTML=`<div class="bar"><div class="bar-inner" style="height:${h}%;"></div></div><div class="bar-label">${b.label}</div>`;
+        bars.appendChild(wrap);
+      });
+
+      const lvlBars = document.getElementById('levelBars'); lvlBars.innerHTML='';
+      const lvMap = levelDist||{};
+      [['beginner','Beginner'],['intermediate','Intermediate'],['advanced','Advanced']].forEach(([k,label])=>{
+        const v = lvMap[k]||0;
+        const wrap=document.createElement('div'); wrap.style.flex='1';
+        wrap.innerHTML=`<div class="bar"><div class="bar-inner" style="height:${Math.min(100,18+v*18)}%;"></div></div><div class="bar-label">${label}</div>`;
+        lvlBars.appendChild(wrap);
+      });
+    }
+
+    function renderHomeDemo(){
+      const demoProfile = {};
+      const levelDist = {beginner:3, intermediate:4, advanced:2};
+      const histData = [
+        {label:'0-59', count:1},
+        {label:'60-69', count:2},
+        {label:'70-79', count:3},
+        {label:'80-89', count:2},
+        {label:'90-100', count:1}
+      ];
+      renderHomeCharts({
+        profile: demoProfile,
+        levelDist,
+        histData,
+        enterpriseTotal: 9,
+        avgScore: 78.5,
+        ledger30: 5,
+        fbSubmitted: 3,
+        fbReviewed: 1
+      });
+    }
+
+    async function loadHomeStats(){
+      try{
+        const r = await fetch('/api/portal/expert/stats');
+        const data = await r.json();
+        if(!data.success){
+          renderHomeDemo();
+          return;
+        }
+        const prof = data.profile||{};
+
+        // 如果后端没有任何企业数据，也用一套示意数据
+        let levelDist = data.level_distribution || {};
+        let histData = data.score_histogram || [];
+        if(!data.enterprise_total || !histData.length){
+          levelDist = {beginner:3, intermediate:4, advanced:2};
+          histData = [
+            {label:'0-59', count:1},
+            {label:'60-69', count:2},
+            {label:'70-79', count:3},
+            {label:'80-89', count:2},
+            {label:'90-100', count:1}
+          ];
+        }
+
+        const fb = data.feedback || {};
+        renderHomeCharts({
+          profile: prof,
+          levelDist,
+          histData,
+          enterpriseTotal: data.enterprise_total||0,
+          avgScore: data.avg_score||0,
+          ledger30: (Array.isArray(data.ledger_30_days)?data.ledger_30_days.length:data.ledger_30_days||0),
+          fbSubmitted: fb.submitted||0,
+          fbReviewed: fb.reviewed||0
+        });
+      }catch(e){
+        renderHomeDemo();
+      }
+    }
+
+    // ========== 匹配概览 ==========
     async function loadMatches(){
-      const res = await fetch('/api/portal/expert/matches');
-      const data = await res.json();
-      const tbody = document.querySelector('#tbl tbody');
+      try{
+        const r = await fetch('/api/portal/expert/matches');
+        const data = await r.json();
+        const tbody = document.querySelector('#tblMatches tbody');
       tbody.innerHTML='';
-      if(!data.success){
-        tbody.innerHTML = `<tr><td colspan="5" style="color:#ef4444;">${data.error||'加载失败'}</td></tr>`;
+        if(!data.success){ throw new Error(data.error||'加载失败'); }
+        const prof = data.profile||{};
+        const level = (prof.rating_level||'local').toLowerCase();
+        const levelLabel = level==='national'?'国家级':(level==='provincial'?'省级':'地市级');
+        document.getElementById('scopeTipMatches').innerText =
+          `已按【${levelLabel}】专家、地域范围过滤企业；如需调整请前往“评级管理”设置。`;
+
+        if(!data.items || !data.items.length){
+          tbody.innerHTML='<tr><td colspan="5" style="color:#9ca3af;">暂无可匹配的企业。</td></tr>';
         return;
       }
       data.items.forEach(it=>{
         const tr=document.createElement('tr');
-        tr.innerHTML = `
-          <td>${it.enterprise_name||''}</td>
+          tr.innerHTML=`<td>${it.enterprise_name||''}</td>
           <td>${it.current_level||''}</td>
-          <td>${it.score_percentage?.toFixed(1)||'-'}%</td>
+                        <td>${(it.score_percentage||0).toFixed(1)}%</td>
           <td>${it.match_level||'-'}</td>
-          <td>${it.priority||'-'}</td>
-        `;
-        tbody.appendChild(tr);
-      })
+                        <td>${it.priority||'-'}</td>`;
+          tbody.appendChild(tr);
+        });
+      }catch(e){
+        const tbody = document.querySelector('#tblMatches tbody');
+        tbody.innerHTML=`<tr><td colspan="5" style="color:#b91c1c;">加载失败：${e.message}</td></tr>`;
+      }
     }
-    loadMatches();
+
+    // ========== 企业详情 ==========
+    async function loadEnterpriseList(){
+      try{
+        const kw = document.getElementById('kw').value||'';
+        const r = await fetch('/api/portal/expert/enterprises?kw='+encodeURIComponent(kw));
+        const data = await r.json();
+        const tbody = document.getElementById('entList');
+        tbody.innerHTML='';
+        if(!data.success){ throw new Error(data.error||'加载失败'); }
+        const prof = data.profile||{};
+        const levelLabel = ((prof.rating_level||'local')==='national'?'国家级':((prof.rating_level||'local')==='provincial'?'省级':'地市级'));
+        document.getElementById('scopeTipEnterprise').innerText =
+          `当前仅展示在您服务范围内的企业（专家等级：${levelLabel}，省份：${prof.province||'未限定'}，城市：${prof.city||'未限定'}）。`;
+
+        if(!data.items || !data.items.length){
+          tbody.innerHTML='<tr><td colspan="4" style="color:#9ca3af;">暂无企业记录。</td></tr>';
+          return;
+        }
+        data.items.forEach(it=>{
+          const tr=document.createElement('tr');
+          tr.innerHTML=`<td>${it.enterprise_name||''}</td>
+                        <td>${it.user_level||''}</td>
+                        <td>${(it.score_percentage||0).toFixed(1)}%</td>
+                        <td>${it.submitted_at||''}</td>`;
+          tr.addEventListener('click',()=>loadEnterpriseDetail(it.username));
+          tbody.appendChild(tr);
+        });
+      }catch(e){
+        document.getElementById('entList').innerHTML =
+          `<tr><td colspan="4" style="color:#b91c1c;">加载失败：${e.message}</td></tr>`;
+      }
+    }
+
+    async function loadEnterpriseDetail(username){
+      try{
+        const r = await fetch('/api/portal/expert/enterprise/'+encodeURIComponent(username));
+        const data = await r.json();
+        if(!data.success){ throw new Error(data.error||'加载失败'); }
+        document.getElementById('entTitle').innerText = data.enterprise_name||'企业详情';
+        const info = data.info||{};
+        document.getElementById('entBasic').innerText =
+          `类型：${info['企业类型']||'-'} ｜ 行业：${info['所属行业']||'-'} ｜ 联系人：${info['联系人姓名']||'-'} ${info['联系人电话']||''}`;
+        const score = data.score||{};
+        const scoreText =
+          `得分：${(score.total||0).toFixed(1)} / ${(score.max||0).toFixed(1)}，得分率：${(score.percentage||0).toFixed(1)}%。`;
+        document.getElementById('entScore').innerText = scoreText;
+        document.getElementById('entScoreBadge').innerText = `${(score.percentage||0).toFixed(1)}%`;
+        // 标签
+        const tags = [];
+        if(info['企业类型']) tags.push(info['企业类型']);
+        if(info['所属行业']) tags.push(info['所属行业']);
+        if(prov) tags.push(prov);
+        if(city) tags.push(city);
+        const tagHtml = tags.length
+          ? tags.map(t=>`<span class="tag-chip">${t}</span>`).join(' ')
+          : '<span class="muted" style="font-size:11px;">暂无标签</span>';
+        document.getElementById('entTags').innerHTML = tagHtml;
+        const prov = info['省/直辖市']||info['省份']||'';
+        const city = info['市/州']||info['城市']||'';
+        const dist = info['区县']||info['区']||'';
+        document.getElementById('entRegion').innerText = `${prov||'-'} ${city||''} ${dist||''}`.trim();
+        document.getElementById('entExcel').innerText = data.excel_file?`问卷文件：${data.excel_file}`:'未找到对应问卷Excel文件';
+      }catch(e){
+        document.getElementById('entTitle').innerText = '加载详情失败';
+        document.getElementById('entBasic').innerText = e.message;
+      }
+    }
+
+    // ========== 辅导台账 ==========
+    function resetLedgerForm(){
+      currentLedgerId = null;
+      document.getElementById('fLedgerEnt').value='';
+      document.getElementById('fLedgerDate').value='';
+      document.getElementById('fLedgerMethod').value='';
+      document.getElementById('fLedgerSummary').value='';
+      document.getElementById('fLedgerNext').value='';
+    }
+
+    function newLedger(){
+      resetLedgerForm();
+      const now = new Date();
+      document.getElementById('fLedgerDate').value = new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    }
+
+    async function loadLedger(){
+      try{
+        const r = await fetch('/api/portal/expert/ledger');
+        const data = await r.json();
+        const tbody = document.getElementById('ledgerList');
+        tbody.innerHTML='';
+        if(!data.success){ throw new Error(data.error||'加载失败'); }
+        (data.items||[]).forEach(it=>{
+          const tr=document.createElement('tr');
+          tr.innerHTML=`<td>${(it.date||'').replace('T',' ').slice(0,16)}</td>
+                        <td>${it.enterprise_name||''}</td>
+                        <td>${it.method||''}</td>
+                        <td>
+                          <div class="action-links">
+                            <button type="button" class="action-link act-edit">编辑</button>
+                            <button type="button" class="action-link delete act-del">删除</button>
+                          </div>
+                        </td>`;
+          tr.querySelector('.act-edit').addEventListener('click',()=>{
+            currentLedgerId = it.id;
+            document.getElementById('fLedgerEnt').value=it.enterprise_name||'';
+            document.getElementById('fLedgerDate').value=(it.date||'').slice(0,16);
+            document.getElementById('fLedgerMethod').value=it.method||'';
+            document.getElementById('fLedgerSummary').value=it.summary||'';
+            document.getElementById('fLedgerNext').value=it.next_plan||'';
+          });
+          tr.querySelector('.act-del').addEventListener('click',()=>deleteLedger(it.id));
+          tbody.appendChild(tr);
+        });
+      }catch(e){
+        document.getElementById('ledgerList').innerHTML =
+          `<tr><td colspan="4" style="color:#b91c1c;">加载失败：${e.message}</td></tr>`;
+      }
+    }
+
+    async function saveLedger(){
+      try{
+        const body={
+          id: currentLedgerId,
+          enterprise_name: document.getElementById('fLedgerEnt').value,
+          date: document.getElementById('fLedgerDate').value,
+          method: document.getElementById('fLedgerMethod').value,
+          summary: document.getElementById('fLedgerSummary').value,
+          next_plan: document.getElementById('fLedgerNext').value
+        };
+        const r = await fetch('/api/portal/expert/ledger',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(body)
+        });
+        const data = await r.json();
+        if(!data.success){ throw new Error(data.error||'保存失败'); }
+        alert('已保存');
+        currentLedgerId = data.id;
+        loadLedger();
+      }catch(e){
+        alert('保存失败：'+e.message);
+      }
+    }
+
+    async function deleteLedger(id){
+      if(!confirm('确定删除该记录？')) return;
+      try{
+        const r = await fetch('/api/portal/expert/ledger/'+encodeURIComponent(id),{method:'DELETE'});
+        const data = await r.json();
+        if(!data.success){ throw new Error(data.error||'删除失败'); }
+        loadLedger();
+      }catch(e){
+        alert('删除失败：'+e.message);
+      }
+    }
+
+    // ========== 专项反馈 ==========
+    async function loadFeedbacks(){
+      try{
+        const r = await fetch('/api/portal/expert/feedback/my');
+        const data = await r.json();
+        const tbody = document.getElementById('fbList');
+        tbody.innerHTML='';
+        if(!data.success){ throw new Error(data.error||'加载失败'); }
+        (data.items||[]).forEach(it=>{
+          const tr=document.createElement('tr');
+          tr.innerHTML=`<td>${it.title||''}</td>
+                        <td>${it.scope||''}</td>
+                        <td>${it.status||''}</td>
+                        <td>${(it.created_at||'').replace('T',' ').slice(0,16)}</td>`;
+        tbody.appendChild(tr);
+        });
+      }catch(e){
+        document.getElementById('fbList').innerHTML =
+          `<tr><td colspan="4" style="color:#b91c1c;">加载失败：${e.message}</td></tr>`;
+      }
+    }
+
+    async function submitFeedback(){
+      try{
+        const body={
+          title: document.getElementById('fFbTitle').value,
+          scope: document.getElementById('fFbScope').value,
+          content: document.getElementById('fFbContent').value
+        };
+        const r = await fetch('/api/portal/expert/feedback',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(body)
+        });
+        const data = await r.json();
+        if(!data.success){ throw new Error(data.error||'提交失败'); }
+        alert('已提交反馈');
+        document.getElementById('fFbTitle').value='';
+        document.getElementById('fFbScope').value='';
+        document.getElementById('fFbContent').value='';
+        loadFeedbacks();
+      }catch(e){
+        alert('提交失败：'+e.message);
+      }
+    }
+
+    // ========== 我的信息 & 评级管理 ==========
+    async function loadProfile(){
+      try{
+        const r = await fetch('/api/portal/expert/profile');
+        const data = await r.json();
+        if(!data.success){ throw new Error(data.error||'加载失败'); }
+        const p = data.profile||{};
+        document.getElementById('pfName').value = p.display_name||'';
+        document.getElementById('pfEmail').value = p.email||'';
+        document.getElementById('pfPhone').value = p.phone||'';
+        document.getElementById('pfOrg').value = p.org||'';
+        document.getElementById('pfTitle').value = p.title||'';
+        document.getElementById('pfExpertise').value = p.expertise||'';
+        document.getElementById('pfBio').value = p.bio||'';
+
+        document.getElementById('rtLevel').value = (p.rating_level||'local');
+        document.getElementById('rtProvince').value = p.province||'';
+        document.getElementById('rtCity').value = p.city||'';
+        document.getElementById('rtDistrict').value = p.district||'';
+        const cats = p.categories;
+        document.getElementById('rtCategories').value = Array.isArray(cats)?cats.join(', '):(cats||'');
+      }catch(e){
+        console.error(e);
+      }
+    }
+
+    async function saveProfile(){
+      try{
+        const body={
+          display_name: document.getElementById('pfName').value,
+          email: document.getElementById('pfEmail').value,
+          phone: document.getElementById('pfPhone').value,
+          org: document.getElementById('pfOrg').value,
+          title: document.getElementById('pfTitle').value,
+          expertise: document.getElementById('pfExpertise').value,
+          bio: document.getElementById('pfBio').value
+        };
+        const r = await fetch('/api/portal/expert/profile',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(body)
+        });
+        const data = await r.json();
+        if(!data.success){ throw new Error(data.error||'保存失败'); }
+        alert('信息已保存');
+        loadHomeStats();
+      }catch(e){
+        alert('保存失败：'+e.message);
+      }
+    }
+
+    async function saveRating(){
+      try{
+        const body={
+          rating_level: document.getElementById('rtLevel').value,
+          province: document.getElementById('rtProvince').value,
+          city: document.getElementById('rtCity').value,
+          district: document.getElementById('rtDistrict').value,
+          categories: document.getElementById('rtCategories').value
+        };
+        const r = await fetch('/api/portal/expert/profile',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(body)
+        });
+        const data = await r.json();
+        if(!data.success){ throw new Error(data.error||'保存失败'); }
+        alert('评级设置已保存');
+        loadHomeStats();
+      }catch(e){
+        alert('保存失败：'+e.message);
+      }
+    }
+
+    // ========== 一键演示数据 ==========
+    async function seedDemo(){
+      try{
+        const r = await fetch('/api/portal/expert/seed-demo',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({count:5})
+        });
+        const data = await r.json();
+        if(!data.success){ throw new Error(data.error||'填充失败'); }
+        alert(`已填充演示数据（台账 ${data.ledger_count} 条，反馈 ${data.feedback_count} 条）`);
+        loadHomeStats();
+        if(document.getElementById('tab-ledger').classList.contains('active')) loadLedger();
+        if(document.getElementById('tab-feedback').classList.contains('active')) loadFeedbacks();
+      }catch(e){
+        alert('填充失败：'+e.message);
+      }
+    }
+
+    // 首次加载首页统计
+    loadHomeStats();
   </script>
 </body>
 </html>
-
-

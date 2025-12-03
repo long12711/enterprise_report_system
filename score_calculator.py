@@ -1,6 +1,8 @@
 """
 答案解析和评分计算模块
 """
+import os
+import json
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple
@@ -16,21 +18,52 @@ class ScoreCalculator:
         Args:
             indicator_file: 指标体系Excel文件路径
         """
-        if indicator_file is None:
-            indicator_file = r'D:\Claude Code\enterprise_report_system\指标体系.xlsx'
+        # 如果未显式传入，则尝试从 config.json / 备份文件 / 默认文件中推断
+        if not indicator_file:
+            indicator_file = None
+            # 1) 尝试从 config.json 读取
+            try:
+                if os.path.exists("config.json"):
+                    with open("config.json", "r", encoding="utf-8") as f:
+                        conf = json.load(f)
+                    indicator_file = conf.get("indicators", {}).get("nk_excel_path") or None
+            except Exception:
+                indicator_file = None
+
+            # 2) 若未配置或路径不存在，则尝试本地常用文件名
+            if not indicator_file or not os.path.exists(indicator_file):
+                if os.path.exists("指标体系_备份.xlsx"):
+                    indicator_file = "指标体系_备份.xlsx"
+                elif os.path.exists("指标体系.xlsx"):
+                    indicator_file = "指标体系.xlsx"
+                else:
+                    indicator_file = None
 
         self.indicator_file = indicator_file
         self.indicators_df = None
         self.load_indicators()
 
     def load_indicators(self):
-        """加载指标体系"""
+        """加载指标体系（如缺失则降级为空指标，保证系统可启动）"""
+        # 统一列集合，方便后续计算逻辑依赖字段名
+        cols = ["序号", "一级指标", "二级指标", "三级指标（问题）", "问题类型", "分值", "适用对象"]
         try:
-            self.indicators_df = pd.read_excel(self.indicator_file, sheet_name=0)
-            print(f"[OK] 加载指标体系: {len(self.indicators_df)} 个问题")
+            if self.indicator_file and os.path.exists(self.indicator_file):
+                self.indicators_df = pd.read_excel(self.indicator_file, sheet_name=0)
+                print(
+                    f"[OK] 加载指标体系: {len(self.indicators_df)} 个问题 -> {self.indicator_file}"
+                )
+            else:
+                # 找不到文件时，给出警告但不抛异常
+                self.indicators_df = pd.DataFrame(columns=cols)
+                print(
+                    "[WARN] 未找到指标体系文件，将使用空指标以保证应用可启动。"
+                    "可在 config.json 配置 indicators.nk_excel_path 或放置 指标体系_备份.xlsx / 指标体系.xlsx"
+                )
         except Exception as e:
-            print(f"[ERROR] 加载指标体系失败: {e}")
-            raise
+            # 任意异常都降级为空指标，避免阻塞整个系统
+            print(f"[ERROR] 加载指标体系失败（已降级为空指标）：{e}")
+            self.indicators_df = pd.DataFrame(columns=cols)
 
     def parse_questionnaire(self, questionnaire_file: str) -> Dict:
         """

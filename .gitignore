@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Local data (runtime only)
+storage/**
+!storage/submissions/.gitkeep
+!storage/reports/.gitkeep
+!storage/expert_ledgers/.gitkeep
+!storage/expert_feedbacks/.gitkeep
+!storage/enterprise_reviews/.gitkeep
+
+expert_portal/api.py
+expert_portal/routes.py
+expert_portal/templates/portal_expert.html
+
+
+
