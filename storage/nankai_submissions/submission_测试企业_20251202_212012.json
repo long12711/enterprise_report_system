@@ -1,0 +1,493 @@
+{
+  "timestamp": "20251202_212012",
+  "level": "初级",
+  "enterprise_info": {
+    "enterprise_name": "测试科技股份有限公司",
+    "contact_person": "张经理",
+    "contact_phone": "13800138000",
+    "contact_email": "test@example.com",
+    "main_business": "软件和信息技术服务业",
+    "enterprise_scale": "中型",
+    "establishment_years": "8",
+    "annual_revenue": "5000",
+    "rd_investment": "500",
+    "rd_ratio": "10"
+  },
+  "answers": {
+    "1": "C. 均未完成",
+    "2": "A. 全部完成",
+    "3": "A. 全部完成",
+    "4": "B. 部分完成",
+    "5": "A. 全部完成",
+    "6": "C. 均未完成",
+    "7": "B. 部分完成",
+    "8": "A. 全部完成",
+    "9": "A. 全部完成",
+    "10": "B. 部分完成",
+    "11": "C. 均未完成",
+    "12": "A. 全部完成",
+    "13": "B. 部分完成",
+    "14": "A. 全部完成",
+    "15": "A. 全部完成",
+    "16": "C. 均未完成",
+    "17": "A. 全部完成",
+    "18": "A. 全部完成",
+    "19": "B. 部分完成",
+    "20": "A. 全部完成",
+    "21": "C. 均未完成",
+    "22": "B. 部分完成",
+    "23": "A. 全部完成",
+    "24": "A. 全部完成",
+    "25": "B. 部分完成",
+    "26": "C. 均未完成",
+    "27": "A. 全部完成",
+    "28": "B. 部分完成",
+    "29": "A. 全部完成",
+    "30": "A. 全部完成",
+    "31": "C. 均未完成",
+    "32": "A. 全部完成",
+    "33": "A. 全部完成",
+    "34": "B. 部分完成",
+    "35": "A. 全部完成",
+    "36": "C. 均未完成",
+    "37": "B. 部分完成",
+    "38": "A. 全部完成",
+    "39": "A. 全部完成",
+    "40": "B. 部分完成",
+    "41": "C. 均未完成",
+    "42": "A. 全部完成",
+    "43": "B. 部分完成",
+    "44": "A. 全部完成",
+    "45": "A. 全部完成",
+    "46": "C. 均未完成",
+    "47": "A. 全部完成",
+    "48": "A. 全部完成",
+    "49": "B. 部分完成",
+    "50": "A. 全部完成",
+    "51": "C. 均未完成",
+    "52": "B. 部分完成",
+    "53": "A. 全部完成",
+    "54": "A. 全部完成",
+    "55": "B. 部分完成",
+    "56": "C. 均未完成",
+    "57": "A. 全部完成",
+    "58": "B. 部分完成",
+    "59": "A. 全部完成",
+    "60": "A. 全部完成",
+    "61": "C. 均未完成",
+    "62": "A. 全部完成",
+    "63": "A. 全部完成",
+    "64": "B. 部分完成"
+  },
+  "partial_details": {
+    "4": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "7": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "10": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "13": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "19": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "22": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "25": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "28": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "34": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "37": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "40": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "43": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "49": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "52": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "55": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "58": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。",
+    "64": "该项工作已启动，目前完成了基础框架的搭建，正在逐步完善相关制度和流程。预计在未来3-6个月内全面完成。已投入专项资金约50万元，配备专职人员2名。"
+  },
+  "score": {
+    "total_score": 58.38,
+    "max_score": 85.6,
+    "percentage": 68.2,
+    "details": {
+      "1": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 均未完成",
+        "rule_type": "binary"
+      },
+      "2": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "3": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "4": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      },
+      "5": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "6": {
+        "max_score": 2.0,
+        "earned_score": 0.0,
+        "answer": "C. 均未完成",
+        "rule_type": "graded"
+      },
+      "7": {
+        "max_score": 2.0,
+        "earned_score": 1.76,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "8": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "9": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "10": {
+        "max_score": 2.0,
+        "earned_score": 1.76,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "11": {
+        "max_score": 2.0,
+        "earned_score": 0.0,
+        "answer": "C. 均未完成",
+        "rule_type": "graded"
+      },
+      "12": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "13": {
+        "max_score": 2.0,
+        "earned_score": 1.76,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "14": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "15": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "16": {
+        "max_score": 2.0,
+        "earned_score": 0.0,
+        "answer": "C. 均未完成",
+        "rule_type": "graded"
+      },
+      "17": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "18": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "19": {
+        "max_score": 1.4,
+        "earned_score": 1.23,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "20": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "21": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 均未完成",
+        "rule_type": "binary"
+      },
+      "22": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      },
+      "23": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "24": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "25": {
+        "max_score": 1.4,
+        "earned_score": 1.23,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "26": {
+        "max_score": 1.2,
+        "earned_score": 0.0,
+        "answer": "C. 均未完成",
+        "rule_type": "graded"
+      },
+      "27": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "28": {
+        "max_score": 1.2,
+        "earned_score": 1.06,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "29": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "30": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "31": {
+        "max_score": 1.2,
+        "earned_score": 0.0,
+        "answer": "C. 均未完成",
+        "rule_type": "graded"
+      },
+      "32": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "33": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "34": {
+        "max_score": 1.2,
+        "earned_score": 1.06,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "35": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "36": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 均未完成",
+        "rule_type": "binary"
+      },
+      "37": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      },
+      "38": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "39": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "40": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      },
+      "41": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 均未完成",
+        "rule_type": "binary"
+      },
+      "42": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "43": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      },
+      "44": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "45": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "46": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 均未完成",
+        "rule_type": "binary"
+      },
+      "47": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "48": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "49": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      },
+      "50": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "51": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 均未完成",
+        "rule_type": "binary"
+      },
+      "52": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      },
+      "53": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "54": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "55": {
+        "max_score": 2.0,
+        "earned_score": 1.76,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "56": {
+        "max_score": 2.0,
+        "earned_score": 0.0,
+        "answer": "C. 均未完成",
+        "rule_type": "graded"
+      },
+      "57": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "58": {
+        "max_score": 2.0,
+        "earned_score": 1.76,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "59": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 全部完成",
+        "rule_type": "graded"
+      },
+      "60": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "61": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 均未完成",
+        "rule_type": "binary"
+      },
+      "62": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "63": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 全部完成",
+        "rule_type": "binary"
+      },
+      "64": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      }
+    }
+  },
+  "submitted_at": "2025-12-02T21:20:12.105264"
+}

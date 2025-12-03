@@ -1,0 +1,545 @@
+{
+  "timestamp": "20251202_172955",
+  "level": "初级",
+  "enterprise_info": {
+    "enterprise_name": "远洋集团",
+    "contact_person": "王露",
+    "contact_phone": "13287905329",
+    "contact_email": "13287905329@163.com",
+    "main_business": "第二产业",
+    "enterprise_scale": "大型",
+    "establishment_years": "1998",
+    "annual_revenue": "10000",
+    "rd_investment": "2000",
+    "rd_ratio": "15"
+  },
+  "answers": {
+    "1": "A. 已完成",
+    "2": "A. 已完成",
+    "3": "A. 已完成",
+    "4": "A. 已完成",
+    "5": "A. 已完成",
+    "6": "B. 部分完成",
+    "7": "A. 已完成",
+    "8": "B. 部分完成",
+    "9": "A. 已完成",
+    "10": "A. 已完成",
+    "11": "A. 已完成",
+    "12": "A. 已完成",
+    "13": "A. 已完成",
+    "14": "A. 已完成",
+    "15": "A. 已完成",
+    "16": "A. 已完成",
+    "17": "A. 已完成",
+    "18": "C. 未完成",
+    "19": "A. 已完成",
+    "20": "A. 已完成",
+    "21": "C. 未完成",
+    "22": "C. 未完成",
+    "23": "A. 已完成",
+    "24": "A. 已完成",
+    "25": "A. 已完成",
+    "26": "A. 已完成",
+    "27": "C. 未完成",
+    "28": "C. 未完成",
+    "29": "C. 未完成",
+    "30": "C. 未完成",
+    "31": "A. 已完成",
+    "32": "A. 已完成",
+    "33": "A. 已完成",
+    "34": "A. 已完成",
+    "35": "A. 已完成",
+    "36": "A. 已完成",
+    "37": "A. 已完成",
+    "38": "A. 已完成",
+    "39": "A. 已完成",
+    "40": "A. 已完成",
+    "41": "A. 已完成",
+    "42": "C. 未完成",
+    "43": "C. 未完成",
+    "44": "A. 已完成",
+    "45": "A. 已完成",
+    "46": "A. 已完成",
+    "47": "A. 已完成",
+    "48": "A. 已完成",
+    "49": "C. 未完成",
+    "50": "C. 未完成",
+    "51": "A. 已完成",
+    "52": "C. 未完成",
+    "53": "A. 已完成",
+    "54": "B. 部分完成",
+    "55": "A. 已完成",
+    "56": "C. 未完成",
+    "57": "A. 已完成",
+    "58": "A. 已完成",
+    "59": "A. 已完成",
+    "60": "A. 已完成",
+    "61": "A. 已完成",
+    "62": "A. 已完成",
+    "63": "A. 已完成",
+    "64": "A. 已完成"
+  },
+  "partial_details": {
+    "6": "第一二三项已完成",
+    "8": "实现一二三项",
+    "54": "只完成了第一项"
+  },
+  "files": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": [],
+    "6": [],
+    "7": [],
+    "8": [],
+    "9": [],
+    "10": [],
+    "11": [],
+    "12": [],
+    "13": [],
+    "14": [],
+    "15": [],
+    "16": [],
+    "17": [],
+    "18": [],
+    "19": [],
+    "20": [],
+    "21": [],
+    "22": [],
+    "23": [],
+    "24": [],
+    "25": [],
+    "26": [],
+    "27": [],
+    "28": [],
+    "29": [],
+    "30": [],
+    "31": [],
+    "32": [],
+    "33": [],
+    "34": [],
+    "35": [],
+    "36": [],
+    "37": [],
+    "38": [],
+    "39": [],
+    "40": [],
+    "41": [],
+    "42": [],
+    "43": [],
+    "44": [],
+    "45": [],
+    "46": [],
+    "47": [],
+    "48": [],
+    "49": [],
+    "50": [],
+    "51": [],
+    "52": [],
+    "53": [],
+    "54": [],
+    "55": [],
+    "56": [],
+    "57": [],
+    "58": [],
+    "59": [],
+    "60": [],
+    "61": [],
+    "62": [],
+    "63": [],
+    "64": []
+  },
+  "score": {
+    "total_score": 67.8,
+    "max_score": 85.6,
+    "percentage": 79.21,
+    "details": {
+      "1": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "2": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "3": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "4": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "5": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "6": {
+        "max_score": 2.0,
+        "earned_score": 1.2,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "7": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "8": {
+        "max_score": 2.0,
+        "earned_score": 1.0,
+        "answer": "B. 部分完成",
+        "rule_type": "graded"
+      },
+      "9": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "10": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "11": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "12": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "13": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "14": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "15": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "16": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "17": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "18": {
+        "max_score": 1.4,
+        "earned_score": 0.0,
+        "answer": "C. 未完成",
+        "rule_type": "graded"
+      },
+      "19": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "20": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "21": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 未完成",
+        "rule_type": "binary"
+      },
+      "22": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 未完成",
+        "rule_type": "binary"
+      },
+      "23": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "24": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "25": {
+        "max_score": 1.4,
+        "earned_score": 1.4,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "26": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "27": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 未完成",
+        "rule_type": "binary"
+      },
+      "28": {
+        "max_score": 1.2,
+        "earned_score": 0.0,
+        "answer": "C. 未完成",
+        "rule_type": "graded"
+      },
+      "29": {
+        "max_score": 1.2,
+        "earned_score": 0.0,
+        "answer": "C. 未完成",
+        "rule_type": "graded"
+      },
+      "30": {
+        "max_score": 1.2,
+        "earned_score": 0.0,
+        "answer": "C. 未完成",
+        "rule_type": "graded"
+      },
+      "31": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "32": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "33": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "34": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "35": {
+        "max_score": 1.2,
+        "earned_score": 1.2,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "36": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "37": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "38": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "39": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "40": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "41": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "42": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 未完成",
+        "rule_type": "binary"
+      },
+      "43": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 未完成",
+        "rule_type": "binary"
+      },
+      "44": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "45": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "46": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "47": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "48": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "49": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 未完成",
+        "rule_type": "binary"
+      },
+      "50": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 未完成",
+        "rule_type": "binary"
+      },
+      "51": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "52": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "C. 未完成",
+        "rule_type": "binary"
+      },
+      "53": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "54": {
+        "max_score": 1.0,
+        "earned_score": 0,
+        "answer": "B. 部分完成",
+        "rule_type": "binary"
+      },
+      "55": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "56": {
+        "max_score": 2.0,
+        "earned_score": 0.0,
+        "answer": "C. 未完成",
+        "rule_type": "graded"
+      },
+      "57": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "58": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "59": {
+        "max_score": 2.0,
+        "earned_score": 2.0,
+        "answer": "A. 已完成",
+        "rule_type": "graded"
+      },
+      "60": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "61": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "62": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "63": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      },
+      "64": {
+        "max_score": 1.0,
+        "earned_score": 1.0,
+        "answer": "A. 已完成",
+        "rule_type": "binary"
+      }
+    }
+  },
+  "submitted_at": "2025-12-02T17:29:55.829195"
+}

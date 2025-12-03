@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南开问卷系统 - 选择问卷级别</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2E5090 0%, #4472C4 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 60px 40px;
+        }
+
+        .intro-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .intro-section h2 {
+            color: #2E5090;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .intro-section p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .level-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .level-card {
+            background: white;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .level-card:hover {
+            border-color: #2E5090;
+            box-shadow: 0 10px 30px rgba(46, 80, 144, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .level-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .level-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .level-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E5090;
+            margin-bottom: 15px;
+        }
+
+        .level-description {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .level-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2E5090;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .select-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #2E5090 0%, #4472C4 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(46, 80, 144, 0.3);
+            text-decoration: none;
+        }
+
+        .select-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 80, 144, 0.4);
+        }
+
+        .features-section {
+            margin-top: 60px;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .features-section h3 {
+            color: #2E5090;
+            font-size: 22px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .feature-icon {
+            font-size: 30px;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .feature-content p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #2E5090 0%, #4472C4 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(46, 80, 144, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(46, 80, 144, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .level-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 南开大学现代企业制度指数评价问卷系统</h1>
+            <p>基于南开大学指标体系的企业现代制度评价系统<br>请根据企业实际情况选择合适的问卷级别</p>
+        </div>
+
+        <div class="content">
+            <div class="intro-section">
+                <h2>欢迎使用南开问卷系统</h2>
+                <p>
+                    本系统提供三个级别的问卷，分别适用于不同发展阶段的企业。
+                    请根据企业的实际情况和管理成熟度选择合适的问卷级别。
+                    完成问卷后，系统将自动生成评分和企业自评报告。
+                </p>
+            </div>
+
+            <div class="level-cards">
+                <!-- 初级问卷 -->
+                <div class="level-card" onclick="selectLevel('初级')">
+                    <div class="level-icon">🌱</div>
+                    <div class="level-title">初级问卷</div>
+                    <div class="level-description">
+                        适合初创期或管理制度尚在建立阶段的企业，
+                        涵盖企业治理的基础要素和核心指标。
+                    </div>
+                    <div class="level-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">64</div>
+                            <div class="stat-label">题目数量</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">评价维度</div>
+                        </div>
+                    </div>
+                    <button class="select-btn">选择初级问卷</button>
+                </div>
+
+                <!-- 中级问卷 -->
+                <div class="level-card" onclick="selectLevel('中级')">
+                    <div class="level-icon">🌿</div>
+                    <div class="level-title">中级问卷</div>
+                    <div class="level-description">
+                        适合成长期企业，已建立基本管理制度，
+                        需要进一步完善和优化治理结构。
+                    </div>
+                    <div class="level-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">52</div>
+                            <div class="stat-label">题目数量</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">评价维度</div>
+                        </div>
+                    </div>
+                    <button class="select-btn">选择中级问卷</button>
+                </div>
+
+                <!-- 高级问卷 -->
+                <div class="level-card" onclick="selectLevel('高级')">
+                    <div class="level-icon">🌳</div>
+                    <div class="level-title">高级问卷</div>
+                    <div class="level-description">
+                        适合成熟期企业，管理制度完善，
+                        追求卓越治理和持续改进的企业。
+                    </div>
+                    <div class="level-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">题目数量</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">评价维度</div>
+                        </div>
+                    </div>
+                    <button class="select-btn">选择高级问卷</button>
+                </div>
+            </div>
+
+            <div class="features-section">
+                <h3>✨ 系统特色功能</h3>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-content">
+                            <h4>智能评分系统</h4>
+                            <p>基于南开大学指标体系，自动计算企业得分（满分100分）</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📝</div>
+                        <div class="feature-content">
+                            <h4>自评报告生成</h4>
+                            <p>完成问卷后自动生成详细的企业自评报告</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📎</div>
+                        <div class="feature-content">
+                            <h4>佐证材料上传</h4>
+                            <p>支持上传相关佐证材料，增强评价的客观性</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-content">
+                            <h4>多维度评价</h4>
+                            <p>涵盖治理方向性、规范性、安全性、科学性、社会性、有效性六大维度</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="/" class="back-button">← 返回首页</a>
+
+    <script>
+        function selectLevel(level) {
+            // 跳转到问卷填写页面
+            window.location.href = `/nankai-questionnaire-fill?level=${encodeURIComponent(level)}`;
+        }
+    </script>
+</body>
+</html>

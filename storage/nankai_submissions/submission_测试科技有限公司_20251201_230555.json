@@ -1,0 +1,1458 @@
+{
+  "timestamp": "20251201_230555",
+  "level": "Sheet1",
+  "enterprise_info": {
+    "enterprise_name": "测试科技有限公司",
+    "contact_person": "张经理",
+    "contact_phone": "13800138000",
+    "contact_email": "test@example.com",
+    "main_business": "软件开发与技术服务",
+    "enterprise_scale": "中型企业（100-500人）",
+    "establishment_years": "10年",
+    "annual_revenue": "5000万元",
+    "rd_investment": "500万元",
+    "rd_ratio": "10%"
+  },
+  "answers": {
+    "1": "A. 已完成",
+    "2": "C. 未完成",
+    "3": "A. 已完成",
+    "4": "A. 已完成",
+    "5": "A. 已完成",
+    "6": "A. 已完成",
+    "7": "A. 已完成",
+    "8": "A. 已完成",
+    "9": "C. 未完成",
+    "10": "B. 部分完成",
+    "11": "B. 部分完成",
+    "12": "A. 已完成",
+    "13": "A. 已完成",
+    "14": "C. 未完成",
+    "15": "A. 已完成",
+    "16": "A. 已完成",
+    "17": "A. 已完成",
+    "18": "A. 已完成",
+    "19": "A. 已完成",
+    "20": "A. 已完成",
+    "21": "A. 已完成",
+    "22": "A. 已完成",
+    "23": "A. 已完成",
+    "24": "A. 已完成",
+    "25": "A. 已完成",
+    "26": "B. 部分完成",
+    "27": "B. 部分完成",
+    "28": "A. 已完成",
+    "29": "B. 部分完成",
+    "30": "B. 部分完成",
+    "31": "A. 已完成",
+    "32": "A. 已完成",
+    "33": "B. 部分完成",
+    "34": "A. 已完成",
+    "35": "A. 已完成",
+    "36": "A. 已完成",
+    "37": "A. 已完成",
+    "38": "A. 已完成",
+    "39": "A. 已完成",
+    "40": "A. 已完成",
+    "41": "A. 已完成",
+    "42": "A. 已完成",
+    "43": "A. 已完成",
+    "44": "A. 已完成",
+    "45": "A. 已完成",
+    "46": "B. 部分完成",
+    "47": "A. 已完成",
+    "48": "A. 已完成",
+    "49": "B. 部分完成",
+    "50": "A. 已完成",
+    "51": "A. 已完成",
+    "52": "A. 已完成",
+    "53": "A. 已完成",
+    "54": "A. 已完成",
+    "55": "A. 已完成",
+    "56": "A. 已完成",
+    "57": "C. 未完成",
+    "58": "A. 已完成",
+    "59": "B. 部分完成",
+    "60": "B. 部分完成",
+    "61": "A. 已完成",
+    "62": "A. 已完成",
+    "63": "A. 已完成",
+    "64": "A. 已完成",
+    "65": "A. 已完成",
+    "66": "A. 已完成",
+    "67": "A. 已完成",
+    "68": "A. 已完成",
+    "69": "A. 已完成",
+    "70": "A. 已完成",
+    "71": "A. 已完成",
+    "72": "A. 已完成",
+    "73": "A. 已完成",
+    "74": "A. 已完成",
+    "75": "A. 已完成",
+    "76": "A. 已完成",
+    "77": "C. 未完成",
+    "78": "A. 已完成",
+    "79": "A. 已完成",
+    "80": "A. 已完成",
+    "81": "A. 已完成",
+    "82": "B. 部分完成",
+    "83": "A. 已完成",
+    "84": "A. 已完成",
+    "85": "A. 已完成",
+    "86": "A. 已完成",
+    "87": "C. 未完成",
+    "88": "A. 已完成",
+    "89": "B. 部分完成",
+    "90": "B. 部分完成",
+    "91": "A. 已完成",
+    "92": "B. 部分完成",
+    "93": "A. 已完成",
+    "94": "A. 已完成",
+    "95": "A. 已完成",
+    "96": "C. 未完成",
+    "97": "A. 已完成",
+    "98": "B. 部分完成",
+    "99": "A. 已完成",
+    "100": "A. 已完成",
+    "101": "A. 已完成",
+    "102": "A. 已完成",
+    "103": "A. 已完成",
+    "104": "A. 已完成",
+    "105": "A. 已完成",
+    "106": "B. 部分完成",
+    "107": "A. 已完成",
+    "108": "A. 已完成",
+    "110": "A. 已完成",
+    "111": "A. 已完成",
+    "112": "A. 已完成",
+    "113": "A. 已完成",
+    "114": "B. 部分完成",
+    "115": "C. 未完成",
+    "116": "A. 已完成",
+    "117": "C. 未完成",
+    "118": "A. 已完成",
+    "120": "C. 未完成",
+    "121": "B. 部分完成",
+    "122": "A. 已完成",
+    "123": "A. 已完成",
+    "124": "A. 已完成",
+    "127": "A. 已完成",
+    "128": "A. 已完成",
+    "129": "C. 未完成",
+    "130": "B. 部分完成",
+    "131": "B. 部分完成",
+    "132": "B. 部分完成",
+    "133": "A. 已完成",
+    "134": "A. 已完成",
+    "135": "B. 部分完成",
+    "136": "A. 已完成",
+    "137": "A. 已完成",
+    "138": "B. 部分完成",
+    "139": "A. 已完成",
+    "140": "A. 已完成",
+    "141": "A. 已完成",
+    "142": "C. 未完成",
+    "143": "A. 已完成",
+    "144": "A. 已完成",
+    "145": "A. 已完成",
+    "146": "B. 部分完成",
+    "147": "B. 部分完成",
+    "148": "A. 已完成",
+    "149": "A. 已完成",
+    "150": "A. 已完成",
+    "151": "A. 已完成",
+    "152": "A. 已完成",
+    "153": "A. 已完成",
+    "154": "A. 已完成",
+    "155": "A. 已完成",
+    "156": "B. 部分完成",
+    "157": "C. 未完成",
+    "158": "A. 已完成",
+    "159": "C. 未完成",
+    "160": "A. 已完成",
+    "161": "B. 部分完成",
+    "162": "A. 已完成",
+    "163": "A. 已完成",
+    "164": "A. 已完成",
+    "165": "A. 已完成",
+    "166": "A. 已完成",
+    "167": "A. 已完成",
+    "168": "A. 已完成",
+    "169": "A. 已完成",
+    "170": "A. 已完成",
+    "171": "A. 已完成",
+    "172": "C. 未完成",
+    "173": "B. 部分完成",
+    "174": "A. 已完成",
+    "175": "B. 部分完成",
+    "176": "A. 已完成",
+    "177": "A. 已完成",
+    "178": "A. 已完成",
+    "179": "A. 已完成",
+    "180": "A. 已完成",
+    "181": "C. 未完成",
+    "182": "A. 已完成",
+    "183": "A. 已完成",
+    "184": "A. 已完成",
+    "185": "A. 已完成",
+    "186": "C. 未完成",
+    "187": "C. 未完成",
+    "188": "A. 已完成",
+    "189": "A. 已完成",
+    "190": "A. 已完成",
+    "191": "A. 已完成",
+    "192": "B. 部分完成",
+    "193": "B. 部分完成",
+    "194": "B. 部分完成",
+    "195": "A. 已完成",
+    "196": "B. 部分完成",
+    "197": "C. 未完成",
+    "198": "C. 未完成",
+    "199": "A. 已完成",
+    "200": "A. 已完成",
+    "201": "A. 已完成",
+    "202": "B. 部分完成",
+    "203": "B. 部分完成",
+    "204": "A. 已完成",
+    "205": "C. 未完成",
+    "206": "C. 未完成",
+    "207": "A. 已完成",
+    "208": "A. 已完成",
+    "209": "B. 部分完成",
+    "210": "A. 已完成",
+    "211": "A. 已完成",
+    "212": "A. 已完成",
+    "213": "A. 已完成",
+    "214": "B. 部分完成",
+    "215": "A. 已完成",
+    "216": "B. 部分完成",
+    "217": "B. 部分完成",
+    "218": "A. 已完成",
+    "219": "A. 已完成",
+    "220": "C. 未完成",
+    "221": "B. 部分完成",
+    "222": "A. 已完成",
+    "223": "A. 已完成",
+    "224": "A. 已完成",
+    "225": "C. 未完成",
+    "226": "A. 已完成",
+    "227": "B. 部分完成",
+    "228": "A. 已完成",
+    "229": "A. 已完成",
+    "230": "A. 已完成",
+    "231": "B. 部分完成",
+    "232": "A. 已完成",
+    "233": "A. 已完成",
+    "234": "A. 已完成",
+    "235": "A. 已完成"
+  },
+  "partial_details": {
+    "10": "该项工作已完成约80%，正在持续推进中。",
+    "11": "该项工作已完成约80%，正在持续推进中。",
+    "26": "该项工作已完成约80%，正在持续推进中。",
+    "27": "该项工作已完成约80%，正在持续推进中。",
+    "29": "该项工作已完成约80%，正在持续推进中。",
+    "30": "该项工作已完成约80%，正在持续推进中。",
+    "33": "该项工作已完成约80%，正在持续推进中。",
+    "46": "该项工作已完成约80%，正在持续推进中。",
+    "49": "该项工作已完成约80%，正在持续推进中。",
+    "59": "该项工作已完成约80%，正在持续推进中。",
+    "60": "该项工作已完成约80%，正在持续推进中。",
+    "82": "该项工作已完成约80%，正在持续推进中。",
+    "89": "该项工作已完成约80%，正在持续推进中。",
+    "90": "该项工作已完成约80%，正在持续推进中。",
+    "92": "该项工作已完成约80%，正在持续推进中。",
+    "98": "该项工作已完成约80%，正在持续推进中。",
+    "106": "该项工作已完成约80%，正在持续推进中。",
+    "114": "该项工作已完成约80%，正在持续推进中。",
+    "121": "该项工作已完成约80%，正在持续推进中。",
+    "130": "该项工作已完成约80%，正在持续推进中。",
+    "131": "该项工作已完成约80%，正在持续推进中。",
+    "132": "该项工作已完成约80%，正在持续推进中。",
+    "135": "该项工作已完成约80%，正在持续推进中。",
+    "138": "该项工作已完成约80%，正在持续推进中。",
+    "146": "该项工作已完成约80%，正在持续推进中。",
+    "147": "该项工作已完成约80%，正在持续推进中。",
+    "156": "该项工作已完成约80%，正在持续推进中。",
+    "161": "该项工作已完成约80%，正在持续推进中。",
+    "173": "该项工作已完成约80%，正在持续推进中。",
+    "175": "该项工作已完成约80%，正在持续推进中。",
+    "192": "该项工作已完成约80%，正在持续推进中。",
+    "193": "该项工作已完成约80%，正在持续推进中。",
+    "194": "该项工作已完成约80%，正在持续推进中。",
+    "196": "该项工作已完成约80%，正在持续推进中。",
+    "202": "该项工作已完成约80%，正在持续推进中。",
+    "203": "该项工作已完成约80%，正在持续推进中。",
+    "209": "该项工作已完成约80%，正在持续推进中。",
+    "214": "该项工作已完成约80%，正在持续推进中。",
+    "216": "该项工作已完成约80%，正在持续推进中。",
+    "217": "该项工作已完成约80%，正在持续推进中。",
+    "221": "该项工作已完成约80%，正在持续推进中。",
+    "227": "该项工作已完成约80%，正在持续推进中。",
+    "231": "该项工作已完成约80%，正在持续推进中。"
+  },
+  "files": {},
+  "score": {
+    "total_score": 211.3,
+    "max_score": 239.0,
+    "percentage": 88.41,
+    "details": {
+      "1": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "2": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "3": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "4": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "5": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "6": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "7": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "8": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "9": {
+        "max_score": 10.0,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "10": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "11": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "12": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "13": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "14": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "15": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "16": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "17": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "18": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "19": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "20": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "21": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "22": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "23": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "24": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "25": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "26": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "27": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "28": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "29": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "30": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "31": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "32": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "33": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "34": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "35": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "36": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "37": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "38": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "39": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "40": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "41": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "42": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "43": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "44": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "45": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "46": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "47": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "48": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "49": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "50": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "51": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "52": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "53": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "54": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "55": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "56": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "57": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "58": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "59": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "60": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "61": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "62": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "63": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "64": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "65": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "66": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "67": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "68": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "69": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "70": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "71": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "72": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "73": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "74": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "75": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "76": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "77": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "78": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "79": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "80": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "81": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "82": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "83": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "84": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "85": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "86": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "87": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "88": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "89": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "90": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "91": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "92": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "93": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "94": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "95": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "96": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "97": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "98": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "99": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "100": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "101": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "102": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "103": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "104": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "105": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "106": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "107": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "108": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "110": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "111": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "112": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "113": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "114": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "115": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "116": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "117": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "118": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "120": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "121": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "122": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "123": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "124": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "127": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "128": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "129": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "130": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "131": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "132": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "133": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "134": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "135": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "136": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "137": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "138": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "139": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "140": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "141": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "142": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "143": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "144": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "145": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "146": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "147": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "148": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "149": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "150": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "151": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "152": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "153": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "154": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "155": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "156": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "157": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "158": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "159": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "160": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "161": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "162": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "163": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "164": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "165": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "166": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "167": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "168": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "169": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "170": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "171": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "172": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "173": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "174": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "175": {
+        "max_score": 10.0,
+        "earned_score": 8.0,
+        "answer": "B. 部分完成"
+      },
+      "176": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "177": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "178": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "179": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "180": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "181": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "182": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "183": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "184": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "185": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "186": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "187": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "188": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "189": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "190": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "191": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "192": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "193": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "194": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "195": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "196": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "197": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "198": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "199": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "200": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "201": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "202": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "203": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "204": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "205": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "206": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "207": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "208": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "209": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "210": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "211": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "212": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "213": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "214": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "215": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "216": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "217": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "218": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "219": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "220": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "221": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "222": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "223": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "224": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "225": {
+        "max_score": 0.5,
+        "earned_score": 0.0,
+        "answer": "C. 未完成"
+      },
+      "226": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "227": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "228": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "229": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "230": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "231": {
+        "max_score": 0.5,
+        "earned_score": 0.4,
+        "answer": "B. 部分完成"
+      },
+      "232": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "233": {
+        "max_score": 10.0,
+        "earned_score": 10.0,
+        "answer": "A. 已完成"
+      },
+      "234": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      },
+      "235": {
+        "max_score": 0.5,
+        "earned_score": 0.5,
+        "answer": "A. 已完成"
+      }
+    }
+  },
+  "submitted_at": "2025-12-01T23:05:55.374598"
+}

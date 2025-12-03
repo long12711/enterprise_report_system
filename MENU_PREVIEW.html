@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>工商联门户菜单预览</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    .preview-section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .preview-section h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #333;
+      border-bottom: 2px solid #4338ca;
+      padding-bottom: 10px;
+    }
+    
+    .layout {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .sidebar-preview {
+      width: 240px;
+      background: #101827;
+      color: #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .side-header {
+      padding: 18px 16px;
+      font-weight: 700;
+      border-bottom: 1px solid #1f2937;
+      color: #fff;
+    }
+    
+    .menu {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 500px;
+    }
+    
+    .menu-group {
+      padding: 8px 0;
+    }
+    
+    .menu-group-title {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .menu button {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      padding: 12px 16px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .menu button:hover {
+      background: #0b1220;
+    }
+    
+    .menu button.active {
+      color: #fff;
+      background: #0b1220;
+      border-left-color: #60a5fa;
+    }
+    
+    .menu-arrow {
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    
+    .submenu-tooltip {
+      position: absolute;
+      left: 240px;
+      top: 0;
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      min-width: 180px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      z-index: 1000;
+      padding: 8px 0;
+    }
+    
+    .menu button:hover .submenu-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .submenu-item {
+      padding: 10px 16px;
+      color: #cbd5e1;
+      font-size: 13px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      transition: all 0.2s;
+    }
+    
+    .submenu-item:hover {
+      background: #374151;
+      color: #fff;
+    }
+    
+    .content-preview {
+      flex: 1;
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .content-preview h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .content-preview p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .feature-list {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+    
+    .feature-list h4 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .feature-list ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .feature-list li {
+      color: #666;
+      font-size: 13px;
+      padding: 5px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+    
+    .feature-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #16a34a;
+      font-weight: bold;
+    }
+    
+    .structure-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .structure-table th,
+    .structure-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .structure-table th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .structure-table td {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .structure-table tr:hover {
+      background: #f9fafb;
+    }
+    
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #fff;
+      background: #4338ca;
+    }
+    
+    .tag.new {
+      background: #16a34a;
+    }
+    
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .comparison-item {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 15px;
+      border-left: 4px solid #4338ca;
+    }
+    
+    .comparison-item h4 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .comparison-item p {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    .code-block {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    
+    .highlight {
+      color: #4338ca;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 工商联门户菜单重设计 - 预览</h1>
+    
+    <!-- 菜单预览 -->
+    <div class="preview-section">
+      <h2>菜单结构预览</h2>
+      <div class="layout">
+        <div class="sidebar-preview">
+          <div class="side-header">工商联门户</div>
+          <div class="menu">
+            <!-- 企业管理 -->
+            <div class="menu-group">
+              <div class="menu-group-title">企业管理</div>
+              <button class="active">
+                <span>资质审核</span>
+                <span class="menu-arrow">→</span>
+                <div class="submenu-tooltip">
+                  <button class="submenu-item">企业资质审核</button>
+                </div>
+              </button>
+            </div>
+
+            <!-- 专家管理 -->
+            <div class="menu-group">
+              <div class="menu-group-title">专家管理</div>
+              <button>
+                <span>专家辅导记录</span>
+                <span class="menu-arrow">→</span>
+                <div class="submenu-tooltip">
+                  <button class="submenu-item">辅导记录查看</button>
+                </div>
+              </button>
+            </div>
+
+            <!-- 工商联用户管理 -->
+            <div class="menu-group">
+              <div class="menu-group-title">工商联用户管理</div>
+              <button>
+                <span>用户管理</span>
+                <span class="menu-arrow">→</span>
+                <div class="submenu-tooltip">
+                  <button class="submenu-item">工商联用户列表</button>
+                </div>
+              </button>
+            </div>
+
+            <!-- 专项反馈管理 -->
+            <div class="menu-group">
+              <div class="menu-group-title">专项反馈管理</div>
+              <button>
+                <span>专项申请审核</span>
+                <span class="menu-arrow">→</span>
+                <div class="submenu-tooltip">
+                  <button class="submenu-item">专项申请审核</button>
+                </div>
+              </button>
+            </div>
+
+            <!-- 基础问卷管理 -->
+            <div class="menu-group">
+              <div class="menu-group-title">基础问卷管理</div>
+              <button>
+                <span>问卷管理</span>
+                <span class="menu-arrow">→</span>
+                <div class="submenu-tooltip">
+                  <button class="submenu-item">问卷配置</button>
+                </div>
+              </button>
+            </div>
+
+            <!-- 平台基础功能管理 -->
+            <div class="menu-group">
+              <div class="menu-group-title">平台基础功能管理</div>
+              <button>
+                <span>报告管理</span>
+                <span class="menu-arrow">→</span>
+                <div class="submenu-tooltip">
+                  <button class="submenu-item">查看企业报告</button>
+                  <button class="submenu-item">发送报告</button>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="content-preview">
+          <h3>✨ 新菜单结构特点</h3>
+          <p>工商联门户已升级为更清晰、更易用的菜单结构。新设计包含以下特点：</p>
+          
+          <div class="feature-list">
+            <h4>🎯 主要特点</h4>
+            <ul>
+              <li>6个功能分类，组织清晰</li>
+              <li>悬浮窗口显示二级菜单</li>
+              <li>鼠标悬停时自动显示子菜单</li>
+              <li>活跃菜单项高亮显示</li>
+              <li>响应式设计，兼容各种浏览器</li>
+            </ul>
+          </div>
+          
+          <div class="feature-list">
+            <h4>🚀 新增功能</h4>
+            <ul>
+              <li>工商联用户管理</li>
+              <li>基础问卷管理</li>
+              <li>改进的菜单导航体验</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 功能对比 -->
+    <div class="preview-section">
+      <h2>功能对比</h2>
+      <div class="comparison">
+        <div class="comparison-item">
+          <h4>📋 旧菜单结构</h4>
+          <p>• 资质审核</p>
+          <p>• 专项审核</p>
+          <p>• 查看企业报告</p>
+          <p>• 发送报告</p>
+          <p>• 专家辅导记录</p>
+          <p style="color: #999; margin-top: 10px; font-style: italic;">5个菜单项，缺乏分类</p>
+        </div>
+        
+        <div class="comparison-item">
+          <h4>✨ 新菜单结构</h4>
+          <p>• 企业管理 (1个子菜单)</p>
+          <p>• 专家管理 (1个子菜单)</p>
+          <p>• 工商联用户管理 (1个子菜单)</p>
+          <p>• 专项反馈管理 (1个子菜单)</p>
+          <p>• 基础问卷管理 (1个子菜单)</p>
+          <p>• 平台基础功能管理 (2个子菜单)</p>
+          <p style="color: #16a34a; margin-top: 10px; font-weight: bold;">6个分类，7个子菜单</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 菜单映射表 -->
+    <div class="preview-section">
+      <h2>功能映射表</h2>
+      <table class="structure-table">
+        <thead>
+          <tr>
+            <th>原菜单项</th>
+            <th>新分类</th>
+            <th>新菜单项</th>
+            <th>二级菜单</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>资质审核</td>
+            <td>企业管理</td>
+            <td>资质审核</td>
+            <td>企业资质审核</td>
+            <td><span class="tag">保留</span></td>
+          </tr>
+          <tr>
+            <td>专项审核</td>
+            <td>专项反馈管理</td>
+            <td>专项申请审核</td>
+            <td>专项申请审核</td>
+            <td><span class="tag">保留</span></td>
+          </tr>
+          <tr>
+            <td>查看企业报告</td>
+            <td>平台基础功能管理</td>
+            <td>报告管理</td>
+            <td>查看企业报告</td>
+            <td><span class="tag">保留</span></td>
+          </tr>
+          <tr>
+            <td>发送报告</td>
+            <td>平台基础功能管理</td>
+            <td>报告管理</td>
+            <td>发送报告</td>
+            <td><span class="tag">保留</span></td>
+          </tr>
+          <tr>
+            <td>专家辅导记录</td>
+            <td>专家管理</td>
+            <td>专家辅导记录</td>
+            <td>辅导记录查看</td>
+            <td><span class="tag">保留</span></td>
+          </tr>
+          <tr>
+            <td>-</td>
+            <td>工商联用户管理</td>
+            <td>用户管理</td>
+            <td>工商联用户列表</td>
+            <td><span class="tag new">新增</span></td>
+          </tr>
+          <tr>
+            <td>-</td>
+            <td>基础问卷管理</td>
+            <td>问卷管理</td>
+            <td>问卷配置</td>
+            <td><span class="tag new">新增</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 技术细节 -->
+    <div class="preview-section">
+      <h2>技术实现</h2>
+      
+      <h3 style="margin-top: 20px; margin-bottom: 10px; color: #333;">CSS 类名</h3>
+      <div class="code-block">
+.menu-group { /* 菜单分组 */ }
+.menu-group-title { /* 分组标题 */ }
+.menu button { /* 菜单项 */ }
+.menu-arrow { /* 箭头指示符 */ }
+.submenu-tooltip { /* 悬浮窗口 */ }
+.submenu-item { /* 二级菜单项 */ }
+      </div>
+      
+      <h3 style="margin-top: 20px; margin-bottom: 10px; color: #333;">JavaScript 函数</h3>
+      <div class="code-block">
+switchTab(id, btn) { /* 切换标签页 */ }
+loadChamberUsers() { /* 加载用户列表 */ }
+loadQuestionnaires() { /* 加载问卷列表 */ }
+      </div>
+      
+      <h3 style="margin-top: 20px; margin-bottom: 10px; color: #333;">API 端点</h3>
+      <div class="code-block">
+GET /api/portal/chamber/users
+GET /api/portal/chamber/questionnaires
+      </div>
+    </div>
+    
+    <!-- 交互说明 -->
+    <div class="preview-section">
+      <h2>交互说明</h2>
+      <div style="background: #f9fafb; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <h4 style="color: #333; margin-bottom: 10px;">🖱️ 鼠标交互</h4>
+        <ol style="color: #666; font-size: 14px; line-height: 1.8;">
+          <li>将鼠标悬停在左侧菜单项上</li>
+          <li>右侧会自动显示悬浮窗口，显示该菜单项的二级菜单</li>
+          <li>点击二级菜单中的任何项目</li>
+          <li>页面会切换到对应的功能模块</li>
+          <li>当前活跃的菜单项会高亮显示</li>
+        </ol>
+      </div>
+      
+      <div style="background: #f9fafb; padding: 15px; border-radius: 8px; margin-top: 15px;">
+        <h4 style="color: #333; margin-bottom: 10px;">⌨️ 键盘支持（后续添加）</h4>
+        <ol style="color: #666; font-size: 14px; line-height: 1.8;">
+          <li>Tab 键：在菜单项之间导航</li>
+          <li>Enter 键：选择菜单项</li>
+          <li>Escape 键：关闭悬浮窗口</li>
+        </ol>
+      </div>
+    </div>
+    
+    <!-- 浏览器兼容性 -->
+    <div class="preview-section">
+      <h2>浏览器兼容性</h2>
+      <table class="structure-table">
+        <thead>
+          <tr>
+            <th>浏览器</th>
+            <th>最低版本</th>
+            <th>支持状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Chrome</td>
+            <td>90+</td>
+            <td>✅ 完全支持</td>
+          </tr>
+          <tr>
+            <td>Firefox</td>
+            <td>88+</td>
+            <td>✅ 完全支持</td>
+          </tr>
+          <tr>
+            <td>Safari</td>
+            <td>14+</td>
+            <td>✅ 完全支持</td>
+          </tr>
+          <tr>
+            <td>Edge</td>
+            <td>90+</td>
+            <td>✅ 完全支持</td>
+          </tr>
+          <tr>
+            <td>IE 11</td>
+            <td>-</td>
+            <td>❌ 不支持</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 后续优化 -->
+    <div class="preview-section">
+      <h2>后续优化建议</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
+          <h4 style="color: #333; margin-bottom: 10px;">🎨 UI 增强</h4>
+          <ul style="color: #666; font-size: 13px; line-height: 1.8; list-style-position: inside;">
+            <li>• 添加菜单项图标</li>
+            <li>• 支持菜单折叠/展开</li>
+            <li>• 深色/浅色主题切换</li>
+            <li>• 菜单动画优化</li>
+          </ul>
+        </div>
+        
+        <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
+          <h4 style="color: #333; margin-bottom: 10px;">🔧 功能扩展</h4>
+          <ul style="color: #666; font-size: 13px; line-height: 1.8; list-style-position: inside;">
+            <li>• 菜单搜索功能</li>
+            <li>• 菜单权限控制</li>
+            <li>• 菜单项拖拽排序</li>
+            <li>• 菜单快捷键</li>
+          </ul>
+        </div>
+        
+        <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
+          <h4 style="color: #333; margin-bottom: 10px;">📱 响应式设计</h4>
+          <ul style="color: #666; font-size: 13px; line-height: 1.8; list-style-position: inside;">
+            <li>• 平板设备适配</li>
+            <li>• 移动设备适配</li>
+            <li>• 抽屉式导航</li>
+            <li>• 触摸优化</li>
+          </ul>
+        </div>
+        
+        <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
+          <h4 style="color: #333; margin-bottom: 10px;">♿ 无障碍设计</h4>
+          <ul style="color: #666; font-size: 13px; line-height: 1.8; list-style-position: inside;">
+            <li>• ARIA 标签</li>
+            <li>• 键盘导航</li>
+            <li>• 屏幕阅读器支持</li>
+            <li>• 高对比度模式</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 文档链接 -->
+    <div class="preview-section">
+      <h2>📚 相关文档</h2>
+      <ul style="color: #666; font-size: 14px; line-height: 2;">
+        <li>📄 <strong>CHAMBER_PORTAL_REDESIGN.md</strong> - 完整的重设计说明文档</li>
+        <li>📄 <strong>MENU_STRUCTURE.md</strong> - 菜单结构详细说明</li>
+        <li>📄 <strong>IMPLEMENTATION_GUIDE.md</strong> - 实现指南和后端 API 说明</li>
+        <li>📄 <strong>QUICK_REFERENCE.md</strong> - 快速参考卡片</li>
+        <li>📄 <strong>MENU_PREVIEW.html</strong> - 本预览文件</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

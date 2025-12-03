@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>指标体系管理 - 管理后台</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin: 5px 10px;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .main-content {
+            padding: 30px;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .badge-active {
+            background-color: #28a745;
+        }
+        .badge-inactive {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏 -->
+            <nav class="col-md-2 d-md-block sidebar">
+                <div class="sidebar-sticky pt-3">
+                    <h4 class="text-center mb-4">
+                        <i class="fas fa-cog"></i> 管理后台
+                    </h4>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#indicators">
+                                <i class="fas fa-list"></i> 指标管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#scoring-rules">
+                                <i class="fas fa-calculator"></i> 评分规则
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#questionnaires">
+                                <i class="fas fa-file-alt"></i> 问卷版本
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/dashboard">
+                                <i class="fas fa-arrow-left"></i> 返回主页
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 主内容区 -->
+            <main role="main" class="col-md-10 ml-sm-auto main-content">
+                <!-- 指标管理 -->
+                <div id="indicators-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-list"></i> 指标管理</h2>
+                        <button class="btn btn-primary" onclick="showAddIndicatorModal()">
+                            <i class="fas fa-plus"></i> 添加指标
+                        </button>
+                    </div>
+
+                    <!-- 筛选器 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <select class="form-control" id="levelFilter" onchange="loadIndicators()">
+                                        <option value="">全部级别</option>
+                                        <option value="初级">初级</option>
+                                        <option value="中级">中级</option>
+                                        <option value="高级">高级</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-control" id="statusFilter" onchange="loadIndicators()">
+                                        <option value="active">使用中</option>
+                                        <option value="">全部状态</option>
+                                        <option value="inactive">已停用</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="searchInput" placeholder="搜索指标..." onkeyup="searchIndicators()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 指标列表 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>一级指标</th>
+                                            <th>二级指标</th>
+                                            <th>三级指标</th>
+                                            <th>分值</th>
+                                            <th>适用级别</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="indicatorsTableBody">
+                                        <tr>
+                                            <td colspan="8" class="text-center">
+                                                <i class="fas fa-spinner fa-spin"></i> 加载中...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 添加/编辑指标模态框 -->
+    <div class="modal fade" id="indicatorModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="indicatorModalTitle">添加指标</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="indicatorForm">
+                        <input type="hidden" id="indicatorId">
+                        <div class="form-group">
+                            <label>一级指标 *</label>
+                            <input type="text" class="form-control" id="level1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>二级指标 *</label>
+                            <input type="text" class="form-control" id="level2" required>
+                        </div>
+                        <div class="form-group">
+                            <label>三级指标 *</label>
+                            <input type="text" class="form-control" id="level3" required>
+                        </div>
+                        <div class="form-group">
+                            <label>题目/问题 *</label>
+                            <textarea class="form-control" id="question" rows="3" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>分值</label>
+                                    <input type="text" class="form-control" id="scoreValue" placeholder="如: 1 或 0-2">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>状态</label>
+                                    <select class="form-control" id="status">
+                                        <option value="active">使用中</option>
+                                        <option value="inactive">已停用</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>佐证材料要求</label>
+                            <textarea class="form-control" id="evidenceRequired" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>适用级别</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="level_beginner" value="初级">
+                                    <label class="form-check-label" for="level_beginner">初级</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="level_intermediate" value="中级">
+                                    <label class="form-check-label" for="level_intermediate">中级</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="level_advanced" value="高级">
+                                    <label class="form-check-label" for="level_advanced">高级</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="saveIndicator()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 加载指标列表
+        function loadIndicators() {
+            const level = $('#levelFilter').val();
+            const status = $('#statusFilter').val();
+            
+            let url = '/api/admin/indicator-management/indicators?';
+            if (level) url += `level=${level}&`;
+            if (status) url += `status=${status}`;
+            
+            $.get(url, function(response) {
+                if (response.success) {
+                    displayIndicators(response.data);
+                } else {
+                    alert('加载失败: ' + response.error);
+                }
+            });
+        }
+
+        // 显示指标列表
+        function displayIndicators(indicators) {
+            const tbody = $('#indicatorsTableBody');
+            tbody.empty();
+            
+            if (indicators.length === 0) {
+                tbody.append('<tr><td colspan="8" class="text-center">暂无数据</td></tr>');
+                return;
+            }
+            
+            indicators.forEach(indicator => {
+                const levels = indicator.applicable_levels ? indicator.applicable_levels.join(', ') : '-';
+                const statusBadge = indicator.status === 'active' ? 
+                    '<span class="badge badge-active">使用中</span>' : 
+                    '<span class="badge badge-inactive">已停用</span>';
+                
+                tbody.append(`
+                    <tr>
+                        <td>${indicator.id}</td>
+                        <td>${indicator.level1 || '-'}</td>
+                        <td>${indicator.level2 || '-'}</td>
+                        <td>${indicator.level3 || '-'}</td>
+                        <td>${indicator.score_value || '-'}</td>
+                        <td>${levels}</td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" onclick='editIndicator(${JSON.stringify(indicator)})'>
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteIndicator('${indicator.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+        }
+
+        // 显示添加指标模态框
+        function showAddIndicatorModal() {
+            $('#indicatorModalTitle').text('添加指标');
+            $('#indicatorForm')[0].reset();
+            $('#indicatorId').val('');
+            $('#indicatorModal').modal('show');
+        }
+
+        // 编辑指标
+        function editIndicator(indicator) {
+            $('#indicatorModalTitle').text('编辑指标');
+            $('#indicatorId').val(indicator.id);
+            $('#level1').val(indicator.level1);
+            $('#level2').val(indicator.level2);
+            $('#level3').val(indicator.level3);
+            $('#question').val(indicator.question);
+            $('#scoreValue').val(indicator.score_value);
+            $('#status').val(indicator.status);
+            $('#evidenceRequired').val(indicator.evidence_required);
+            
+            // 设置适用级别
+            $('#level_beginner').prop('checked', indicator.applicable_levels && indicator.applicable_levels.includes('初级'));
+            $('#level_intermediate').prop('checked', indicator.applicable_levels && indicator.applicable_levels.includes('中级'));
+            $('#level_advanced').prop('checked', indicator.applicable_levels && indicator.applicable_levels.includes('高级'));
+            
+            $('#indicatorModal').modal('show');
+        }
+
+        // 保存指标
+        function saveIndicator() {
+            const id = $('#indicatorId').val();
+            const applicableLevels = [];
+            if ($('#level_beginner').is(':checked')) applicableLevels.push('初级');
+            if ($('#level_intermediate').is(':checked')) applicableLevels.push('中级');
+            if ($('#level_advanced').is(':checked')) applicableLevels.push('高级');
+            
+            const data = {
+                level1: $('#level1').val(),
+                level2: $('#level2').val(),
+                level3: $('#level3').val(),
+                question: $('#question').val(),
+                score_value: $('#scoreValue').val(),
+                status: $('#status').val(),
+                evidence_required: $('#evidenceRequired').val(),
+                applicable_levels: applicableLevels
+            };
+            
+            const url = id ? `/api/admin/indicator-management/indicators/${id}` : '/api/admin/indicator-management/indicators';
+            const method = id ? 'PUT' : 'POST';
+            
+            $.ajax({
+                url: url,
+                method: method,
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#indicatorModal').modal('hide');
+                        loadIndicators();
+                    } else {
+                        alert('保存失败: ' + response.error);
+                    }
+                },
+                error: function() {
+                    alert('保存失败，请重试');
+                }
+            });
+        }
+
+        // 删除指标
+        function deleteIndicator(id) {
+            if (!confirm('确定要删除这个指标吗？')) return;
+            
+            $.ajax({
+                url: `/api/admin/indicator-management/indicators/${id}`,
+                method: 'DELETE',
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        loadIndicators();
+                    } else {
+                        alert('删除失败: ' + response.error);
+                    }
+                },
+                error: function() {
+                    alert('删除失败，请重试');
+                }
+            });
+        }
+
+        // 搜索指标
+        function searchIndicators() {
+            const searchText = $('#searchInput').val().toLowerCase();
+            $('#indicatorsTableBody tr').each(function() {
+                const text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(searchText) > -1);
+            });
+        }
+
+        // 页面加载时加载指标
+        $(document).ready(function() {
+            loadIndicators();
+        });
+    </script>
+</body>
+</html>

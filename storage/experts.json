@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "id": "exp001",
+      "name": "张三",
+      "region": "天津市",
+      "province": "天津",
+      "industry": "制造业",
+      "level": "county",
+      "phone": "13800138000",
+      "email": "zhangsan@example.com",
+      "org": "天津工业协会",
+      "skills": "企业管理、质量控制",
+      "created_at": "2024-01-01 10:00",
+      "updated_at": "2024-01-01 10:00"
+    },
+    {
+      "id": "exp002",
+      "name": "李四",
+      "region": "北京市",
+      "province": "北京",
+      "industry": "信息技术",
+      "level": "province",
+      "phone": "13900139000",
+      "email": "lisi@example.com",
+      "org": "北京科技协会",
+      "skills": "数字化转型、IT管理",
+      "created_at": "2024-01-02 10:00",
+      "updated_at": "2024-01-02 10:00"
+    },
+    {
+      "id": "exp003",
+      "name": "王五",
+      "region": "上海市",
+      "province": "上海",
+      "industry": "金融服务",
+      "level": "national",
+      "phone": "13700137000",
+      "email": "wangwu@example.com",
+      "org": "全国企业协会",
+      "skills": "财务管理、风险控制、国际贸易",
+      "created_at": "2024-01-03 10:00",
+      "updated_at": "2024-01-03 10:00"
+    }
+  ]
+}
+

@@ -7,7 +7,7 @@ api_bp = Blueprint('survey_api', __name__)
 _loader = SurveyLoader()
 
 
-@api_bp.get('/get_questions')
+@api_bp.route('/get_questions', methods=['GET'])
 def get_questions():
     try:
         user_type = request.args.get('user_type')
@@ -34,7 +34,7 @@ def get_questions():
         return jsonify({'success': False, 'error': f'获取问卷题目失败: {str(e)}'}), 500
 
 
-@api_bp.get('/health')
+@api_bp.route('/health', methods=['GET'])
 def health():
     try:
         path = _loader.nk_excel_path
@@ -58,7 +58,7 @@ def health():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
-@api_bp.get('/indicators/overview')
+@api_bp.route('/indicators/overview', methods=['GET'])
 def indicators_overview():
     try:
         import os
