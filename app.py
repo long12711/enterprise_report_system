@@ -20,9 +20,11 @@ import threading
 import hashlib
 from functools import wraps
 # from report_generator import ReportGenerator  # 已废弃，使用 enterprise_report_generator
-from notification_service import NotificationService
-from questionnaire_submission_manager import QuestionnaireSubmissionManager
+from report_generator.notification_service import NotificationService
+from survey_engine.questionnaire_submission_manager import QuestionnaireSubmissionManager
 from report_engine import EnterpriseReportGenerator, PDFReportGenerator, ProfessionalReportGenerator, ComprehensiveAnalysisGenerator
+from report_generator.nankai_report_generator import NankaiReportGenerator
+from survey_generator.nankai_scoring_engine import NankaiScoringEngine
 # from score_calculator import ScoreCalculator  # 避免依赖空指标文件导致初始化失败
 from user_types_config_final import (
     get_all_user_types, 
@@ -32,6 +34,19 @@ from user_types_config_final import (
 # from nankai_indicator_loader import load_questions_by_level, map_user_to_level  # 已迁移到 survey_engine
 from survey_engine.services.loader import SurveyLoader
 
+# 问卷指标文件配置
+try:
+    from survey_config import INDICATOR_FILE
+except ImportError:
+    # 如果配置文件不存在，使用默认值
+    import os
+    INDICATOR_FILE_CANDIDATES = ["nankai_indicators.xlsx", "测试问卷.xlsx", "指标体系.xlsx"]
+    INDICATOR_FILE = next((f for f in INDICATOR_FILE_CANDIDATES if os.path.exists(f)), None)
+    if INDICATOR_FILE:
+        print(f"[配置] 使用指标文件: {INDICATOR_FILE}")
+    else:
+        print("[警告] 未找到指标文件，南开问卷功能将不可用")
+
 app = Flask(__name__)
 # 注册专家门户蓝图
 from expert_portal import ui_bp as expert_ui_bp, api_bp as expert_api_bp
@@ -40,6 +55,16 @@ app.register_blueprint(expert_api_bp, url_prefix='/api/portal/expert')
 # 注册问卷引擎蓝图（提供 /api/get_questions、/api/health 等）
 from survey_engine import api_bp as survey_api_bp
 app.register_blueprint(survey_api_bp, url_prefix='/api/survey')
+# 注册指标体系管理蓝图
+from indicator_management import indicator_management_bp
+app.register_blueprint(indicator_management_bp)
+
+# 指标管理页面路由
+@app.route('/admin/indicator-management')
+def admin_indicator_management():
+    """指标体系管理页面"""
+    return render_template('admin_indicator_management.html')
+
 app.config['UPLOAD_FOLDER'] = 'storage/uploads'
 app.config['REPORT_FOLDER'] = 'storage/reports'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
@@ -59,7 +84,12 @@ os.makedirs(app.config['SUBMISSIONS_FOLDER'], exist_ok=True)
 # 初始化服务
 # report_generator = ReportGenerator()  # 已废弃，使用 enterprise_report_generator
 notification_service = NotificationService()
-submission_manager = QuestionnaireSubmissionManager(storage_folder=app.config['SUBMISSIONS_FOLDER'])
+# 临时禁用submission_manager以避免ScoreCalculator初始化失败
+try:
+    submission_manager = QuestionnaireSubmissionManager(storage_folder=app.config['SUBMISSIONS_FOLDER'])
+except Exception as e:
+    print(f"[WARN] QuestionnaireSubmissionManager初始化失败: {e}")
+    submission_manager = None
 enterprise_report_generator = EnterpriseReportGenerator()
 pdf_report_generator = PDFReportGenerator()
 
@@ -68,6 +98,12 @@ professional_report_generator = ProfessionalReportGenerator() if 'ProfessionalRe
 
 # 新增：综合分析报告生成器（集中由 report_engine 提供）
 comprehensive_analysis_generator = ComprehensiveAnalysisGenerator() if 'ComprehensiveAnalysisGenerator' in globals() and ComprehensiveAnalysisGenerator else None
+
+# 新增：南开问卷自评报告生成器
+nankai_report_generator = NankaiReportGenerator(indicator_file=INDICATOR_FILE) if INDICATOR_FILE else None
+
+# 新增：南开问卷评分引擎（使用标准评分细则）
+nankai_scoring_engine = NankaiScoringEngine('survey_generator/南开大学-现代企业制度指数评价体系初稿2025.10.22（单独指标）(1).xlsx')
 
 # 存储处理状态
 processing_status = {}
@@ -791,6 +827,697 @@ def indicators_overview():
             }
         return jsonify({'success': True, 'data': data})
     except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/nankai-survey')
+def nankai_survey_entrance():
+    """南开问卷系统入口页面"""
+    return render_template('nankai_survey_entrance.html')
+
+
+@app.route('/nankai-questionnaire')
+def nankai_questionnaire_page():
+    """南开问卷预览页面（旧版）"""
+    level = request.args.get('level', '初级')
+    return render_template('nankai_questionnaire.html', selected_level=level)
+
+
+@app.route('/nankai-questionnaire-fill')
+def nankai_questionnaire_fill_page():
+    """南开问卷填写页面"""
+    try:
+        import pandas as pd
+        
+        level = request.args.get('level', '初级')
+        excel_path = INDICATOR_FILE
+        
+        if not excel_path or not os.path.exists(excel_path):
+            return f"<h1>指标文件不存在</h1><p>请确保以下文件之一存在：</p><ul><li>nankai_indicators.xlsx</li><li>测试问卷.xlsx</li></ul>", 404
+        
+        # 读取Excel数据
+        df = pd.read_excel(excel_path, sheet_name=level)
+        
+        # 构建问卷数据
+        questions = []
+        
+        current_category = ''
+        for idx, row in df.iterrows():
+            q_id = int(row['序号']) if pd.notna(row['序号']) else idx + 1
+            
+            # 读取评分准则（题目内容）
+            question_text = ''
+            for col_name in ['评分准则', '评分标准', '打分标准', '题目']:
+                if col_name in df.columns and pd.notna(row[col_name]):
+                    question_text = str(row[col_name])
+                    break
+            
+            # 如果没有评分准则，使用三级指标作为题目
+            if not question_text:
+                question_text = str(row['三级指标']) if pd.notna(row['三级指标']) else ''
+            
+            # 解析选项列
+            options_col = None
+            for col_name in ['选项', '打分标准']:
+                if col_name in df.columns:
+                    options_col = col_name
+                    break
+            
+            options_text = str(row[options_col]) if options_col and pd.notna(row[options_col]) else ''
+            options_list = []
+            if options_text:
+                for line in options_text.split('\n'):
+                    line = line.strip()
+                    if line and (line.startswith('A.') or line.startswith('B.') or line.startswith('C.')):
+                        options_list.append(line)
+            
+            if not options_list:
+                options_list = ['A. 已完成', 'B. 部分完成', 'C. 未完成']
+            
+            # 读取分值
+            score = 0
+            score_value = '1'
+            if '分值' in df.columns and pd.notna(row['分值']):
+                try:
+                    score_str = str(row['分值'])
+                    score_value = score_str  # 保留原始分值字符串（如"0-2"）
+                    # 处理范围分值，如"0-2"，取最大值
+                    if '-' in score_str:
+                        score = float(score_str.split('-')[1])
+                    else:
+                        score = float(score_str)
+                except:
+                    score = 1  # 默认1分
+                    score_value = '1'
+            
+            # 读取评分准则（详细的评分规则）
+            scoring_rule = ''
+            for col_name in ['评分准则', '评分规则', '评分说明']:
+                if col_name in df.columns and pd.notna(row[col_name]):
+                    scoring_rule = str(row[col_name])
+                    break
+            
+            # 读取佐证材料要求
+            evidence = ''
+            if '佐证材料' in df.columns and pd.notna(row['佐证材料']):
+                evidence = str(row['佐证材料'])
+            
+            questions.append({
+                'id': q_id,
+                'category': str(row['一级指标']) if pd.notna(row['一级指标']) else current_category,
+                'level1': str(row['一级指标']) if pd.notna(row['一级指标']) else '',
+                'level2': str(row['二级指标']) if pd.notna(row['二级指标']) else '',
+                'level3': str(row['三级指标']) if pd.notna(row['三级指标']) else '',
+                'indicator': question_text,
+                'options': options_list,
+                'score': score,
+                'score_value': score_value,  # 新增：分值字符串
+                'scoring_rule': scoring_rule,  # 新增：评分准则
+                'evidence': evidence  # 新增：佐证材料
+            })
+            
+            if pd.notna(row['一级指标']):
+                current_category = str(row['一级指标'])
+        
+        return render_template(
+            'nankai_questionnaire_fill.html',
+            level_name=level,
+            questions=questions
+        )
+        
+    except Exception as e:
+        import traceback
+        error_detail = traceback.format_exc()
+        print(f"[ERROR] 加载问卷失败: {error_detail}")
+        return f"<h1>加载问卷失败</h1><pre>{error_detail}</pre>", 500
+
+
+@app.route('/api/nankai/questionnaire/<level>')
+def get_nankai_questionnaire(level):
+    """获取南开问卷数据（初级/中级/高级）"""
+    try:
+        from survey_generator.nankai_excel_generator import NankaiExcelGenerator
+        
+        excel_path = INDICATOR_FILE
+        
+        if not excel_path or not os.path.exists(excel_path):
+            return jsonify({'success': False, 'error': '指标文件不存在，请联系管理员'}), 404
+        
+        generator = NankaiExcelGenerator(excel_path)
+        
+        # 映射级别名称
+        level_map = {
+            'beginner': '初级',
+            'intermediate': '中级',
+            'advanced': '高级',
+            '初级': '初级',
+            '中级': '中级',
+            '高级': '高级'
+        }
+        
+        chinese_level = level_map.get(level)
+        if not chinese_level:
+            return jsonify({'success': False, 'error': '无效的级别'}), 400
+        
+        # 获取数据
+        df = generator.data[chinese_level].copy()
+        
+        # 添加选项列
+        df['选项'] = df['打分标准'].apply(generator._parse_scoring_standard)
+        
+        # 转换为字典列表
+        questions = []
+        for _, row in df.iterrows():
+            questions.append({
+                '序号': int(row['序号']) if pd.notna(row['序号']) else 0,
+                '一级指标': str(row['一级指标']) if pd.notna(row['一级指标']) else '',
+                '二级指标': str(row['二级指标']) if pd.notna(row['二级指标']) else '',
+                '三级指标': str(row['三级指标']) if pd.notna(row['三级指标']) else '',
+                '打分标准': str(row['打分标准']) if pd.notna(row['打分标准']) else '',
+                '选项': str(row['选项']) if pd.notna(row['选项']) else '',
+                '佐证材料': str(row['佐证材料']) if pd.notna(row['佐证材料']) else ''
+            })
+        
+        return jsonify({
+            'success': True,
+            'level': chinese_level,
+            'total': len(questions),
+            'questions': questions
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/nankai/submit', methods=['POST'])
+def submit_nankai_questionnaire():
+    """提交南开问卷并生成评分和报告"""
+    try:
+        # 处理multipart/form-data格式的数据
+        enterprise_info = {}
+        answers = {}
+        partial_details = {}  # 存储部分完成的详细说明
+        files = {}
+        level = request.form.get('level', '初级')
+        
+        # 解析表单数据
+        for key in request.form:
+            value = request.form[key]
+            
+            # 企业基本信息
+            if key in ['enterprise_name', 'contact_person', 'contact_phone', 'contact_email',
+                      'main_business', 'enterprise_scale', 'establishment_years',
+                      'annual_revenue', 'rd_investment', 'rd_ratio']:
+                enterprise_info[key] = value
+            
+            # 问卷答案
+            elif key.startswith('q_'):
+                question_id = key[2:]  # 去掉 'q_' 前缀
+                answers[question_id] = value
+            
+            # 部分完成的详细说明
+            elif key.startswith('partial_detail_'):
+                question_id = key[15:]  # 去掉 'partial_detail_' 前缀
+                if value.strip():  # 只保存非空的说明
+                    partial_details[question_id] = value.strip()
+        
+        # 处理上传的文件
+        for key in request.files:
+            if key.startswith('evidence_'):
+                question_id = key[9:]  # 去掉 'evidence_' 前缀
+                uploaded_files = request.files.getlist(key)
+                if uploaded_files:
+                    files[question_id] = [f.filename for f in uploaded_files if f.filename]
+        
+        if not enterprise_info or not answers:
+            return jsonify({'success': False, 'error': '数据格式错误'}), 400
+        
+        # 使用南开评分引擎计算得分（基于评分细则）
+        try:
+            score_result = nankai_scoring_engine.calculate_score(
+                level=level,
+                answers=answers,
+                partial_details=partial_details
+            )
+            
+            total_score = score_result['total_score']
+            max_score = score_result['max_score']
+            final_score = score_result['percentage']
+            score_details = score_result['details']
+            
+        except Exception as e:
+            print(f"[ERROR] 使用评分引擎计算失败，回退到简化评分: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            # 回退到简化评分逻辑
+            excel_path = INDICATOR_FILE
+            if not excel_path or not os.path.exists(excel_path):
+                return jsonify({'success': False, 'error': '指标文件不存在'}), 500
+            
+            df = pd.read_excel(excel_path, sheet_name=level)
+            
+            # 构建题目分值映射
+            question_scores = {}
+            for idx, row in df.iterrows():
+                q_id = str(int(row['序号'])) if pd.notna(row['序号']) else str(idx + 1)
+                score = 0
+                if '分值' in df.columns and pd.notna(row['分值']):
+                    try:
+                        score_str = str(row['分值'])
+                        if '-' in score_str:
+                            score = float(score_str.split('-')[1])
+                        else:
+                            score = float(score_str)
+                    except:
+                        score = 1
+                question_scores[q_id] = score
+            
+            # 计算得分
+            total_score = 0
+            max_score = sum(question_scores.values())
+            score_details = {}
+            
+            for question_id, answer in answers.items():
+                q_score = question_scores.get(question_id, 1)
+                option_letter = answer[0] if answer else 'C'
+                
+                if option_letter == 'A':
+                    earned_score = q_score
+                elif option_letter == 'B':
+                    earned_score = q_score * 0.8
+                else:
+                    earned_score = 0
+                
+                total_score += earned_score
+                score_details[question_id] = {
+                    'max_score': q_score,
+                    'earned_score': earned_score,
+                    'answer': answer
+                }
+            
+            final_score = (total_score / max_score * 100) if max_score > 0 else 0
+        
+        # 保存提交数据
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        enterprise_name = enterprise_info.get('enterprise_name', '未知企业')
+        
+        submission_data = {
+            'timestamp': timestamp,
+            'level': level,
+            'enterprise_info': enterprise_info,
+            'answers': answers,
+            'partial_details': partial_details,  # 保存部分完成的详细说明
+            'files': files,
+            'score': {
+                'total_score': round(total_score, 2),
+                'max_score': round(max_score, 2),
+                'percentage': round(final_score, 2),
+                'details': score_details
+            },
+            'submitted_at': datetime.now().isoformat()
+        }
+        
+        # 保存到文件
+        os.makedirs('storage/nankai_submissions', exist_ok=True)
+        submission_file = f'storage/nankai_submissions/submission_{enterprise_name}_{timestamp}.json'
+        with open(submission_file, 'w', encoding='utf-8') as f:
+            json.dump(submission_data, f, ensure_ascii=False, indent=2)
+        
+        # 生成提交ID用于结果页面
+        submission_id = f"{enterprise_name}_{timestamp}"
+        
+        # 异步生成报告并发送邮件
+        thread = threading.Thread(
+            target=generate_and_send_nankai_report_async,
+            args=(submission_file, enterprise_info, level)
+        )
+        thread.start()
+        
+        return jsonify({
+            'success': True,
+            'score': round(final_score, 2),
+            'total_score': round(total_score, 2),
+            'max_score': round(max_score, 2),
+            'message': '问卷提交成功，自评报告将通过邮件发送',
+            'submission_id': submission_id,
+            'submission_file': submission_file
+        })
+        
+    except Exception as e:
+        import traceback
+        error_detail = traceback.format_exc()
+        print(f"[ERROR] 提交问卷失败: {error_detail}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+def generate_and_send_nankai_report_async(submission_file, enterprise_info, level):
+    """
+    异步生成南开问卷自评报告并发送邮件
+    """
+    with app.app_context():
+        try:
+            enterprise_name = enterprise_info.get('enterprise_name', '企业')
+            email = enterprise_info.get('contact_email', '')
+            contact_name = enterprise_info.get('contact_person', '')
+            
+            print(f"\n[INFO] 开始为 {enterprise_name} 生成南开自评报告...")
+            
+            # 生成自评报告
+            if nankai_report_generator:
+                report_path = nankai_report_generator.generate_report(submission_file)
+                print(f"[OK] 南开自评报告已生成: {report_path}")
+                
+                # 发送邮件
+                if email:
+                    print(f"[INFO] 正在发送邮件到 {email}...")
+                    
+                    email_sent = notification_service.send_email(
+                        to_email=email,
+                        enterprise_name=enterprise_name,
+                        contact_name=contact_name,
+                        report_url='',  # 通过附件发送，不需要URL
+                        attachment_path=report_path
+                    )
+                    
+                    if email_sent:
+                        print(f"[SUCCESS] 南开自评报告邮件发送成功到 {email}")
+                    else:
+                        print(f"[ERROR] 南开自评报告邮件发送失败到 {email}")
+                else:
+                    print(f"[WARN] {enterprise_name} 未提供邮箱地址，跳过邮件发送")
+            else:
+                print(f"[ERROR] 南开报告生成器未初始化")
+                
+        except Exception as e:
+            print(f"[ERROR] 生成和发送南开自评报告失败: {e}")
+            import traceback
+            traceback.print_exc()
+
+
+@app.route('/api/nankai/download/<submission_id>')
+def download_nankai_submission(submission_id):
+    """下载南开问卷填报数据为Excel格式"""
+    try:
+        # 查找对应的JSON文件
+        json_file = f'storage/nankai_submissions/submission_{submission_id}.json'
+        
+        if not os.path.exists(json_file):
+            return jsonify({'success': False, 'error': '提交记录不存在'}), 404
+        
+        # 读取JSON数据
+        with open(json_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        # 从Excel读取题目信息
+        level = data.get('level', '初级')
+        excel_path = INDICATOR_FILE
+        
+        if not excel_path or not os.path.exists(excel_path):
+            return jsonify({'success': False, 'error': '指标文件不存在'}), 500
+        
+        df = pd.read_excel(excel_path, sheet_name=level)
+        
+        # 构建输出数据
+        output_data = []
+        answers = data.get('answers', {})
+        partial_details = data.get('partial_details', {})
+        score_details = data.get('score', {}).get('details', {})
+        
+        for idx, row in df.iterrows():
+            q_id = str(int(row['序号'])) if pd.notna(row['序号']) else str(idx + 1)
+            
+            # 获取答案
+            answer = answers.get(q_id, '')
+            
+            # 获取部分完成的详细说明
+            partial_detail = partial_details.get(q_id, '')
+            
+            # 获取得分信息
+            score_info = score_details.get(q_id, {})
+            max_score = score_info.get('max_score', 0)
+            earned_score = score_info.get('earned_score', 0)
+            
+            output_row = {
+                '序号': q_id,
+                '一级指标': str(row['一级指标']) if pd.notna(row['一级指标']) else '',
+                '二级指标': str(row['二级指标']) if pd.notna(row['二级指标']) else '',
+                '三级指标': str(row['三级指标']) if pd.notna(row['三级指标']) else '',
+                '题目': str(row['题目']) if pd.notna(row['题目']) else '',
+                '分值': max_score,
+                '填报答案': answer,
+                '部分完成说明': partial_detail,
+                '得分': earned_score,
+                '评分标准': str(row['评分准则']) if pd.notna(row['评分准则']) else (
+                    str(row['评分标准']) if pd.notna(row.get('评分标准', '')) else (
+                        str(row['打分标准']) if pd.notna(row.get('打分标准', '')) else ''
+                    )
+                )
+            }
+            output_data.append(output_row)
+        
+        # 创建DataFrame
+        output_df = pd.DataFrame(output_data)
+        
+        # 添加企业信息和总分信息
+        enterprise_info = data.get('enterprise_info', {})
+        score_info = data.get('score', {})
+        
+        # 生成Excel文件
+        output_dir = 'storage/nankai_downloads'
+        os.makedirs(output_dir, exist_ok=True)
+        
+        enterprise_name = enterprise_info.get('enterprise_name', '企业')
+        timestamp = data.get('timestamp', datetime.now().strftime('%Y%m%d_%H%M%S'))
+        output_filename = f'问卷填报数据_{enterprise_name}_{timestamp}.xlsx'
+        output_path = os.path.join(output_dir, output_filename)
+        
+        # 使用openpyxl创建格式化的Excel
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+        from openpyxl.utils.dataframe import dataframe_to_rows
+        
+        wb = Workbook()
+        ws = wb.active
+        ws.title = f'{level}问卷填报数据'
+        
+        # 添加标题行
+        ws.merge_cells('A1:J1')
+        title_cell = ws['A1']
+        title_cell.value = f'南开大学现代企业制度指数评价问卷 - {level}'
+        title_cell.font = Font(size=16, bold=True, color='FFFFFF')
+        title_cell.alignment = Alignment(horizontal='center', vertical='center')
+        title_cell.fill = PatternFill(start_color='4472C4', end_color='4472C4', fill_type='solid')
+        ws.row_dimensions[1].height = 30
+        
+        # 添加企业信息
+        info_row = 2
+        ws.merge_cells(f'A{info_row}:J{info_row}')
+        info_cell = ws[f'A{info_row}']
+        info_text = f"企业名称：{enterprise_info.get('enterprise_name', '')}  |  " \
+                   f"联系人：{enterprise_info.get('contact_person', '')}  |  " \
+                   f"联系电话：{enterprise_info.get('contact_phone', '')}  |  " \
+                   f"提交时间：{data.get('submitted_at', '')}"
+        info_cell.value = info_text
+        info_cell.font = Font(size=10)
+        info_cell.alignment = Alignment(horizontal='left', vertical='center')
+        info_cell.fill = PatternFill(start_color='E7E6E6', end_color='E7E6E6', fill_type='solid')
+        ws.row_dimensions[info_row].height = 25
+        
+        # 添加得分信息
+        score_row = 3
+        ws.merge_cells(f'A{score_row}:J{score_row}')
+        score_cell = ws[f'A{score_row}']
+        score_text = f"百分制得分：{score_info.get('percentage', 0):.2f}分  |  " \
+                    f"实际得分：{score_info.get('total_score', 0):.2f}分  |  " \
+                    f"满分：{score_info.get('max_score', 0):.2f}分"
+        score_cell.value = score_text
+        score_cell.font = Font(size=11, bold=True, color='2E5090')
+        score_cell.alignment = Alignment(horizontal='center', vertical='center')
+        score_cell.fill = PatternFill(start_color='D9E1F2', end_color='D9E1F2', fill_type='solid')
+        ws.row_dimensions[score_row].height = 25
+        
+        # 添加表头
+        header_row = 5
+        headers = ['序号', '一级指标', '二级指标', '三级指标', '题目', '分值', '填报答案', '部分完成说明', '得分', '评分标准']
+        for col_idx, header in enumerate(headers, 1):
+            cell = ws.cell(row=header_row, column=col_idx)
+            cell.value = header
+            cell.font = Font(bold=True, color='FFFFFF')
+            cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+            cell.fill = PatternFill(start_color='2E5090', end_color='2E5090', fill_type='solid')
+        
+        ws.row_dimensions[header_row].height = 30
+        
+        # 添加数据
+        thin_border = Border(
+            left=Side(style='thin'),
+            right=Side(style='thin'),
+            top=Side(style='thin'),
+            bottom=Side(style='thin')
+        )
+        
+        for r_idx, row_data in enumerate(dataframe_to_rows(output_df, index=False, header=False), header_row + 1):
+            for c_idx, value in enumerate(row_data, 1):
+                cell = ws.cell(row=r_idx, column=c_idx)
+                cell.value = value
+                cell.border = thin_border
+                cell.alignment = Alignment(vertical='center', wrap_text=True)
+                
+                # 根据列设置对齐方式
+                if c_idx in [1, 6, 9]:  # 序号、分值、得分 - 居中
+                    cell.alignment = Alignment(horizontal='center', vertical='center')
+                elif c_idx in [5, 7, 8, 10]:  # 题目、答案、说明、评分标准 - 左对齐
+                    cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+        
+        # 设置列宽
+        column_widths = {
+            'A': 8,   # 序号
+            'B': 15,  # 一级指标
+            'C': 15,  # 二级指标
+            'D': 20,  # 三级指标
+            'E': 40,  # 题目
+            'F': 8,   # 分值
+            'G': 20,  # 填报答案
+            'H': 30,  # 部分完成说明
+            'I': 8,   # 得分
+            'J': 30   # 评分标准
+        }
+        
+        for col, width in column_widths.items():
+            ws.column_dimensions[col].width = width
+        
+        # 保存文件
+        wb.save(output_path)
+        
+        # 发送文件
+        return send_file(
+            output_path,
+            as_attachment=True,
+            download_name=output_filename,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        
+    except Exception as e:
+        import traceback
+        error_detail = traceback.format_exc()
+        print(f"[ERROR] 下载问卷数据失败: {error_detail}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+
+@app.route('/nankai-result')
+def nankai_result_page():
+    """南开问卷结果页面"""
+    score = request.args.get('score', '0')
+    total_score = request.args.get('total_score', '0')
+    max_score = request.args.get('max_score', '100')
+    level = request.args.get('level', '初级')
+    enterprise = request.args.get('enterprise', '企业')
+    return render_template('nankai_result.html',
+                         score=score,
+                         total_score=total_score,
+                         max_score=max_score,
+                         level=level,
+                         enterprise=enterprise)
+
+
+@app.route('/api/nankai/generate-report/<submission_id>')
+def generate_nankai_report(submission_id):
+    """生成南开问卷自评报告"""
+    try:
+        if not nankai_report_generator:
+            return jsonify({'success': False, 'error': '报告生成器未初始化'}), 500
+        
+        # 查找对应的JSON文件
+        json_file = f'storage/nankai_submissions/submission_{submission_id}.json'
+        
+        if not os.path.exists(json_file):
+            return jsonify({'success': False, 'error': '提交记录不存在'}), 404
+        
+        # 生成报告
+        report_path = nankai_report_generator.generate_report(json_file)
+        
+        # 返回下载链接
+        report_filename = os.path.basename(report_path)
+        
+        return jsonify({
+            'success': True,
+            'report_path': report_path,
+            'report_filename': report_filename,
+            'download_url': f'/api/nankai/download-report/{report_filename}'
+        })
+        
+    except Exception as e:
+        import traceback
+        error_detail = traceback.format_exc()
+        print(f"[ERROR] 生成自评报告失败: {error_detail}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/nankai/download-report/<filename>')
+def download_nankai_report(filename):
+    """下载南开问卷自评报告（保留旧接口兼容性）"""
+    try:
+        from urllib.parse import unquote
+        # 解码URL中的中文字符
+        filename = unquote(filename, encoding='utf-8')
+        
+        report_path = os.path.join('storage/nankai_reports', filename)
+        
+        if not os.path.exists(report_path):
+            return jsonify({'success': False, 'error': '报告文件不存在'}), 404
+        
+        return send_file(
+            report_path,
+            as_attachment=True,
+            attachment_filename=filename,
+            mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+        
+    except Exception as e:
+        import traceback
+        error_detail = traceback.format_exc()
+        print(f"[ERROR] 下载报告失败: {error_detail}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/nankai/download-report-by-id/<submission_id>')
+def download_nankai_report_by_id(submission_id):
+    """
+    通过submission_id下载报告（推荐使用，避免文件名编码问题）
+    """
+    try:
+        reports_dir = 'storage/nankai_reports'
+        
+        if not os.path.exists(reports_dir):
+            return jsonify({'success': False, 'error': '报告目录不存在'}), 404
+        
+        # 在报告目录中查找包含submission_id的文件
+        report_file = None
+        for filename in os.listdir(reports_dir):
+            if submission_id in filename and filename.endswith('.docx'):
+                report_file = filename
+                break
+        
+        if not report_file:
+            return jsonify({'success': False, 'error': '报告文件不存在'}), 404
+        
+        report_path = os.path.join(reports_dir, report_file)
+        
+        # 使用安全的文件名
+        safe_filename = f'自评报告_{submission_id}.docx'
+        
+        return send_file(
+            report_path,
+            as_attachment=True,
+            attachment_filename=safe_filename,
+            mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+        
+    except Exception as e:
+        import traceback
+        error_detail = traceback.format_exc()
+        print(f"[ERROR] 下载报告失败: {error_detail}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
 

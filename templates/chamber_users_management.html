@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>工商联用户管理</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #4338ca;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #3730a3;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .btn-success {
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #15803d;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .toolbar-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .toolbar-group label {
+      font-weight: 500;
+      color: #666;
+    }
+
+    .form-control {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #4338ca;
+      box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+    }
+
+    .table-wrapper {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th {
+      background: #f9fafb;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: #333;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .table tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-active {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .badge-inactive {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-admin {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .badge-reviewer {
+      background: #e9d5ff;
+      color: #6b21a8;
+    }
+
+    .badge-operator {
+      background: #ccfbf1;
+      color: #134e4a;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn-edit {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .action-btn-edit:hover {
+      background: #bfdbfe;
+    }
+
+    .action-btn-delete {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .action-btn-delete:hover {
+      background: #fecaca;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 20px;
+      padding: 15px;
+    }
+
+    .pagination button {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .pagination button:hover {
+      background: #f0f0f0;
+    }
+
+    .pagination button.active {
+      background: #4338ca;
+      color: white;
+      border-color: #4338ca;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* 模态框 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      color: #333;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .modal-close:hover {
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #4338ca;
+      box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .alert-info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card h3 {
+      color: #999;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #4338ca;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 头部 -->
+    <div class="header">
+      <h1>工商联用户管理</h1>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="openAddUserModal()">+ 新增用户</button>
+        <button class="btn btn-secondary" onclick="exportUsers()">导出 Excel</button>
+      </div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="stats" id="stats"></div>
+
+    <!-- 提示信息 -->
+    <div class="alert alert-success" id="successAlert"></div>
+    <div class="alert alert-error" id="errorAlert"></div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="toolbar-group">
+        <label>搜索：</label>
+        <input type="text" class="form-control" id="keyword" placeholder="用户名/邮箱/姓名" />
+      </div>
+      <div class="toolbar-group">
+        <label>层级：</label>
+        <select class="form-control" id="levelFilter">
+          <option value="">全部</option>
+          <option value="county">县市</option>
+          <option value="province">省级</option>
+          <option value="national">全联</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <label>角色：</label>
+        <select class="form-control" id="roleFilter">
+          <option value="">全部</option>
+          <option value="admin">管理员</option>
+          <option value="reviewer">审核员</option>
+          <option value="operator">操作员</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <label>状态：</label>
+        <select class="form-control" id="statusFilter">
+          <option value="">全部</option>
+          <option value="active">激活</option>
+          <option value="inactive">禁用</option>
+          <option value="pending">待审核</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="loadUsers()">查询</button>
+      <button class="btn btn-secondary" onclick="resetFilters()">重置</button>
+    </div>
+
+    <!-- 用户列表 -->
+    <div class="table-wrapper">
+      <table class="table" id="usersTable">
+        <thead>
+          <tr>
+            <th>用户名</th>
+            <th>真实姓名</th>
+            <th>邮箱</th>
+            <th>手机号</th>
+            <th>层级</th>
+            <th>地区</th>
+            <th>角色</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+          <tr>
+            <td colspan="10" class="loading">加载中...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 分页 -->
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <!-- 新增/编辑用户模态框 -->
+  <div class="modal" id="userModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="userModalTitle">新增用户</h2>
+        <button class="modal-close" onclick="closeUserModal()">×</button>
+      </div>
+      <div class="alert alert-error" id="userModalError"></div>
+      <form id="userForm" onsubmit="saveUser(event)">
+        <div class="form-group">
+          <label>用户名 *</label>
+          <input type="text" id="username" required />
+        </div>
+        <div class="form-group">
+          <label>邮箱 *</label>
+          <input type="email" id="email" required />
+        </div>
+        <div class="form-group" id="passwordGroup">
+          <label>密码 *</label>
+          <input type="password" id="password" required />
+        </div>
+        <div class="form-group">
+          <label>真实姓名 *</label>
+          <input type="text" id="real_name" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>手机号</label>
+            <input type="tel" id="phone" />
+          </div>
+          <div class="form-group">
+            <label>层级 *</label>
+            <select id="level" required>
+              <option value="">请选择</option>
+              <option value="county">县市</option>
+              <option value="province">省级</option>
+              <option value="national">全联</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>地区 *</label>
+            <input type="text" id="region" required />
+          </div>
+          <div class="form-group">
+            <label>角色 *</label>
+            <select id="role" required>
+              <option value="">请选择</option>
+              <option value="admin">管理员</option>
+              <option value="reviewer">审核员</option>
+              <option value="operator">操作员</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>审核权限等级</label>
+            <select id="review_level">
+              <option value="">无</option>
+              <option value="beginner">初级</option>
+              <option value="intermediate">中级</option>
+              <option value="advanced">高级</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>状态</label>
+            <select id="status">
+              <option value="pending">待审核</option>
+              <option value="active">激活</option>
+              <option value="inactive">禁用</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>部门</label>
+            <input type="text" id="department" />
+          </div>
+          <div class="form-group">
+            <label>职位</label>
+            <input type="text" id="position" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>备注</label>
+          <textarea id="remark"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeUserModal()">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    let currentUserId = null;
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function () {
+      loadUsers();
+    });
+
+    // 加载用户列表
+    function loadUsers() {
+      const keyword = document.getElementById('keyword').value;
+      const level = document.getElementById('levelFilter').value;
+      const role = document.getElementById('roleFilter').value;
+      const status = document.getElementById('statusFilter').value;
+
+      const params = new URLSearchParams({
+        page: currentPage,
+        page_size: 10,
+        keyword,
+        level,
+        role,
+        status
+      });
+
+      fetch(`/api/portal/chamber/users?${params}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.code === 200) {
+            renderUsers(data.data.users);
+            renderPagination(data.data.total_pages, data.data.page);
+          } else {
+            showError(data.message);
+          }
+        })
+        .catch(err => showError('加载失败: ' + err.message));
+    }
+
+    // 渲染用户列表
+    function renderUsers(users) {
+      const tbody = document.getElementById('usersTableBody');
+      
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="empty-state">暂无数据</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = users.map(user => `
+        <tr>
+          <td>${user.username}</td>
+          <td>${user.real_name || '-'}</td>
+          <td>${user.email}</td>
+          <td>${user.phone || '-'}</td>
+          <td>
+            <span class="badge badge-${user.level}">
+              ${getLevelLabel(user.level)}
+            </span>
+          </td>
+          <td>${user.region || '-'}</td>
+          <td>
+            <span class="badge badge-${user.role}">
+              ${getRoleLabel(user.role)}
+            </span>
+          </td>
+          <td>
+            <span class="badge badge-${user.status}">
+              ${getStatusLabel(user.status)}
+            </span>
+          </td>
+          <td>${formatDate(user.created_at)}</td>
+          <td>
+            <div class="actions">
+              <button class="action-btn action-btn-edit" onclick="editUser('${user.id}')">编辑</button>
+              <button class="action-btn action-btn-delete" onclick="deleteUser('${user.id}', '${user.username}')">删除</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // 渲染分页
+    function renderPagination(totalPages, currentPageNum) {
+      const pagination = document.getElementById('pagination');
+      let html = '';
+
+      if (currentPageNum > 1) {
+        html += `<button onclick="goToPage(1)">首页</button>`;
+        html += `<button onclick="goToPage(${currentPageNum - 1})">上一页</button>`;
+      }
+
+      for (let i = Math.max(1, currentPageNum - 2); i <= Math.min(totalPages, currentPageNum + 2); i++) {
+        html += `<button ${i === currentPageNum ? 'class="active"' : ''} onclick="goToPage(${i})">${i}</button>`;
+      }
+
+      if (currentPageNum < totalPages) {
+        html += `<button onclick="goToPage(${currentPageNum + 1})">下一页</button>`;
+        html += `<button onclick="goToPage(${totalPages})">末页</button>`;
+      }
+
+      pagination.innerHTML = html;
+    }
+
+    // 打开新增用户模态框
+    function openAddUserModal() {
+      currentUserId = null;
+      document.getElementById('userModalTitle').textContent = '新增用户';
+      document.getElementById('userForm').reset();
+      document.getElementById('passwordGroup').style.display = 'block';
+      document.getElementById('password').required = true;
+      document.getElementById('userModal').classList.add('active');
+    }
+
+    // 编辑用户
+    function editUser(userId) {
+      currentUserId = userId;
+      
+      fetch(`/api/portal/chamber/users/${userId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.code === 200) {
+            const user = data.data;
+            document.getElementById('userModalTitle').textContent = '编辑用户';
+            document.getElementById('username').value = user.username;
+            document.getElementById('email').value = user.email;
+            document.getElementById('real_name').value = user.real_name || '';
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('level').value = user.level;
+            document.getElementById('region').value = user.region || '';
+            document.getElementById('role').value = user.role;
+            document.getElementById('review_level').value = user.review_level || '';
+            document.getElementById('status').value = user.status;
+            document.getElementById('department').value = user.department || '';
+            document.getElementById('position').value = user.position || '';
+            document.getElementById('remark').value = user.remark || '';
+            
+            document.getElementById('passwordGroup').style.display = 'none';
+            document.getElementById('password').required = false;
+            document.getElementById('userModal').classList.add('active');
+          } else {
+            showError(data.message);
+          }
+        })
+        .catch(err => showError('加载用户信息失败: ' + err.message));
+    }
+
+    // 保存用户
+    function saveUser(event) {
+      event.preventDefault();
+
+      const data = {
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        real_name: document.getElementById('real_name').value,
+        phone: document.getElementById('phone').value,
+        level: document.getElementById('level').value,
+        region: document.getElementById('region').value,
+        role: document.getElementById('role').value,
+        review_level: document.getElementById('review_level').value || null,
+        status: document.getElementById('status').value,
+        department: document.getElementById('department').value,
+        position: document.getElementById('position').value,
+        remark: document.getElementById('remark').value
+      };
+
+      if (!currentUserId) {
+        data.password = document.getElementById('password').value;
+      }
+
+      const method = currentUserId ? 'PUT' : 'POST';
+      const url = currentUserId 
+        ? `/api/portal/chamber/users/${currentUserId}`
+        : '/api/portal/chamber/users';
+
+      fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code === 200 || data.code === 201) {
+            showSuccess(currentUserId ? '用户已更新' : '用户已创建');
+            closeUserModal();
+            loadUsers();
+          } else {
+            showErrorInModal(data.message);
+          }
+        })
+        .catch(err => showErrorInModal('保存失败: ' + err.message));
+    }
+
+    // 删除用户
+    function deleteUser(userId, username) {
+      if (!confirm(`确定要删除用户 "${username}" 吗？`)) return;
+
+      fetch(`/api/portal/chamber/users/${userId}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code === 200) {
+            showSuccess('用户已删除');
+            loadUsers();
+          } else {
+            showError(data.message);
+          }
+        })
+        .catch(err => showError('删除失败: ' + err.message));
+    }
+
+    // 导出用户
+    function exportUsers() {
+      window.location.href = '/api/portal/chamber/users/export';
+    }
+
+    // 关闭模态框
+    function closeUserModal() {
+      document.getElementById('userModal').classList.remove('active');
+    }
+
+    // 重置筛选
+    function resetFilters() {
+      document.getElementById('keyword').value = '';
+      document.getElementById('levelFilter').value = '';
+      document.getElementById('roleFilter').value = '';
+      document.getElementById('statusFilter').value = '';
+      currentPage = 1;
+      loadUsers();
+    }
+
+    // 跳转页码
+    function goToPage(page) {
+      currentPage = page;
+      loadUsers();
+    }
+
+    // 辅助函数
+    function getLevelLabel(level) {
+      const labels = { county: '县市', province: '省级', national: '全联' };
+      return labels[level] || level;
+    }
+
+    function getRoleLabel(role) {
+      const labels = { admin: '管理员', reviewer: '审核员', operator: '操作员' };
+      return labels[role] || role;
+    }
+
+    function getStatusLabel(status) {
+      const labels = { active: '激活', inactive: '禁用', pending: '待审核' };
+      return labels[status] || status;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('zh-CN') + ' ' + date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function showSuccess(message) {
+      const alert = document.getElementById('successAlert');
+      alert.textContent = message;
+      alert.classList.add('show');
+      setTimeout(() => alert.classList.remove('show'), 3000);
+    }
+
+    function showError(message) {
+      const alert = document.getElementById('errorAlert');
+      alert.textContent = message;
+      alert.classList.add('show');
+      setTimeout(() => alert.classList.remove('show'), 5000);
+    }
+
+    function showErrorInModal(message) {
+      const alert = document.getElementById('userModalError');
+      alert.textContent = message;
+      alert.classList.add('show');
+      setTimeout(() => alert.classList.remove('show'), 5000);
+    }
+  </script>
+</body>
+</html>
+
