@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": "ent001",
+      "name": "示例企业A",
+      "region": "天津市",
+      "industry": "制造业",
+      "level": "intermediate",
+      "contact": "张经理",
+      "email": "contact@example-a.com",
+      "phone": "13800138000",
+      "created_at": "2024-01-01 10:00",
+      "updated_at": "2025-12-03 03:41"
+    },
+    {
+      "id": "ent002",
+      "name": "示例企业B",
+      "region": "北京市",
+      "industry": "信息技术",
+      "level": "intermediate",
+      "contact": "李经理",
+      "email": "contact@example-b.com",
+      "phone": "13900139000",
+      "created_at": "2024-01-02 10:00",
+      "updated_at": "2024-01-02 10:00"
+    },
+    {
+      "id": "ent003",
+      "name": "示例企业C",
+      "region": "上海市",
+      "industry": "金融服务",
+      "level": "advanced",
+      "contact": "王经理",
+      "email": "contact@example-c.com",
+      "phone": "13700137000",
+      "created_at": "2024-01-03 10:00",
+      "updated_at": "2024-01-03 10:00"
+    }
+  ]
+}

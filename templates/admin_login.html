@@ -254,12 +254,16 @@
             loginButton.innerHTML = '<span class="loading"></span> 登录中...';
 
             try {
-                const response = await fetch('/api/admin/login', {
+                const response = await fetch('/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ 
+                        username, 
+                        password,
+                        role: 'chamber_of_commerce'  // 默认为工商联用户
+                    })
                 });
 
                 const result = await response.json();
@@ -267,14 +271,9 @@
                 if (response.ok && result.success) {
                     showStatus('✅ 登录成功，正在跳转...', 'success');
 
-                    // 保存token
-                    if (result.token) {
-                        localStorage.setItem('admin_token', result.token);
-                    }
-
-                    // 跳转到管理员面板
+                    // 跳转到工商联门户
                     setTimeout(() => {
-                        window.location.href = '/admin/dashboard';
+                        window.location.href = result.redirect || '/portal/chamber';
                     }, 1000);
                 } else {
                     showStatus('❌ ' + (result.error || '登录失败'), 'error');

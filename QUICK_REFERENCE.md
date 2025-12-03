@@ -1,221 +1,195 @@
-# 快速参考卡片
+# 工商联门户菜单重设计 - 快速参考
 
-## 模块导入
+## 菜单结构一览
 
-```python
-# 问卷生成
-from survey_generator import QuestionnaireGenerator
-
-# 报告生成
-from report_generator import ProfessionalReportGenerator
+```
+┌─────────────────────────────────────┐
+│         工商联门户                   │
+├─────────────────────────────────────┤
+│ 企业管理                             │
+│  └─ 资质审核 →                       │
+│                                     │
+│ 专家管理                             │
+│  └─ 专家辅导记录 →                   │
+│                                     │
+│ 工商联用户管理                       │
+│  └─ 用户管理 →                       │
+│                                     │
+│ 专项反馈管理                         │
+│  └─ 专项申请审核 →                   │
+│                                     │
+│ 基础问卷管理                         │
+│  └─ 问卷管理 →                       │
+│                                     │
+│ 平台基础功能管理                     │
+│  └─ 报告管理 →                       │
+└─────────────────────────────────────┘
 ```
 
----
+## 功能清单
 
-## 常用代码片段
+| 分类 | 菜单项 | 二级菜单 | 功能描述 |
+|------|--------|---------|---------|
+| 企业管理 | 资质审核 | 企业资质审核 | 审核企业资质，判断升级条件 |
+| 专家管理 | 专家辅导记录 | 辅导记录查看 | 查看专家与企业的沟通记录 |
+| 工商联用户管理 | 用户管理 | 工商联用户列表 | 管理工商联系统用户 |
+| 专项反馈管理 | 专项申请审核 | 专项申请审核 | 审核企业提交的专项申请 |
+| 基础问卷管理 | 问卷管理 | 问卷配置 | 管理系统中的问卷 |
+| 平台基础功能管理 | 报告管理 | 查看企业报告 | 查看所有企业报告 |
+| 平台基础功能管理 | 报告管理 | 发送报告 | 通过邮件发送报告 |
 
-### 生成单个问卷
+## 新增 API 端点
 
-```python
-from survey_generator import QuestionnaireGenerator
-
-gen = QuestionnaireGenerator()
-file = gen.generate_questionnaire(
-    output_path='问卷.xlsx',
-    enterprise_name='企业名称'
-)
-print(f"问卷已生成: {file}")
+```
+GET /api/portal/chamber/users
+GET /api/portal/chamber/questionnaires
 ```
 
-### 批量生成问卷
+## CSS 类名参考
 
-```python
-import pandas as pd
-from survey_generator import QuestionnaireGenerator
-
-df = pd.DataFrame({'企业名称': ['企业A', '企业B', '企业C']})
-gen = QuestionnaireGenerator()
-files = gen.generate_batch_questionnaires(df, output_folder='questionnaires')
-print(f"已生成 {len(files)} 份问卷")
-```
-
-### 生成报告
-
-```python
-from report_generator import ProfessionalReportGenerator
-from score_calculator import ScoreCalculator
-
-calc = ScoreCalculator()
-gen = ProfessionalReportGenerator(score_calculator=calc)
-report = gen.generate_report(questionnaire_file='问卷.xlsx')
-print(f"报告已生成: {report}")
-```
-
-### 完整工作流
-
-```python
-from survey_generator import QuestionnaireGenerator
-from report_generator import ProfessionalReportGenerator
-from score_calculator import ScoreCalculator
-
-# 第一步: 生成问卷
-q_gen = QuestionnaireGenerator()
-questionnaire = q_gen.generate_questionnaire(enterprise_name='示例企业')
-
-# 第二步: 生成报告
-calc = ScoreCalculator()
-r_gen = ProfessionalReportGenerator(score_calculator=calc)
-report = r_gen.generate_report(questionnaire_file=questionnaire)
-
-print(f"问卷: {questionnaire}")
-print(f"报告: {report}")
-```
-
----
-
-## Flask集成
-
-```python
-from flask import Blueprint, request, jsonify
-from survey_generator import QuestionnaireGenerator
-from report_generator import ProfessionalReportGenerator
-from score_calculator import ScoreCalculator
-
-api = Blueprint('api', __name__)
-
-@api.post('/questionnaire')
-def create_questionnaire():
-    gen = QuestionnaireGenerator()
-    file = gen.generate_questionnaire(
-        enterprise_name=request.json.get('name')
-    )
-    return {'file': file}
-
-@api.post('/report')
-def create_report():
-    calc = ScoreCalculator()
-    gen = ProfessionalReportGenerator(score_calculator=calc)
-    file = gen.generate_report(
-        questionnaire_file=request.json.get('questionnaire')
-    )
-    return {'file': file}
-```
-
----
-
-## 错误处理
-
-```python
-from survey_generator import QuestionnaireGenerator
-
-try:
-    gen = QuestionnaireGenerator()
-    file = gen.generate_questionnaire()
-except FileNotFoundError as e:
-    print(f"文件错误: {e}")
-except Exception as e:
-    print(f"生成失败: {e}")
-```
-
----
-
-## 文件位置
-
-| 文件 | 位置 |
+| 类名 | 用途 |
 |------|------|
-| 问卷生成模块 | `survey_generator/` |
-| 报告生成模块 | `report_generator/` |
-| 使用指南 | `MODULES_USAGE_GUIDE.md` |
-| 集成示例 | `INTEGRATION_EXAMPLE.py` |
-| 重构总结 | `MODULES_REFACTORING_SUMMARY.md` |
+| `.menu-group` | 菜单分组容器 |
+| `.menu-group-title` | 菜单分组标题 |
+| `.menu button` | 菜单项按钮 |
+| `.menu-arrow` | 菜单箭头指示符 |
+| `.submenu-tooltip` | 悬浮窗口容器 |
+| `.submenu-item` | 二级菜单项 |
 
----
+## JavaScript 函数参考
 
-## 常见问题
+| 函数名 | 参数 | 功能 |
+|--------|------|------|
+| `switchTab(id, btn)` | id: 标签页ID, btn: 按钮元素 | 切换标签页 |
+| `loadChamberUsers()` | 无 | 加载工商联用户列表 |
+| `loadQuestionnaires()` | 无 | 加载问卷列表 |
 
-**Q: 如何自定义指标文件？**
-```python
-gen = QuestionnaireGenerator(indicator_file='/path/to/indicators.xlsx')
-```
+## 标签页 ID 映射
 
-**Q: 如何指定输出路径？**
-```python
-gen.generate_questionnaire(output_path='/path/to/output.xlsx')
-```
+| 标签页ID | 对应功能 | 加载函数 |
+|---------|---------|---------|
+| `qualification` | 企业资质审核 | `loadReviews()` |
+| `special` | 专项申请审核 | `loadSpecials()` |
+| `reports` | 查看企业报告 | `loadAllReports()` |
+| `send-report` | 发送报告 | `loadReportsForSelector()` |
+| `tutoring` | 专家辅导记录 | `loadTutoringRecords()` |
+| `chamber-users` | 工商联用户管理 | `loadChamberUsers()` |
+| `questionnaire-mgmt` | 基础问卷管理 | `loadQuestionnaires()` |
 
-**Q: 如何处理大量生成？**
-```python
-files = gen.generate_batch_questionnaires(df, output_folder='output')
-```
+## 样式值参考
 
-**Q: 报告生成失败怎么办？**
-```python
-try:
-    report = gen.generate_report(questionnaire_file='问卷.xlsx')
-except Exception as e:
-    print(f"错误: {e}")
-```
+| 样式属性 | 值 |
+|---------|-----|
+| 侧边栏宽度 | 240px |
+| 菜单项高度 | 44px (12px padding × 2 + 14px font) |
+| 悬浮窗口最小宽度 | 180px |
+| 悬浮窗口阴影 | 0 10px 25px rgba(0,0,0,0.3) |
+| 过渡时间 | 0.2s |
+| 圆角半径 | 8px |
 
----
+## 颜色参考
 
-## 运行示例
+| 元素 | 颜色 | 十六进制 |
+|------|------|---------|
+| 侧边栏背景 | 深蓝灰 | #101827 |
+| 菜单项文字 | 浅灰 | #cbd5e1 |
+| 菜单项悬停背景 | 深蓝 | #0b1220 |
+| 活跃菜单项边框 | 蓝 | #60a5fa |
+| 悬浮窗口背景 | 深灰 | #1f2937 |
+| 悬浮窗口边框 | 浅灰 | #374151 |
+| 分组标题文字 | 中灰 | #9ca3af |
 
-```bash
-# 快速测试
-python INTEGRATION_EXAMPLE.py --quick
-
-# 运行特定场景
-python INTEGRATION_EXAMPLE.py --scenario 1
-
-# 运行所有场景
-python INTEGRATION_EXAMPLE.py
-```
-
----
-
-## 主要类和方法
-
-### QuestionnaireGenerator
-
-| 方法 | 说明 |
-|------|------|
-| `__init__(indicator_file=None)` | 初始化 |
-| `load_indicators()` | 加载指标 |
-| `generate_questionnaire()` | 生成问卷 |
-| `generate_batch_questionnaires()` | 批量生成 |
-
-### ProfessionalReportGenerator
-
-| 方法 | 说明 |
-|------|------|
-| `__init__(score_calculator=None)` | 初始化 |
-| `generate_report()` | 生成报告 |
-
----
-
-## 依赖包
+## 交互流程
 
 ```
-pandas
-openpyxl
-python-docx
-matplotlib
+用户进入门户
+    ↓
+看到6个功能分类
+    ↓
+鼠标悬停菜单项
+    ↓
+右侧显示悬浮窗口
+    ↓
+点击二级菜单项
+    ↓
+切换到对应功能页面
+    ↓
+加载相应数据
 ```
 
-安装:
-```bash
-pip install pandas openpyxl python-docx matplotlib
+## 常用操作
+
+### 切换菜单
+```javascript
+// 点击菜单项或二级菜单项时调用
+switchTab('qualification');  // 切换到资质审核
+switchTab('chamber-users');  // 切换到用户管理
+switchTab('questionnaire-mgmt');  // 切换到问卷管理
 ```
 
----
+### 刷新数据
+```javascript
+loadChamberUsers();  // 刷新用户列表
+loadQuestionnaires();  // 刷新问卷列表
+```
 
-## 更多信息
+## 文件修改清单
 
-- 详细文档: `MODULES_USAGE_GUIDE.md`
-- 集成示例: `INTEGRATION_EXAMPLE.py`
-- 重构总结: `MODULES_REFACTORING_SUMMARY.md`
+- [x] `templates/portal_chamber.html` - 菜单结构和样式
+- [ ] `app.py` 或路由文件 - 添加新 API 端点
+- [ ] 数据库 - 创建用户和问卷表
 
----
+## 测试清单
 
-**最后更新**: 2025-11-29
+- [ ] 菜单显示正确
+- [ ] 悬浮窗口显示正确
+- [ ] 菜单项点击有效
+- [ ] 二级菜单项点击有效
+- [ ] 数据加载正确
+- [ ] 错误处理正确
+- [ ] 浏览器兼容性正确
 
+## 部署检查清单
+
+- [ ] 备份原始文件
+- [ ] 更新前端文件
+- [ ] 实现后端 API
+- [ ] 创建数据库表
+- [ ] 运行完整测试
+- [ ] 验证所有功能
+- [ ] 部署到生产环境
+- [ ] 监控错误日志
+
+## 性能指标
+
+| 指标 | 目标 | 当前 |
+|------|------|------|
+| 菜单加载时间 | < 100ms | - |
+| 悬浮窗口显示延迟 | < 50ms | - |
+| 数据加载时间 | < 1s | - |
+| 页面切换时间 | < 500ms | - |
+
+## 浏览器支持
+
+| 浏览器 | 最低版本 | 状态 |
+|--------|---------|------|
+| Chrome | 90+ | ✓ 支持 |
+| Firefox | 88+ | ✓ 支持 |
+| Safari | 14+ | ✓ 支持 |
+| Edge | 90+ | ✓ 支持 |
+| IE 11 | - | ✗ 不支持 |
+
+## 故障排查
+
+| 问题 | 可能原因 | 解决方案 |
+|------|---------|---------|
+| 悬浮窗口不显示 | CSS 未加载 | 检查浏览器开发者工具 |
+| 菜单项无反应 | JavaScript 错误 | 查看控制台错误信息 |
+| 数据加载失败 | API 未实现 | 检查后端实现 |
+| 页面闪烁 | 样式冲突 | 检查 CSS 优先级 |
+
+## 联系方式
+
+- 技术支持：[support@example.com]
+- 文档：[docs.example.com]
+- 问题报告：[issues.example.com]
