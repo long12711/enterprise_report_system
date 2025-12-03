@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷提交成功 - 南开问卷系统</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Microsoft YaHei", Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { max-width: 800px; width: 100%; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2E5090 0%, #4472C4 100%); color: white; padding: 40px; text-align: center; }
+        .success-icon { font-size: 80px; margin-bottom: 20px; animation: bounce 1s ease; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
+        .header h1 { font-size: 32px; margin-bottom: 10px; }
+        .header p { font-size: 16px; opacity: 0.95; }
+        .content { padding: 50px 40px; }
+        .score-section { text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, #f0f7ff 0%, #e3f2fd 100%); border-radius: 15px; border: 3px solid #2E5090; }
+        .score-label { font-size: 18px; color: #666; margin-bottom: 15px; }
+        .score-value { font-size: 72px; font-weight: bold; color: #2E5090; margin-bottom: 10px; }
+        .score-level { font-size: 20px; color: #4472C4; font-weight: bold; }
+        .info-section { margin-bottom: 30px; }
+        .info-item { display: flex; justify-content: space-between; padding: 15px; background: #f8f9fa; border-radius: 8px; margin-bottom: 10px; }
+        .info-label { font-weight: bold; color: #666; }
+        .info-value { color: #333; }
+        .report-section { background: #fff9e6; padding: 25px; border-radius: 15px; border-left: 5px solid #ffc107; margin-bottom: 30px; }
+        .report-section h3 { color: #f57c00; margin-bottom: 15px; font-size: 20px; }
+        .report-section p { color: #666; line-height: 1.8; margin-bottom: 20px; }
+        .report-btn { display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #2E5090 0%, #4472C4 100%); color: white; border: none; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(46, 80, 144, 0.3); text-decoration: none; margin-right: 15px; }
+        .report-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(46, 80, 144, 0.4); }
+        .report-btn.secondary { background: linear-gradient(135deg, #6c757d 0%, #495057 100%); }
+        .actions { text-align: center; padding: 30px 0; }
+        .back-link { display: inline-block; margin-top: 20px; color: #2E5090; text-decoration: none; font-size: 16px; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="success-icon">✅</div>
+            <h1>问卷提交成功！</h1>
+            <p>感谢您完成南开大学现代企业制度指数评价问卷</p>
+        </div>
+
+        <div class="content">
+            <div class="score-section">
+                <div class="score-label">您的企业综合得分</div>
+                <div class="score-value" id="scoreValue">{{ score }}分</div>
+                <div class="score-level" id="scoreLevel">加载中...</div>
+                <div style="margin-top: 20px; font-size: 16px; color: #666;">
+                    <div>实际得分：<strong style="color: #2E5090;">{{ total_score }}</strong> 分</div>
+                    <div>满分：<strong>{{ max_score }}</strong> 分</div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-item">
+                    <span class="info-label">企业名称</span>
+                    <span class="info-value">{{ enterprise }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">问卷级别</span>
+                    <span class="info-value">{{ level }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">提交时间</span>
+                    <span class="info-value" id="submitTime">-</span>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h3>📊 企业自评报告</h3>
+                <p>系统正在为您生成详细的企业自评报告，报告将包含：</p>
+                <ul style="color: #666; line-height: 2; margin-left: 20px; margin-bottom: 20px;">
+                    <li>企业现代制度建设综合评价</li>
+                    <li>各维度得分详细分析</li>
+                    <li>优势领域与改进建议</li>
+                    <li>行业对标与发展路径</li>
+                </ul>
+                <button class="report-btn" onclick="generateReport()">生成自评报告</button>
+                <button class="report-btn secondary" onclick="downloadData()">下载问卷数据</button>
+            </div>
+
+            <div class="actions">
+                <a href="/nankai-survey" class="back-link">← 返回问卷选择</a>
+                <span style="margin: 0 15px; color: #ccc;">|</span>
+                <a href="/" class="back-link">返回首页</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 显示提交时间
+        document.getElementById('submitTime').textContent = new Date().toLocaleString('zh-CN');
+
+        // 从URL获取分数参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const score = parseFloat(urlParams.get('score') || '{{ score }}' || '0');
+        const totalScore = parseFloat(urlParams.get('total_score') || '{{ total_score }}' || '0');
+        const maxScore = parseFloat(urlParams.get('max_score') || '{{ max_score }}' || '100');
+        const submissionId = urlParams.get('submission_id') || '';
+        const enterprise = urlParams.get('enterprise') || '{{ enterprise }}';
+        
+        // 更新显示
+        document.getElementById('scoreValue').textContent = score.toFixed(2) + '分';
+        
+        // 根据分数显示评级
+        const scoreLevel = document.getElementById('scoreLevel');
+        
+        if (score >= 90) {
+            scoreLevel.textContent = '优秀 - 企业制度建设达到卓越水平';
+            scoreLevel.style.color = '#28a745';
+        } else if (score >= 80) {
+            scoreLevel.textContent = '良好 - 企业制度建设较为完善';
+            scoreLevel.style.color = '#17a2b8';
+        } else if (score >= 70) {
+            scoreLevel.textContent = '中等 - 企业制度建设基本健全';
+            scoreLevel.style.color = '#ffc107';
+        } else if (score >= 60) {
+            scoreLevel.textContent = '及格 - 企业制度建设有待提升';
+            scoreLevel.style.color = '#fd7e14';
+        } else {
+            scoreLevel.textContent = '需改进 - 企业制度建设亟需加强';
+            scoreLevel.style.color = '#dc3545';
+        }
+
+        // 生成报告
+        function generateReport() {
+            if (!submissionId) {
+                alert('无法获取提交ID，请重新提交问卷');
+                return;
+            }
+            
+            // 显示加载提示
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '正在生成报告...';
+            btn.disabled = true;
+            
+            // 调用API生成报告
+            fetch(`/api/nankai/generate-report/${submissionId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 生成成功，直接下载
+                        window.location.href = data.download_url;
+                        
+                        // 显示成功提示
+                        setTimeout(() => {
+                            alert('报告生成成功！\n\n报告已包含：\n✓ 企业基本信息\n✓ 各维度得分分析\n✓ 优势与不足\n✓ 改进建议\n✓ 问卷详细数据');
+                            btn.textContent = originalText;
+                            btn.disabled = false;
+                        }, 1000);
+                    } else {
+                        alert('报告生成失败：' + (data.error || '未知错误'));
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('生成报告出错:', error);
+                    alert('报告生成失败，请稍后重试');
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                });
+        }
+
+        // 下载数据
+        function downloadData() {
+            if (!submissionId) {
+                alert('无法获取提交ID，请重新提交问卷');
+                return;
+            }
+            
+            // 直接跳转到下载链接
+            window.location.href = `/api/nankai/download/${submissionId}`;
+        }
+    </script>
+</body>
+</html>

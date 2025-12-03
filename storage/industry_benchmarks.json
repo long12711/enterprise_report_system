@@ -1,0 +1,165 @@
+{
+  "last_update": "2025-12-02",
+  "industries": {
+    "软件和信息技术服务业": {
+      "total_enterprises": 15420,
+      "large_enterprises": 1205,
+      "benchmarks": {
+        "average": 81.0,
+        "excellent": 95.0,
+        "same_size_avg": 88.0,
+        "benchmark": 97.0,
+        "international": 99.0
+      },
+      "dimensions": {
+        "治理方向性": {
+          "average": 85.0,
+          "excellent": 97.0
+        },
+        "治理有效性": {
+          "average": 80.0,
+          "excellent": 94.0
+        },
+        "治理规范性": {
+          "average": 82.0,
+          "excellent": 96.0
+        },
+        "治理透明性": {
+          "average": 75.0,
+          "excellent": 92.0
+        },
+        "财务管理": {
+          "average": 84.0,
+          "excellent": 97.0
+        },
+        "风险管控": {
+          "average": 78.0,
+          "excellent": 91.0
+        },
+        "合规管理": {
+          "average": 76.0,
+          "excellent": 93.0
+        },
+        "创新能力": {
+          "average": 83.0,
+          "excellent": 95.0
+        },
+        "可持续发展": {
+          "average": 73.5,
+          "excellent": 90.0
+        }
+      },
+      "benchmark_companies": [
+        "腾讯控股",
+        "阿里巴巴集团",
+        "华为技术有限公司"
+      ]
+    },
+    "制造业": {
+      "total_enterprises": 28500,
+      "large_enterprises": 2150,
+      "benchmarks": {
+        "average": 78.0,
+        "excellent": 92.0,
+        "same_size_avg": 85.0,
+        "benchmark": 95.0,
+        "international": 98.0
+      },
+      "dimensions": {
+        "治理方向性": {
+          "average": 82.0,
+          "excellent": 94.0
+        },
+        "治理有效性": {
+          "average": 77.0,
+          "excellent": 91.0
+        },
+        "治理规范性": {
+          "average": 79.0,
+          "excellent": 93.0
+        },
+        "治理透明性": {
+          "average": 72.0,
+          "excellent": 89.0
+        },
+        "财务管理": {
+          "average": 81.0,
+          "excellent": 94.0
+        },
+        "风险管控": {
+          "average": 75.0,
+          "excellent": 88.0
+        },
+        "合规管理": {
+          "average": 73.0,
+          "excellent": 90.0
+        },
+        "创新能力": {
+          "average": 80.0,
+          "excellent": 92.0
+        },
+        "可持续发展": {
+          "average": 70.0,
+          "excellent": 87.0
+        }
+      },
+      "benchmark_companies": [
+        "华为制造",
+        "比亚迪",
+        "格力电器"
+      ]
+    },
+    "其他": {
+      "total_enterprises": 50000,
+      "large_enterprises": 3000,
+      "benchmarks": {
+        "average": 76.0,
+        "excellent": 91.0,
+        "same_size_avg": 83.0,
+        "benchmark": 95.0,
+        "international": 98.0
+      },
+      "dimensions": {
+        "治理方向性": {
+          "average": 80.0,
+          "excellent": 93.0
+        },
+        "治理有效性": {
+          "average": 75.0,
+          "excellent": 89.0
+        },
+        "治理规范性": {
+          "average": 77.0,
+          "excellent": 91.0
+        },
+        "治理透明性": {
+          "average": 71.0,
+          "excellent": 87.0
+        },
+        "财务管理": {
+          "average": 79.0,
+          "excellent": 92.0
+        },
+        "风险管控": {
+          "average": 73.0,
+          "excellent": 86.0
+        },
+        "合规管理": {
+          "average": 71.0,
+          "excellent": 88.0
+        },
+        "创新能力": {
+          "average": 78.0,
+          "excellent": 90.0
+        },
+        "可持续发展": {
+          "average": 68.0,
+          "excellent": 85.0
+        }
+      },
+      "benchmark_companies": [
+        "行业领先企业"
+      ]
+    }
+  }
+}
