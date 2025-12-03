@@ -1,255 +1,130 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>中国现代民营企业制度培育建设系统 - 登录</title>
-  <style>
-    :root{
-      --brand:#3157d3;--brand2:#6aa1ff;--bg1:#1f3b78;--bg2:#2f66c2;--card:#ffffffcc;--text:#0f172a;
-      --muted:#64748b;--shadow:0 18px 48px rgba(0,0,0,.18)
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:"Microsoft YaHei",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh;background:radial-gradient(1200px 600px at 10% -10%, #4b6cb7 0%, transparent 60%),linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--text)}
-    .container{max-width:1080px;margin:0 auto;padding:28px}
-
-    /* 顶部区 */
-    .hero{position:relative;padding:28px 22px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);box-shadow:var(--shadow);color:#fff;text-align:center}
-    .hero h1{font-size:30px;letter-spacing:.5px;margin-bottom:6px}
-    .hero p{opacity:.9}
-    .admin-link{position:absolute;right:18px;top:18px;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.6);padding:8px 14px;border-radius:999px;transition:.2s}
-    .admin-link:hover{background:rgba(255,255,255,.15)}
-
-    /* 轮播容器 */
-    .carousel{position:relative;margin-top:20px;border-radius:18px;background:rgba(255,255,255,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:var(--shadow);overflow:hidden}
-    .slides{display:flex;transition:transform .45s cubic-bezier(.22,.61,.36,1);will-change:transform}
-    .slide{min-width:100%;padding:34px 28px}
-
-    /* 卡片内容 */
-    .role-card{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:stretch}
-    .role-head{border:1px solid #e5e7eb;background:#f8fafc;border-radius:14px;padding:22px;box-shadow:0 10px 26px rgba(2,6,23,.05)}
-    .role-title{display:flex;align-items:center;gap:12px}
-    .role-title .badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px}
-    .role-title h3{font-size:22px}
-    .role-desc{color:#475569;margin-top:8px;line-height:1.6}
-
-    .role-body{border:1px solid #e5e7eb;background:#fff;border-radius:14px;padding:22px;box-shadow:0 10px 26px rgba(2,6,23,.06)}
-    .form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .form label{font-size:13px;color:#334155;margin-bottom:6px;display:block}
-    .form input,.form select{width:100%;padding:12px 14px;border:1px solid #d1d5db;border-radius:12px;font-size:14px;background:#f8fafc;transition:border-color .2s, box-shadow .2s}
-    .form input:focus,.form select:focus{outline:none;border-color:var(--brand2);box-shadow:0 0 0 3px rgba(106,161,255,.25)}
-    .actions{display:flex;gap:12px;margin-top:8px}
-    .btn{border:none;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;padding:12px 20px;border-radius:12px;cursor:pointer;box-shadow:0 6px 18px rgba(49,87,211,.25)}
-    .btn.sec{background:#64748b;box-shadow:none}
-
-    /* 导航箭头 */
-    .nav{position:absolute;inset:0;pointer-events:none}
-    .arrow{position:absolute;top:50%;transform:translateY(-50%);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#ffffffee;border:1px solid #e5e7eb;box-shadow:0 12px 30px rgba(2,6,23,.18);color:#0f172a;font-weight:700;cursor:pointer;pointer-events:auto;user-select:none}
-    .arrow:hover{background:#fff}
-    .arrow.prev{left:16px}
-    .arrow.next{right:16px}
-
-    /* 圆点指示器 */
-    .dots{display:flex;gap:10px;justify-content:center;padding:14px 0 20px}
-    .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1;border:1px solid #94a3b8;cursor:pointer;transition:transform .2s ease, background .2s ease}
-    .dot.active{background:linear-gradient(135deg,var(--brand),var(--brand2));transform:scale(1.2)}
-
-    .hint{margin:10px 0 16px;color:#475569;font-size:13px}
-
-    /* 响应式 */
-    @media (max-width:840px){
-      .role-card{grid-template-columns:1fr}
-      .form{grid-template-columns:1fr}
-      .arrow{display:none}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业现代制度评价系统 - 登录</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(135deg,#2E5090 0%,#4472C4 100%);min-height:100vh;padding:24px}
+        .container{max-width:1080px;margin:0 auto}
+        .card{background:#fff;border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.15);overflow:hidden}
+        .header{background:linear-gradient(135deg,#2E5090 0%,#4472C4 100%);color:#fff;padding:28px;text-align:center;position:relative}
+        .header h1{font-size:28px;margin-bottom:6px}
+        .header p{opacity:.9}
+        .admin-link{position:absolute;right:20px;top:20px;color:#fff;border:1px solid rgba(255,255,255,.6);padding:6px 12px;border-radius:999px;text-decoration:none}
+        .content{padding:26px;background:#fff}
+        .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+        .role{border:1px solid #e5e7eb;border-radius:12px;padding:18px;cursor:pointer;transition:.2s;background:#f9fafb}
+        .role:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.06)}
+        .role.active{outline:2px solid #2E5090;background:#eef4ff}
+        .role h3{color:#111;font-size:18px;margin-bottom:6px}
+        .role p{color:#555;font-size:13px}
+        .form{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+        .form label{font-size:13px;color:#333}
+        .form select,.form input{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px;font-size:14px}
+        .actions{margin-top:16px;display:flex;gap:12px}
+        .btn{background:#2E5090;color:#fff;border:none;border-radius:10px;padding:12px 22px;cursor:pointer}
+        .btn.sec{background:#6b7280}
+        .hint{margin-top:10px;color:#555;font-size:13px}
+        .status{margin-top:12px;padding:10px;border-radius:10px;display:none}
+        .ok{background:#e8fff0;color:#166534;border:1px solid #bbf7d0}
+        .err{background:#fff1f2;color:#991b1b;border:1px solid #fecdd3}
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="hero">
-      <a class="admin-link" href="/admin/login">管理员登录</a>
-      <h1>中国现代民营企业制度培育建设系统</h1>
-      <p>请选择您的身份进行登录（系统将自动识别等级）</p>
+    <div class="container">
+    <div class="card">
+        <div class="header">
+            <a class="admin-link" href="/admin/login">管理员登录</a>
+            <h1>现代企业制度指数评价系统</h1>
+            <p>请选择您的身份登录系统（系统将自动识别等级）</p>
+        </div>
+        <div class="content">
+            <div class="grid" id="roleGrid">
+                <div class="role active" data-role="enterprise">
+                    <h3>企业用户</h3>
+                    <p>填写问卷并自动生成报告</p>
+                </div>
+                <div class="role" data-role="chamber_of_commerce">
+                    <h3>工商联用户</h3>
+                    <p>审核企业资质，判定是否可升级</p>
+                </div>
+                <div class="role" data-role="expert">
+                    <h3>专家用户</h3>
+                    <p>根据问卷结果匹配等级并指导</p>
+                </div>
+            </div>
+
+            <div class="form" style="margin-top:20px;">
+                <div>
+                    <label>登录账户</label>
+                    <input id="username" placeholder="账户名" />
+                </div>
+                <div>
+                    <label>登录密码</label>
+                    <input id="password" type="password" placeholder="密码" />
+                </div>
+
+                <div>
+                    <label>记住我</label>
+                    <select id="remember"><option value="0">否</option><option value="1">是</option></select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" id="loginBtn">登录</button>
+                <button class="btn sec" onclick="resetForm()">重置</button>
+            </div>
+            <div id="status" class="status"></div>
+            <div class="hint">默认账户：企业(ent/ent123)，工商联(chamber/chamber123)，专家(expert/expert123)。可在config.json中配置。</div>
+        </div>
     </div>
+</div>
+    <script>
+    let currentRole = 'enterprise';
+    const roleGrid = document.getElementById('roleGrid');
+    roleGrid.querySelectorAll('.role').forEach(el=>{
+        el.onclick=()=>{
+            roleGrid.querySelectorAll('.role').forEach(x=>x.classList.remove('active'))
+            el.classList.add('active');
+            currentRole = el.getAttribute('data-role');
+            const label = document.getElementById('levelLabel');
+            const level = document.getElementById('level');
+            if(currentRole==='chamber_of_commerce'){
+                label.textContent='审核级别';
+                level.innerHTML=`<option value="beginner">市级</option><option value="intermediate">省级</option><option value="advanced">国家级</option>`
+            }else{
+                label.textContent=(currentRole==='expert'?'专家级别':'企业分级');
+                level.innerHTML=`<option value="beginner">初级</option><option value="intermediate">中级</option><option value="advanced" selected>高级</option>`
+            }
+        }
+    })
 
-    <div class="carousel" id="carousel">
-      <div class="slides" id="slides">
-        <!-- 企业用户 -->
-        <section class="slide" data-role="enterprise">
-          <div class="role-card">
-            <div class="role-head">
-              <div class="role-title">
-                <div class="badge">企</div>
-                <h3>企业用户</h3>
-              </div>
-              <p class="role-desc">填写问卷并自动生成报告，系统将根据得分自动匹配级别。</p>
-            </div>
-            <div class="role-body">
-              <div class="form">
-                <div>
-                  <label>登录账户</label>
-                  <input placeholder="账户名" class="username" />
-                </div>
-                <div>
-                  <label>登录密码</label>
-                  <input type="password" placeholder="密码" class="password" />
-                </div>
-                <div>
-                  <label>记住我</label>
-                  <select class="remember"><option value="0">否</option><option value="1">是</option></select>
-                </div>
-              </div>
-              <div class="actions">
-                <button class="btn login-btn">登录</button>
-                <button class="btn sec reset-btn">重置</button>
-              </div>
-            </div>
-          </div>
-        </section>
-        <!-- 工商联用户 -->
-        <section class="slide" data-role="chamber_of_commerce">
-          <div class="role-card">
-            <div class="role-head">
-              <div class="role-title">
-                <div class="badge">商</div>
-                <h3>工商联用户</h3>
-              </div>
-              <p class="role-desc">审核企业资质，判定是否可升级，分配专家并查看报告。</p>
-            </div>
-            <div class="role-body">
-              <div class="form">
-                <div>
-                  <label>登录账户</label>
-                  <input placeholder="账户名" class="username" />
-                </div>
-                <div>
-                  <label>登录密码</label>
-                  <input type="password" placeholder="密码" class="password" />
-                </div>
-                <div>
-                  <label>记住我</label>
-                  <select class="remember"><option value="0">否</option><option value="1">是</option></select>
-                </div>
-              </div>
-              <div class="actions">
-                <button class="btn login-btn">登录</button>
-                <button class="btn sec reset-btn">重置</button>
-              </div>
-            </div>
-          </div>
-        </section>
-        <!-- 专家用户 -->
-        <section class="slide" data-role="expert">
-          <div class="role-card">
-            <div class="role-head">
-              <div class="role-title">
-                <div class="badge">专</div>
-                <h3>专家用户</h3>
-              </div>
-              <p class="role-desc">根据问卷结果匹配等级并提供辅导建议与评分校对。</p>
-            </div>
-            <div class="role-body">
-              <div class="form">
-                <div>
-                  <label>登录账户</label>
-                  <input placeholder="账户名" class="username" />
-                </div>
-                <div>
-                  <label>登录密码</label>
-                  <input type="password" placeholder="密码" class="password" />
-                </div>
-                <div>
-                  <label>记住我</label>
-                  <select class="remember"><option value="0">否</option><option value="1">是</option></select>
-                </div>
-              </div>
-              <div class="actions">
-                <button class="btn login-btn">登录</button>
-                <button class="btn sec reset-btn">重置</button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-      <div class="nav">
-        <div class="arrow prev" id="prevBtn" aria-label="上一页" role="button">‹</div>
-        <div class="arrow next" id="nextBtn" aria-label="下一页" role="button">›</div>
-      </div>
-      <div class="dots" id="dots" aria-label="分页指示"></div>
-      <div class="hint" style="text-align:center;">
-        默认账户：企业(ent/ent123)，工商联(chamber/chamber123)，专家(expert/expert123)。可在 config.json 中配置。
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const carousel = document.getElementById('carousel');
-    const slides = document.getElementById('slides');
-    const sections = Array.from(slides.querySelectorAll('.slide'));
-    const dotsWrap = document.getElementById('dots');
-    let index = 0; let lock=false;
-
-    // 生成圆点
-    sections.forEach((_,i)=>{
-      const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.dataset.i=i;d.onclick=()=>go(i);dotsWrap.appendChild(d);
-    });
-
-    function update(){
-      slides.style.transform = `translateX(${-index*100}%)`;
-      dotsWrap.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===index));
+    async function doLogin(){
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const remember = document.getElementById('remember').value==='1';
+        const status = document.getElementById('status');
+        status.style.display='none';
+        try{
+            const res = await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role:currentRole,username,password,remember})});
+            const data = await res.json();
+            if(res.ok && data.success){
+                status.className='status ok';status.style.display='block';status.textContent='登录成功，正在跳转...';
+                setTimeout(()=>{ window.location.href = data.redirect || '/'; },500);
+            }else{
+                status.className='status err';status.style.display='block';status.textContent='登录失败：'+(data.error||'');
+                }
+        }catch(e){
+            status.className='status err';status.style.display='block';status.textContent='网络错误：'+e.message;
+        }
     }
-    function go(i){ if(lock) return; index=(i+sections.length)%sections.length; update(); }
-    document.getElementById('prevBtn').onclick=()=>go(index-1);
-    document.getElementById('nextBtn').onclick=()=>go(index+1);
-
-    // 自动轮播：5秒后启动，然后每5秒切换；悬停/输入聚焦暂停
-    const AUTO_INTERVAL = 5000;
-    let autoTimer=null; let startTimer=null;
-    function startAuto(){ if(autoTimer) return; autoTimer=setInterval(()=>go(index+1), AUTO_INTERVAL); }
-    function stopAuto(){ if(autoTimer){ clearInterval(autoTimer); autoTimer=null; } if(startTimer){ clearTimeout(startTimer); startTimer=null; } }
-    // 5秒后先切一次，再进入固定间隔
-    startTimer = setTimeout(()=>{ go(index+1); startAuto(); }, AUTO_INTERVAL);
-
-    // 悬停/触摸暂停
-    carousel.addEventListener('mouseenter', stopAuto);
-    carousel.addEventListener('mouseleave', startAuto);
-    document.addEventListener('visibilitychange',()=>{ if(document.hidden) stopAuto(); else startAuto(); });
-
-    // 键盘控制
-    window.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') go(index-1); if(e.key==='ArrowRight') go(index+1); });
-
-    // 触摸滑动
-    let sx=0, dx=0, touching=false;
-    slides.addEventListener('touchstart',e=>{touching=true; sx=e.touches[0].clientX;});
-    slides.addEventListener('touchmove',e=>{ if(!touching) return; dx=e.touches[0].clientX - sx; });
-    slides.addEventListener('touchend',()=>{ if(!touching) return; touching=false; if(Math.abs(dx)>50){ if(dx>0) go(index-1); else go(index+1);} dx=0;});
-
-    // 登录与重置
-    function getActive(){ return sections[index]; }
-    async function doLoginFrom(section){
-      const role = section.dataset.role;
-      const username = section.querySelector('.username').value.trim();
-      const password = section.querySelector('.password').value.trim();
-      const remember = section.querySelector('.remember').value==='1';
-      const btn = section.querySelector('.login-btn');
-      const old = btn.textContent; btn.disabled=true; btn.textContent='登录中…';
-      try{
-        const res = await fetch('/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role,username,password,remember})});
-        const data = await res.json();
-        if(res.ok && data.success){ btn.textContent='成功，跳转中…'; setTimeout(()=>location.href=data.redirect||'/',400); }
-        else{ alert('登录失败：'+(data.error||'')); }
-      }catch(err){ alert('网络错误：'+err.message); }
-      finally{ btn.disabled=false; btn.textContent=old; }
-    }
-
-    sections.forEach(sec=>{
-      sec.querySelector('.login-btn').addEventListener('click',()=>doLoginFrom(sec));
-      sec.querySelector('.reset-btn').addEventListener('click',()=>{
-        sec.querySelector('.username').value='';
-        sec.querySelector('.password').value='';
-        sec.querySelector('.remember').value='0';
-      });
-    });
-  </script>
+    document.getElementById('loginBtn').onclick=doLogin;
+    function resetForm(){
+        document.getElementById('username').value='';
+        document.getElementById('password').value='';
+        }
+    </script>
 </body>
 </html>
