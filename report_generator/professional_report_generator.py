@@ -1,6 +1,10 @@
 """
-专业版企业报告生成器 - 独立模块
-生成叙述性、专业性的企业制度建设评价报告
+优化版企业自评报告生成器（叙述性、专业性）
+特点：
+1. 避免直白的数据堆砌
+2. 采用叙述性分析语言
+3. 突出企业特色和亮点
+4. 专业的政府报告风格
 """
 from docx import Document
 from docx.shared import Pt, Inches, RGBColor
@@ -12,7 +16,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from datetime import datetime
 import os
-import sys
+from score_calculator import ScoreCalculator
 
 # 设置中文字体
 matplotlib.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei']
@@ -22,27 +26,9 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 class ProfessionalReportGenerator:
     """专业版企业报告生成器 - 叙述性风格"""
 
-    def __init__(self, score_calculator=None):
-        """
-        初始化报告生成器
-
-        Args:
-            score_calculator: 评分计算器实例
-                             如果为None，将尝试导入默认的计算器
-        """
-        self.calculator = score_calculator
-        if self.calculator is None:
-            self._init_default_calculator()
-
-    def _init_default_calculator(self):
-        """初始化默认的评分计算器"""
-        try:
-            # 尝试从项目根目录导入
-            from score_calculator import ScoreCalculator
-            self.calculator = ScoreCalculator()
-        except ImportError:
-            print("[WARN] 无法导入默认的ScoreCalculator，某些功能可能不可用")
-            self.calculator = None
+    def __init__(self):
+        """初始化报告生成器"""
+        self.calculator = ScoreCalculator()
 
     def generate_report(self, questionnaire_file: str, output_path: str = None) -> str:
         """
@@ -51,18 +37,10 @@ class ProfessionalReportGenerator:
         Args:
             questionnaire_file: 已填写的问卷文件路径
             output_path: 输出报告文件路径
-                        如果为None，将在reports目录生成
 
         Returns:
             生成的报告文件路径
-
-        Raises:
-            FileNotFoundError: 问卷文件不存在
-            Exception: 生成失败
         """
-        if not os.path.exists(questionnaire_file):
-            raise FileNotFoundError(f"问卷文件不存在: {questionnaire_file}")
-
         print(f"\n[INFO] 开始生成专业版企业报告...")
 
         # 解析问卷
@@ -75,7 +53,6 @@ class ProfessionalReportGenerator:
 
         # 从问卷文件名生成报告文件名，确保关联性
         if output_path is None:
-            os.makedirs('reports', exist_ok=True)
             base_name = os.path.basename(questionnaire_file)
             report_base_name = base_name.replace('问卷_', '专业报告_').replace('.xlsx', '')
             output_path = os.path.join('reports', f"{report_base_name}.docx")
@@ -479,26 +456,26 @@ class ProfessionalReportGenerator:
 企业高度重视战略管理工作，{self._get_formulation_phrase(percentage)}了符合企业实际的发展战略。战略规划体系较为健全，战略执行机制有效，战略评估与调整机制逐步完善。通过系统的战略管理，企业明确了发展方向和路径。
             """,
             '内控、风险与合规管理': f"""
-企业{{self._get_attention_phrase(percentage)}}内部控制、风险管理和合规经营。建立了相对完善的内控制度体系，风险识别、评估和应对机制逐步健全，合规管理意识不断增强。通过加强内控风险管理，企业有效防范了各类经营风险。
+企业{self._get_attention_phrase(percentage)}内部控制、风险管理和合规经营。建立了相对完善的内控制度体系，风险识别、评估和应对机制逐步健全，合规管理意识不断增强。通过加强内控风险管理，企业有效防范了各类经营风险。
             """,
             '科学民主管理': f"""
-企业积极推行科学民主管理，{{self._get_implementation_phrase(percentage)}}了多种形式的民主管理制度。职工参与企业管理的渠道较为畅通，民主决策、民主管理、民主监督机制逐步完善，有效调动了职工的积极性和创造性。
+企业积极推行科学民主管理，{self._get_implementation_phrase(percentage)}了多种形式的民主管理制度。职工参与企业管理的渠道较为畅通，民主决策、民主管理、民主监督机制逐步完善，有效调动了职工的积极性和创造性。
             """,
             '科技创新': f"""
-企业坚持创新驱动发展战略，{{self._get_innovation_phrase(percentage)}}。研发投入持续增加，创新体系不断完善，创新成果转化机制逐步健全。通过持续创新，企业核心竞争力不断提升。
+企业坚持创新驱动发展战略，{self._get_innovation_phrase(percentage)}。研发投入持续增加，创新体系不断完善，创新成果转化机制逐步健全。通过持续创新，企业核心竞争力不断提升。
             """,
             '社会责任与企业文化': f"""
-企业积极履行社会责任，{{self._get_culture_phrase(percentage)}}。企业文化建设有声有色，价值理念深入人心。在环境保护、职工权益保障、社会公益等方面表现良好，树立了良好的企业形象。
+企业积极履行社会责任，{self._get_culture_phrase(percentage)}。企业文化建设有声有色，价值理念深入人心。在环境保护、职工权益保障、社会公益等方面表现良好，树立了良好的企业形象。
             """,
             '家族企业治理': f"""
-企业作为家族企业，{{self._get_governance_phrase(percentage)}}了较为规范的治理机制。家族成员与职业经理人的权责关系逐步理顺，家族传承制度初步建立，为企业可持续发展提供了制度保障。
+企业作为家族企业，{self._get_governance_phrase(percentage)}了较为规范的治理机制。家族成员与职业经理人的权责关系逐步理顺，家族传承制度初步建立，为企业可持续发展提供了制度保障。
             """
         }
 
         return narratives.get(dimension_name, f"企业在{dimension_name}方面制度建设取得积极成效。").strip()
 
     def _get_level_phrase(self, percentage):
-        """根据得分率返回水平描述"""
+        """根��得分率返回水平描述"""
         if percentage >= 90: return "制度建设成效显著"
         elif percentage >= 80: return "制度体系较为完善"
         elif percentage >= 70: return "制度建设总体良好"
@@ -629,6 +606,70 @@ class ProfessionalReportGenerator:
             para = doc.add_paragraph(problem_analysis.strip())
             para.paragraph_format.first_line_indent = Inches(0.5)
 
+            doc.add_paragraph()  # 空行
+
+            # 逐个分析薄弱维度
+            for idx, (dimension_name, dimension_data) in enumerate(weak_dimensions, 1):
+                percentage = dimension_data['percentage']
+
+                # 委婉的问题描述
+                problem_heading = f"{idx}. {dimension_name}领域"
+                para = doc.add_paragraph(problem_heading)
+                para.paragraph_format.first_line_indent = Inches(0.5)
+                for run in para.runs:
+                    run.font.bold = True
+
+                problem_text = f"""
+该维度当前建设水平为{percentage:.1f}%，在所有维度中处于相对落后位置。{self._get_problem_description(dimension_name, percentage)}建议企业将{dimension_name}作为未来一段时期制度建设的重点方向，通过系统规划、分步实施、持续改进，逐步提升该领域的制度完善程度和执行效果。
+                """
+                para = doc.add_paragraph(problem_text.strip())
+                para.paragraph_format.first_line_indent = Inches(0.5)
+
+        # 一票否决项（如果有）
+        veto_issues = [q for q in score_summary['question_details'] if q['actual_score'] < 0]
+        if veto_issues:
+            doc.add_heading('（一）需要重点关注的合规性问题', level=2)
+
+            # 创建合规风险表格
+            veto_table = doc.add_table(rows=len(veto_issues) + 1, cols=3)
+            veto_table.style = 'Light Grid Accent 1'
+
+            veto_table.rows[0].cells[0].text = '序号'
+            veto_table.rows[0].cells[1].text = '问题描述'
+            veto_table.rows[0].cells[2].text = '风险等级'
+
+            for idx, issue in enumerate(veto_issues, 1):
+                row_cells = veto_table.rows[idx].cells
+                row_cells[0].text = str(idx)
+                row_cells[1].text = issue.get('question', '未知问题')
+                row_cells[2].text = '高风险'
+
+            self._format_table(veto_table, header_row=True)
+
+            doc.add_paragraph()  # 空行
+
+            veto_text = """
+上表列出的事项存在合规性风险，属于一票否决类问题，需要企业高度重视并立即整改。这些问题若不及时解决，可能给企业带来法律风险或经营风险，影响企业的持续健康发展。建议企业成立专项工作组，制定整改方案，明确责任人和完成时限，确保问题得到彻底解决，切实维护企业合法合规经营。
+            """
+            para = doc.add_paragraph(veto_text.strip())
+            para.paragraph_format.first_line_indent = Inches(0.5)
+
+    def _get_problem_description(self, dimension_name, percentage):
+        """获取委婉的问题描述"""
+        problem_descriptions = {
+            '党建引领': "在党组织建设、党建工作机制、党建与经营融合等方面还有较大的完善空间。",
+            '产权结构': "在产权清晰度、股权结构合理性、产权保护机制等方面需要进一步加强。",
+            '公司治理结构和机制': "在治理结构完善、决策程序规范、权力制衡机制等方面还需要系统提升。",
+            '战略管理': "在战略规划、战略执行、战略评估等方面的制度化水平还有待提高。",
+            '内控、风险与合规管理': "在内控制度、风险防控、合规管理等方面还存在薄弱环节。",
+            '科学民主管理': "在民主决策、职工参与、民主监督等方面的机制还不够健全。",
+            '科技创新': "在创新体系、研发投入、成果转化等方面的制度支撑还不够完善。",
+            '社会责任与企业文化': "在社会责任履行、企业文化建设等方面还有较大提升空间。",
+            '家族企业治理': "在家族治理机制、传承制度等方面需要进一步规范和完善。"
+        }
+
+        return problem_descriptions.get(dimension_name, "相关制度的系统性、规范性有待进一步加强。")
+
     def _create_strategic_recommendations(self, doc, score_summary, enterprise_info):
         """创建改进建议与发展方向（战略性、指导性）"""
         doc.add_heading('五、改进建议与发展方向', level=1)
@@ -637,7 +678,7 @@ class ProfessionalReportGenerator:
         doc.add_heading('（一）总体思路', level=2)
 
         overall_text = f"""
-建议{enterprise_info.get('企业名称', '企业')}以本次评价为契机，系统谋划现代制度建设工作，坚持问题导向和目标导向相结合，补短板、强弱项、促提升，不断完善中国特色现代企业制度，为企业高质量发展提供坚实制度保障。
+建议{enterprise_info.get('企业名称', '企业')}以本次评价为契机，系统谋划现代制度建设工作，坚持问题导向和目标导向相结合，补短板、强弱项、促提升，��断完善中国特色现代企业制度，为企业高质量发展提供坚实制度保障。
         """
         para = doc.add_paragraph(overall_text.strip())
         para.paragraph_format.first_line_indent = Inches(0.5)
@@ -698,6 +739,9 @@ class ProfessionalReportGenerator:
         header_cells[1].text = '建设水平'
         header_cells[2].text = '评价'
 
+        # 收集维度数据用于后续分析
+        dimension_analysis_data = []
+
         for level1, data in score_summary['score_by_level1'].items():
             row_cells = table.add_row().cells
             row_cells[0].text = str(level1) if level1 else ''
@@ -707,21 +751,358 @@ class ProfessionalReportGenerator:
             if percentage >= 90:
                 level_desc = "优秀"
                 assessment = "制度健全完善"
+                risk_level = "低风险"
             elif percentage >= 80:
                 level_desc = "良好"
                 assessment = "制度较为健全"
+                risk_level = "较低风险"
             elif percentage >= 70:
                 level_desc = "中等"
                 assessment = "制度基本健全"
+                risk_level = "中等风险"
             elif percentage >= 60:
                 level_desc = "合格"
                 assessment = "制度初步建立"
+                risk_level = "较高风险"
             else:
                 level_desc = "待提升"
                 assessment = "需进一步完善"
+                risk_level = "高风险"
 
             row_cells[1].text = level_desc
             row_cells[2].text = assessment
+
+            # 保存数据用于分析
+            dimension_analysis_data.append({
+                'name': level1,
+                'percentage': percentage,
+                'level': level_desc,
+                'assessment': assessment,
+                'risk_level': risk_level
+            })
+
+        # 添加表格后的详细分析
+        self._add_table_analysis(doc, dimension_analysis_data, score_summary)
+
+        # 添加可视化图表
+        self._add_dimension_charts(doc, dimension_analysis_data, score_summary)
+
+    def _add_table_analysis(self, doc, dimension_data, score_summary):
+        """在表格后添加生动的分析描述"""
+        doc.add_heading('（一）制度建设风险评估分析', level=2)
+
+        # 统计各风险等级的维度数量
+        risk_distribution = {}
+        for dim in dimension_data:
+            risk = dim['risk_level']
+            risk_distribution[risk] = risk_distribution.get(risk, 0) + 1
+
+        # 找出最优和最需改进的维度
+        sorted_dims = sorted(dimension_data, key=lambda x: x['percentage'], reverse=True)
+        top_dimension = sorted_dims[0] if sorted_dims else None
+        bottom_dimension = sorted_dims[-1] if sorted_dims else None
+
+        # 计算整体平均水平
+        avg_percentage = sum(d['percentage'] for d in dimension_data) / len(dimension_data) if dimension_data else 0
+
+        # 生成生动的综合分析
+        analysis_text = f"""
+从上述评价指标概览可以看出，企业现代制度建设呈现出明显的层次性特征。整体而言，企业在制度体系构建方面已经形成了一定基础，平均建设水平达到{self._get_percentage_description(avg_percentage)}，这充分说明企业管理层对制度建设的重视程度较高，并且在实践中取得了积极成效。
+        """
+
+        para = doc.add_paragraph(analysis_text.strip())
+        para.paragraph_format.first_line_indent = Inches(0.5)
+
+        # 优势维度分析
+        if top_dimension:
+            strength_text = f"""
+其中，{top_dimension['name']}维度表现尤为突出，达到{top_dimension['level']}水平，{top_dimension['assessment']}。这表明企业在该领域的制度建设已经形成了较为成熟的管理体系，相关制度不仅覆盖全面，而且执行到位，能够有效支撑企业的规范化运营。这一优势的形成，既得益于企业领导层的高度重视和战略部署，也离不开管理团队的持续投入和精细化管理。
+            """
+            para = doc.add_paragraph(strength_text.strip())
+            para.paragraph_format.first_line_indent = Inches(0.5)
+
+        # 风险分布分析
+        risk_text = f"""
+从风险评估角度来看，"""
+
+        if risk_distribution.get('低风险', 0) > 0:
+            risk_text += f"企业有{risk_distribution['低风险']}个维度处于低风险区间，这些领域的制度建设已经达到较高水平，风险管控能力强，能够有效应对各类挑战。"
+
+        if risk_distribution.get('中等风险', 0) > 0:
+            risk_text += f"同时，{risk_distribution.get('中等风险', 0)}个维度处于中等风险水平，说明这些领域虽然建立了基本的制度框架，但在制度的系统性、执行力度和持续优化方面还有较大的提升空间。"
+
+        if risk_distribution.get('高风险', 0) > 0 or risk_distribution.get('较高风险', 0) > 0:
+            high_risk_count = risk_distribution.get('高风险', 0) + risk_distribution.get('较高风险', 0)
+            risk_text += f"值得关注的是，{high_risk_count}个维度存在较高风险或高风险，这些领域的制度建设相对薄弱，可能影响企业的稳健运营，需要企业在未来的管理实践中重点加强和完善。"
+
+        para = doc.add_paragraph(risk_text.strip())
+        para.paragraph_format.first_line_indent = Inches(0.5)
+
+        # 改进空间分析
+        if bottom_dimension and bottom_dimension['percentage'] < 70:
+            improvement_text = f"""
+特别需要指出的是，{bottom_dimension['name']}维度当前处于{bottom_dimension['level']}水平，{bottom_dimension['risk_level']}状态，是企业制度建设中的明显短板。这一领域的薄弱环节，不仅可能影响企业的管理效率，还可能在某些关键时刻给企业带来潜在的经营风险。建议企业将其作为未来一段时期制度建设的重点突破方向，通过系统规划、分步实施、持续改进的方式，逐步补齐这一短板，提升企业整体制度建设水平。
+            """
+            para = doc.add_paragraph(improvement_text.strip())
+            para.paragraph_format.first_line_indent = Inches(0.5)
+
+        # 均衡发展建议
+        balance_text = f"""
+综合来看，企业现代制度建设既有亮点也有短板，既有优势也有挑战。在未来的发展中，企业应当坚持系统思维，既要继续巩固和发挥优势领域的引领示范作用，又要下大力气补齐薄弱环节，推动各维度制度建设均衡发展、协同提升。只有这样，才能真正构建起全面、系统、有效的现代企业制度体系，为企业的高质量发展提供坚实的制度保障。
+        """
+        para = doc.add_paragraph(balance_text.strip())
+        para.paragraph_format.first_line_indent = Inches(0.5)
+
+    def _get_percentage_description(self, percentage):
+        """将百分比转换为生动的描述"""
+        if percentage >= 90:
+            return "优秀水平"
+        elif percentage >= 80:
+            return "良好水平"
+        elif percentage >= 70:
+            return "中等偏上水平"
+        elif percentage >= 60:
+            return "中等水平"
+        else:
+            return "有待提升水平"
+
+    def _add_dimension_charts(self, doc, dimension_data, score_summary):
+        """添加维度评分可视化图表"""
+        doc.add_heading('（二）制度建设维度对比图', level=2)
+
+        # 说明文字
+        chart_intro = """
+为更直观地展示企业各维度制度建设情况，现通过可视化图表进行呈现。图表能够清晰反映各维度之间的对比关系，帮助企业准确把握自身优势和不足，为后续改进提供参考依据。
+        """
+        para = doc.add_paragraph(chart_intro.strip())
+        para.paragraph_format.first_line_indent = Inches(0.5)
+
+        # 生成图表
+        try:
+            # 1. 柱状图 - 各维度建设水平对比
+            chart_path = self._create_dimension_bar_chart(dimension_data)
+            if chart_path and os.path.exists(chart_path):
+                doc.add_picture(chart_path, width=Inches(6))
+                # 删除临时文件
+                os.remove(chart_path)
+
+            # 图表说明
+            bar_chart_desc = """
+上图通过柱状图形式展示了各维度制度建设水平的横向对比。从图中可以清晰看出，不同维度之间存在明显差异，这种差异既反映了企业在不同领域的资源投入和重视程度，也体现了各维度制度建设的难易程度和发展阶段。柱状图的高低起伏，为企业指明了未来努力的方向：高柱代表的优势领域需要继续保持和深化，低柱所示的薄弱环节则需要加大投入、重点突破。
+            """
+            para = doc.add_paragraph(bar_chart_desc.strip())
+            para.paragraph_format.first_line_indent = Inches(0.5)
+
+            # 2. 雷达图 - 整体制度建设轮廓
+            radar_path = self._create_dimension_radar_chart(dimension_data)
+            if radar_path and os.path.exists(radar_path):
+                doc.add_picture(radar_path, width=Inches(5.5))
+                os.remove(radar_path)
+
+            # 雷达图说明
+            radar_desc = """
+雷达图从整体视角展现了企业制度建设的全景轮廓。理想状态下，雷达图应呈现出饱满均衡的多边形，这意味着各维度发展均衡、协调共进。而当前图形的形态，真实反映了企业制度建设的实际状况：突出的顶点代表优势领域，凹陷的部分则提示存在短板。通过观察雷达图的整体形态，企业可以更加直观地认识到自身制度建设的均衡性，从而有针对性地制定改进策略，逐步将雷达图调整为更加均衡饱满的理想形态。
+            """
+            para = doc.add_paragraph(radar_desc.strip())
+            para.paragraph_format.first_line_indent = Inches(0.5)
+
+            # 3. 风险分布饼图
+            pie_path = self._create_risk_distribution_pie_chart(dimension_data)
+            if pie_path and os.path.exists(pie_path):
+                doc.add_picture(pie_path, width=Inches(5))
+                os.remove(pie_path)
+
+            # 饼图说明
+            pie_desc = """
+风险分布饼图从风险管理角度对各维度进行了分类统计。不同颜色的扇区代表不同风险等级的维度占比，这为企业风险评估提供了量化依据。绿色扇区越大，说明企业低风险维度越多，整体制度建设越稳健；橙色和红色扇区的存在，则提醒企业需要高度关注相关领域的风险防控。通过这一饼图，企业管理层可以快速判断制度建设的风险分布状况，进而合理配置资源，优先加强高风险领域的制度完善工作，确保企业稳健发展。
+            """
+            para = doc.add_paragraph(pie_desc.strip())
+            para.paragraph_format.first_line_indent = Inches(0.5)
+
+        except Exception as e:
+            print(f"[WARN] 图表生成失败: {e}")
+            error_para = doc.add_paragraph("（图表生成过程中遇到技术问题，请参考上述表格数据进行分析）")
+            error_para.paragraph_format.first_line_indent = Inches(0.5)
+
+    def _create_dimension_bar_chart(self, dimension_data):
+        """创建维度柱状图"""
+        try:
+            # 准备数据
+            names = [d['name'] for d in dimension_data]
+            percentages = [d['percentage'] for d in dimension_data]
+
+            # 创建图表
+            plt.figure(figsize=(12, 6))
+
+            # 根据得分率设置颜色
+            colors = []
+            for p in percentages:
+                if p >= 80:
+                    colors.append('#2E7D32')  # 深绿色
+                elif p >= 70:
+                    colors.append('#66BB6A')  # 浅绿色
+                elif p >= 60:
+                    colors.append('#FFA726')  # 橙色
+                else:
+                    colors.append('#EF5350')  # 红色
+
+            bars = plt.bar(range(len(names)), percentages, color=colors, alpha=0.8, edgecolor='black', linewidth=1.2)
+
+            # 添加数值标签
+            for i, (bar, p) in enumerate(zip(bars, percentages)):
+                height = bar.get_height()
+                plt.text(bar.get_x() + bar.get_width()/2., height + 1,
+                        f'{p:.1f}%',
+                        ha='center', va='bottom', fontsize=10, fontweight='bold')
+
+            # 设置标题和标签
+            plt.title('企业现代制度建设各维度评分对比', fontsize=16, fontweight='bold', pad=20)
+            plt.xlabel('评价维度', fontsize=12, fontweight='bold')
+            plt.ylabel('建设水平（%）', fontsize=12, fontweight='bold')
+
+            # 设置X轴标签
+            plt.xticks(range(len(names)), names, rotation=45, ha='right', fontsize=10)
+
+            # 添加网格线
+            plt.grid(axis='y', alpha=0.3, linestyle='--')
+
+            # 添加参考线
+            plt.axhline(y=80, color='green', linestyle='--', alpha=0.5, label='良好水平(80%)')
+            plt.axhline(y=60, color='orange', linestyle='--', alpha=0.5, label='合格水平(60%)')
+
+            plt.legend(loc='upper right', fontsize=10)
+            plt.ylim(0, 105)
+            plt.tight_layout()
+
+            # 保存图表
+            chart_path = 'temp_bar_chart.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight')
+            plt.close()
+
+            return chart_path
+
+        except Exception as e:
+            print(f"[ERROR] 柱状图生成失败: {e}")
+            plt.close()
+            return None
+
+    def _create_dimension_radar_chart(self, dimension_data):
+        """创建维度雷达图"""
+        try:
+            # 准备数据
+            categories = [d['name'][:4] if len(d['name']) > 4 else d['name'] for d in dimension_data]  # 缩短标签
+            values = [d['percentage'] for d in dimension_data]
+
+            # 闭合雷达图
+            categories_closed = categories + [categories[0]]
+            values_closed = values + [values[0]]
+
+            # 计算角度
+            angles = [n / float(len(categories)) * 2 * 3.14159 for n in range(len(categories))]
+            angles += angles[:1]
+
+            # 创建图表
+            fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(projection='polar'))
+
+            # 绘制雷达图
+            ax.plot(angles, values_closed, 'o-', linewidth=2, color='#1976D2', label='当前水平')
+            ax.fill(angles, values_closed, alpha=0.25, color='#1976D2')
+
+            # 添加参考线（理想水平）
+            ideal_values = [90] * len(angles)
+            ax.plot(angles, ideal_values, '--', linewidth=1.5, color='#4CAF50', alpha=0.6, label='优秀水平(90%)')
+
+            # 设置标签
+            ax.set_xticks(angles[:-1])
+            ax.set_xticklabels(categories, fontsize=11)
+
+            # 设置Y轴
+            ax.set_ylim(0, 100)
+            ax.set_yticks([20, 40, 60, 80, 100])
+            ax.set_yticklabels(['20%', '40%', '60%', '80%', '100%'], fontsize=9)
+            ax.grid(True, linestyle='--', alpha=0.7)
+
+            # 标题和图例
+            plt.title('企业现代制度建设雷达图', fontsize=16, fontweight='bold', pad=30)
+            plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1), fontsize=10)
+
+            plt.tight_layout()
+
+            # 保存图表
+            chart_path = 'temp_radar_chart.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight')
+            plt.close()
+
+            return chart_path
+
+        except Exception as e:
+            print(f"[ERROR] 雷达图生成失败: {e}")
+            plt.close()
+            return None
+
+    def _create_risk_distribution_pie_chart(self, dimension_data):
+        """创建风险分布饼图"""
+        try:
+            # 统计各风险等级数量
+            risk_counts = {}
+            for dim in dimension_data:
+                risk = dim['risk_level']
+                risk_counts[risk] = risk_counts.get(risk, 0) + 1
+
+            # 定义风险等级顺序和颜色
+            risk_order = ['低风险', '较低风险', '中等风险', '较高风险', '高风险']
+            risk_colors = {
+                '低风险': '#2E7D32',
+                '较低风险': '#66BB6A',
+                '中等风险': '#FDD835',
+                '较高风险': '#FF9800',
+                '高风险': '#E53935'
+            }
+
+            # 准备数据
+            labels = []
+            sizes = []
+            colors = []
+
+            for risk in risk_order:
+                if risk in risk_counts:
+                    labels.append(f'{risk}\n({risk_counts[risk]}个维度)')
+                    sizes.append(risk_counts[risk])
+                    colors.append(risk_colors[risk])
+
+            if not sizes:
+                return None
+
+            # 创建饼图
+            fig, ax = plt.subplots(figsize=(9, 7))
+
+            wedges, texts, autotexts = ax.pie(sizes, labels=labels, colors=colors,
+                                               autopct='%1.1f%%', startangle=90,
+                                               textprops={'fontsize': 11},
+                                               explode=[0.05] * len(sizes))  # 稍微分离各扇区
+
+            # 美化百分比文字
+            for autotext in autotexts:
+                autotext.set_color('white')
+                autotext.set_fontweight('bold')
+                autotext.set_fontsize(12)
+
+            # 标题
+            plt.title('企业制度建设风险分布', fontsize=16, fontweight='bold', pad=20)
+
+            plt.tight_layout()
+
+            # 保存图表
+            chart_path = 'temp_pie_chart.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight')
+            plt.close()
+
+            return chart_path
+
+        except Exception as e:
+            print(f"[ERROR] 饼图生成失败: {e}")
+            plt.close()
+            return None
 
     def _get_ranking_phrase(self, percentage):
         """根据得分率返回排名描述"""
@@ -787,4 +1168,3 @@ if __name__ == '__main__':
     # 测试
     generator = ProfessionalReportGenerator()
     print("\n专业版企业报告生成器已初始化")
-
