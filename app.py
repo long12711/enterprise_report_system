@@ -20,11 +20,11 @@ import threading
 import hashlib
 from functools import wraps
 # from report_generator import ReportGenerator  # 已废弃，使用 enterprise_report_generator
-from notification_service import NotificationService
-from questionnaire_submission_manager import QuestionnaireSubmissionManager
+from report_generator.notification_service import NotificationService
+from survey_engine.questionnaire_submission_manager import QuestionnaireSubmissionManager
 from report_engine import EnterpriseReportGenerator, PDFReportGenerator, ProfessionalReportGenerator, ComprehensiveAnalysisGenerator
-from nankai_report_generator import NankaiReportGenerator
-from nankai_scoring_engine import NankaiScoringEngine
+from report_generator.nankai_report_generator import NankaiReportGenerator
+from survey_generator.nankai_scoring_engine import NankaiScoringEngine
 # from score_calculator import ScoreCalculator  # 避免依赖空指标文件导致初始化失败
 from user_types_config_final import (
     get_all_user_types, 
